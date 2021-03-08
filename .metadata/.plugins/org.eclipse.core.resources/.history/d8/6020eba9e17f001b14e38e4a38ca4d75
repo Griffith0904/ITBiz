@@ -1,0 +1,25 @@
+package kr.co.hojeon.beans;
+
+public class BizDailyMasterBean {
+	private int BD_SEQ;
+	private String REC_USER;
+	private String REQ_USER;
+	private String REQ_SUBJECT;
+	private String REQ_CONTENT;
+	
+	private String ANL_CONTENT;
+	private int WORK_LEV;
+	private String WORK_STATUS;
+	private int WORK_PRC_PER;
+	private String REC_DATE;
+	
+	private int REC_WEEK;
+	private String EXP_END_DATE;
+	private String ACT_END_DATE;
+	private String REMARK;
+	
+	private String WK_DATE;
+	private String WK_USER;
+	private String ET_DATE;
+	private String ET_USER;
+}

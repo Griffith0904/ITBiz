@@ -41,13 +41,13 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
-                    <span>Components</span>
+                    <span>Daily W/L</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Components:</h6>
-                        <a class="collapse-item" href="${mainpath}buttons.html">Buttons</a>
-                        <a class="collapse-item" href="${mainpath}cards.html">Cards</a>
+                        <h6 class="collapse-header">일자별 업무 리스트 :</h6>
+                        <a class="collapse-item" href="${mainpath}biz/dailyRgst">Register</a>
+                        <a class="collapse-item" href="${mainpath}biz/dailyList">List</a>
                     </div>
                 </div>
             </li>
@@ -57,16 +57,14 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
                     <i class="fas fa-fw fa-wrench"></i>
-                    <span>Utilities</span>
+                    <span>Weekly W/L</span>
                 </a>
                 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item" href="${mainpath}utilities-color.html">Colors</a>
-                        <a class="collapse-item" href="${mainpath}utilities-border.html">Borders</a>
-                        <a class="collapse-item" href="${mainpath}utilities-animation.html">Animations</a>
-                        <a class="collapse-item" href="${mainpath}utilities-other.html">Other</a>
+                        <h6 class="collapse-header">주간별 업무 리스트:</h6>
+                        <a class="collapse-item" href="${mainpath}utilities-color.html">Register</a>
+                        <a class="collapse-item" href="${mainpath}utilities-border.html">List</a>
                     </div>
                 </div>
             </li>
@@ -109,7 +107,7 @@
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="${mainpath}tables.html">
+                <a class="nav-link" href="${root}static/main/tables.html">
                     <i class="fas fa-fw fa-table"></i>
                     <span>Tables</span></a>
             </li>

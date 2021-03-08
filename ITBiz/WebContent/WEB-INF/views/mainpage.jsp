@@ -28,8 +28,10 @@
 
 </head>
 
-<body id="page-top">
 
+
+<body id="page-top">
+	
     <!-- Page Wrapper -->
     <div id="wrapper">
 
@@ -50,8 +52,6 @@
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
                     </button>
-
-                    
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -247,89 +247,55 @@
 
                     <!-- Content Row -->
                     <div class="row">
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Earnings (Monthly)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Earnings (Annual)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-info shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
-                                            </div>
-                                            <div class="row no-gutters align-items-center">
-                                                <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="progress progress-sm mr-2">
-                                                        <div class="progress-bar bg-info" role="progressbar"
-                                                            style="width: 50%" aria-valuenow="50" aria-valuemin="0"
-                                                            aria-valuemax="100"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Pending Requests Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Pending Requests</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-comments fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    	<!-- Dashboard 첫 전체 업무 상태별 항목 Summary -->
+						<c:forEach var='obj' items='${listbfm }' varStatus='idx'>
+							<!-- Earnings (Monthly) Card Example -->
+	                        <div class="col-xl-3 col-md-6 mb-4">
+	                        	<c:choose>
+	                        		<c:when test="${obj.SORT_NO == 1}">
+	                        			<div class="card border-left-success shadow h-100 py-2">
+	                        		</c:when>
+	                        		<c:when test="${obj.SORT_NO == 2}">
+	                        			<div class="card border-left-primary shadow h-100 py-2">
+	                        		</c:when>
+	                        		<c:when test="${obj.SORT_NO == 3}">
+	                        			<div class="card border-left-warning shadow h-100 py-2">
+	                        		</c:when>
+	                        		<c:when test="${obj.SORT_NO == 4}">
+	                        			<div class="card border-left-info shadow h-100 py-2">
+	                        		</c:when>
+	                        	</c:choose>
+	                        		<input type="hidden" id="bizDailyStatus_${obj.SORT_NO}" value="${obj.WORK_STATUS_CODE }"/>
+	                        		<input type="hidden" id="bizDailyStatusName_${obj.SORT_NO}" value="${obj.WORK_STATUS_NAME }"/>
+	                                <div class="card-body">
+	                                    <div class="row no-gutters align-items-center">
+	                                        <div class="col mr-2">
+	                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">${obj.WORK_STATUS_NAME }
+	                                            </div>
+	                                            <div class="row no-gutters align-items-center">
+	                                                <div class="col-auto">
+	                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">${obj.CNT_PERCENT }%</div>
+	                                                </div>
+	                                                <div class="col">
+	                                                    <div class="progress progress-sm mr-2">
+	                                                        <div class="progress-bar bg-info" role="progressbar"
+	                                                            style="width: ${obj.CNT_PERCENT }%" aria-valuenow="80" aria-valuemin="0"
+	                                                            aria-valuemax="100"></div>
+	                                                    </div>
+	                                                </div>
+	                                            </div>
+	                                        </div>
+	                                        <div class="col-auto">
+	                                        	<a id="btn_bd_list_${obj.SORT_NO}" href='#'>
+	                                            	<i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+	                                            </a>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        </div>
+						
+						</c:forEach>                        
                     </div>
 
                     <!-- Content Row -->
@@ -589,7 +555,7 @@
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-
+    
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -605,6 +571,53 @@
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                     <a class="btn btn-primary" href="${mainpath}login.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="BizDailyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true" >
+        <div class="modal-dialog" role="document" >
+            <div class="modal-content" style='width:900px'>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="bdModalTitle"></h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                	<!-- 여기 직접 넣은것 -->
+                	<!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary"></h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="modalDataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>요청 일자</th>
+                                            <th>요청자</th>
+                                            <th>요청 제목</th>
+                                            <th>요청 사항</th>
+                                            <th>작업 난이도</th>
+                                            <th>진도율(%)</th>
+                                            <th>예상 종료일</th>
+                                        </tr>
+                                    </thead>
+                                    
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
@@ -626,7 +639,93 @@
     <!-- Page level custom scripts -->
     <script src="${mainpath}js/demo/chart-area-demo.js"></script>
     <script src="${mainpath}js/demo/chart-pie-demo.js"></script>
+	
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$('#btn_bd_list_1').click(function() {
+				var work_status = $('#bizDailyStatus_1').val();
+				var work_status_name = $('#bizDailyStatusName_1').val();
+				modalTableCreate(work_status, work_status_name)
+			})
+			
+			$('#btn_bd_list_2').click(function() {
+				var work_status = $('#bizDailyStatus_2').val();
+				var work_status_name = $('#bizDailyStatusName_2').val();
+				modalTableCreate(work_status, work_status_name)
+			})
+			
+			$('#btn_bd_list_3').click(function() {
+				var work_status = $('#bizDailyStatus_3').val();
+				var work_status_name = $('#bizDailyStatusName_3').val();
+				modalTableCreate(work_status, work_status_name)
+			})
+			
+			$('#btn_bd_list_4').click(function() {
+				var work_status = $('#bizDailyStatus_4').val();
+				var work_status_name = $('#bizDailyStatusName_4').val();
+				modalTableCreate(work_status, work_status_name)
+			})
+			
+			function modalTableCreate(work_status, work_status_name) {
+				$.ajax({
+					type:"get",
+					dataType:'json',
+					url:'${root}main/searchAllDataFromStatus/' + work_status,
+					success: function(result) {
+						var num_len = result.length
+						
+						if (num_len == 0) {
+							alert("등록된 데이터가 없습니다!")
+							return
+						}
+						var tbody = $('<tbody>');
+		                for (i=0; i<num_len; i++){
+		                	var row = $('<tr>').addClass('chk');
+		                    var cell1 = $('<td>').text(result[i].rec_DATE);
+		                    var cell2 = $('<td>').text(result[i].req_EMP_NAME);
+		                    var cell3 = $('<td>').text(result[i].req_SUBJECT);
+		                    var cell4 = $('<td>').text(result[i].req_CONTENT);
+		                    var cell5 = $('<td>').text(result[i].work_LEV);
+		                    var cell6 = $('<td>').text(result[i].work_PRC_PER);
+		                    var cell7 = $('<td>').text(result[i].exp_END_DATE);
 
+		                    $(row).append(cell1, cell2, cell3, cell4, cell5, cell6, cell7);
+		                    $(tbody).append(row);
+		                	
+		                }
+		                $("#modalDataTable > tbody").empty();
+		                $("#modalDataTable").append(tbody);
+		                
+						$('#bdModalTitle').text(work_status_name + ' List');
+						$('#BizDailyModal').modal('show');
+					},
+					error: function(request, status, error){
+
+						alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+
+					}
+				})
+			}
+		})
+	</script>
+	
+	
+	<!-- Bootstrap core JavaScript-->
+    <script src="${mainpath }vendor/jquery/jquery.min.js"></script>
+    <script src="${mainpath }vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="${mainpath }vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="${mainpath }js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="${mainpath }vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="${mainpath }vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="${mainpath }js/demo/datatables-demo.js"></script>
 </body>
 
 </html>

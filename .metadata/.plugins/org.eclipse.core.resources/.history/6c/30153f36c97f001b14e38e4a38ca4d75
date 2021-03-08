@@ -1,0 +1,19 @@
+package kr.co.hojeon.controllers;
+
+import javax.annotation.Resource;
+
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import kr.co.hojeon.beans.UserBean;
+
+@Controller
+@RequestMapping("/work")
+public class WorkController {
+	@Resource(name="loginUserBean")
+	@Lazy
+	private UserBean loginUserBean;
+	
+	
+}

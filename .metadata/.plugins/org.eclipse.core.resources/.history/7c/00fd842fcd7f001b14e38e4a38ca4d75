@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mabatis.org//DTD Mapper 3.0//EN"
+                       "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="main">
+	<select id="getBizDailyStatus" parameterType="java.lang.String" resultType="" >
+		<![CDATA[
+			SELECT B.BCD_CODE WORK_STATUS_CODE, B.BCD_NAME WORK_STATUS_NAME, B.SORT_NO, COUNT(*) WORK_CNT
+			  FROM (SELECT BD_SEQ FROM TB_BIZDAILY_EXCUTER WITH(NOLOCK) WHERE EXC_USER = #{userid}) M, TB_BIZDAILY_MASTER A WITH(NOLOCK), (SELECT BCD_CODE, BCD_NAME, SORT_NO FROM TB_BASE_DETAIL WITH(NOLOCK) WHERE BCH_CODE=  'W0002') B
+			 WHERE A.
+			   AND A.WORK_STATUS = B.BCD_CODE
+			GROUP BY B.BCD_CODE, B.BCD_NAME, B.SORT_NO
+			ORDER BY B.SORT_NO;
+		]]>
+	
+	</select>
+</mapper>
