@@ -75,8 +75,10 @@
 			<mapping path="/**" />
 			<exclude-mapping path="/user/not_login"/>
 			<exclude-mapping path="/user/login"/>
+			<exclude-mapping path="/user/trylogin"/>
 			<exclude-mapping path="/main"/>
 			<exclude-mapping path="/"/>
+			<exclude-mapping path="/static/**"/>
 			<beans:bean class="kr.co.hojeon.interceptors.CheckLoginInterceptor" />
 		</interceptor>
 	</interceptors>

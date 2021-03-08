@@ -4,7 +4,9 @@ import javax.annotation.Resource;
 
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import kr.co.hojeon.beans.UserBean;
 
@@ -15,11 +17,13 @@ public class MainController {
 	private UserBean loginUserBean;
 	
 	@GetMapping("/main")
-	public String main() {
+	public String main(Model model) {
+		System.out.println("★★★★★★★★★★ main() in MainController ★★★★★★★★★★★★");
+		
+		model.addAttribute("loginUserBean", loginUserBean);
 		if (loginUserBean.isUserLoginYN()) {
 			return "mainpage";			
 		} else {
-			System.out.println("★★★★★★★★ in MainController ★★★★★★★★★★★★★★");
 			return "redirect:/user/login";
 		}
 		
