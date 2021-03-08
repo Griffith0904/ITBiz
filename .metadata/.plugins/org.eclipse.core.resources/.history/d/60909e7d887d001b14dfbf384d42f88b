@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:context="http://www.springframework.org/schema/context"
+             xsi:schemaLocation="http://www.springframework.org/schema/mvc
+                                 http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                                 http://www.springframework.org/schema/beans
+                                 http://www.springframework.org/schema/beans/spring-beans.xsd
+                                 http://www.springframework.org/schema/context
+                                 http://www.springframework.org/schema/context/spring-context.xsd">
+                                 
+	<!-- 스캔한 패키지 내부의 클래스 중 Controller 어노테이션을 가지고 있는 클래스들을 Controller로 로딩하도록 한다. -->
+	<annotation-driven></annotation-driven>
+                
+    <!-- 스캔할 Bean들이 모여있는 패키지를 지정한다 -->
+    <context:component-scan base-package="kr.co.hojeon.controllers"></context:component-scan>
+    <context:component-scan base-package="kr.co.hojeon.daos"></context:component-scan>
+    <context:component-scan base-package="kr.co.hojeon.services"></context:component-scan>
+    
+	<!-- 컨트롤러의 메서드에서 반환하는 문자열 앞/뒤에 붙힐 경로 정보를 셋팅한다.  -->
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolve">
+		<beans:property name="prefix" value="/WEB-INF/views/"></beans:property>
+		<beans:property name="suffix" value=".jsp"></beans:property>	
+	</beans:bean>                     
+
+	<!-- 정적 파일(이미지, 사운드, 동영상, js, css 등) 경로 셋팅 -->
+	<resources location="/resources/" mapping="/**"></resources>
+	
+	<!-- properties 파일의 내용을 사용할 수 있도록 Bean을 정의한다 -->
+	<beans:bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<beans:property name="locations">
+			<beans:list>
+				<beans:value>/WEB-INF/properties/db.properties</beans:value>
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+	
+	<!-- DB 접속 정보 저장 -->
+	<beans:bean class='org.apache.commons.dbcp2.BasicDataSource' id='basic_data_source'>
+		<beans:property name="driverClassName" value="${db.dirverName}"/>
+		<beans:property name="url" value="${db.connectionUrl}"/>
+		<beans:property name="username" value="${db.userName}"/>
+		<beans:property name="password" value="${db.password}"/>
+	</beans:bean>
+	
+	<beans:bean class='org.mybatis.spring.SqlSessionFactoryBean' id='sqlSession'>
+		<beans:property name="dataSource" ref="basic_data_source"></beans:property>
+		<beans:property name="mapperLocations" value="/WEB-INF/mapper/*.xml"></beans:property>
+	</beans:bean>
+	
+	<beans:bean class="org.mybatis.spring.SqlSessionTemplate" id='sqlSessionTemplate'>
+		<beans:constructor-arg index='0' ref='sqlSession'></beans:constructor-arg>
+	</beans:bean>
+	
+	<!-- MessageSource를 등록한다. -->
+	<beans:bean class="org.springframework.context.support.ReloadableResourceBundleMessageSource" id='messageSource'>
+		<beans:property name="basenames">
+			<beans:list>
+				<beans:value>/WEB-INF/properties/error_message</beans:value>
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+	
+	<!-- Message 접근을 위한 접근자 등록 -->
+	<beans:bean class="org.springframework.context.support.MessageSourceAccessor" >
+		<beans:constructor-arg ref='messageSource'></beans:constructor-arg>
+	</beans:bean>
+	
+	<beans:bean class="org.springframework.web.multipart.support.StandardServletMultipartResolver" id='multipartResolver'/>
+</beans:beans>
+                                 
+                                 

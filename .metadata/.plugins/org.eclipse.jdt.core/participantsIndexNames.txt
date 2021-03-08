@@ -1,0 +1,9 @@
+INDEX VERSION 1.131
+D:\Source\IT_Biz\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\126808539.index
+\ITBiz\src
+D:\Source\IT_Biz\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\2099071711.index
+\ITBiz\src
+D:\Source\IT_Biz\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\187101609.index
+\ITBiz\src
+D:\Source\IT_Biz\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\3866475467.index
+\ITBiz\src

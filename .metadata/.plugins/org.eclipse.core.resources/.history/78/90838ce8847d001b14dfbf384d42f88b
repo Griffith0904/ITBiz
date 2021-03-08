@@ -1,0 +1,25 @@
+package kr.co.hojeon.beans;
+
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+public class UserBean {
+	private int deptseq;
+	private String deptname;
+	private String empid;
+	private String empname;
+	private String email;
+	private String userid;
+	
+	private String typename;
+	private String dbname;
+	private String jpname;
+	private String jdname;
+	private String joname;
+	private int dbseq;
+	
+	@Size(min=4, max=100)
+	@Pattern(regexp="[a-zA-Z0-9]*")
+	private String userpw;
+	
+}
