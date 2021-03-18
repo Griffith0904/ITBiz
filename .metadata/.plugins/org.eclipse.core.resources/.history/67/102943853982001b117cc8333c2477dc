@@ -1,0 +1,5 @@
+package kr.co.hojeon.beans;
+
+public class BizWeeklyBasicSubject {
+
+}

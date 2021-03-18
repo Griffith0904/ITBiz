@@ -1,0 +1,18 @@
+package kr.co.hojeon.beans;
+
+import java.util.Date;
+
+public class TableUsrBizTwDetail {
+	private int year_num;
+	private int week_num;
+	private String work_user;
+	private int bws_seq;
+	private int sort_no;
+	private Date wk_date;
+	private String wk_user;
+	private Date et_date;
+	private String et_user;
+	
+	
+
+}

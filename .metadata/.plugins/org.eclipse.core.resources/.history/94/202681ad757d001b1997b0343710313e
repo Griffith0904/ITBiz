@@ -1,4 +1,0 @@
-db.dirverName = com.microsoft.sqlserver.jdbc.SQLServerDriver
-db.connectionUrl = jdbc:sqlserver://localhost:1433;databaseName=SSEN10;
-db.userName = st_user
-db.password = ssen1@erp

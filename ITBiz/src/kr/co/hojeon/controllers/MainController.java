@@ -1,5 +1,6 @@
 package kr.co.hojeon.controllers;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import kr.co.hojeon.beans.BDListFromMainBean;
 import kr.co.hojeon.beans.BizDailyMasterBean;
 import kr.co.hojeon.beans.UserBean;
-import kr.co.hojeon.services.BizDailyService;
+import kr.co.hojeon.services.MainPageService;
 
 @Controller
 public class MainController {
@@ -24,7 +25,7 @@ public class MainController {
 	private UserBean loginUserBean;
 	
 	@Autowired
-	private BizDailyService bds;
+	private MainPageService mps;
 	
 	@GetMapping("/main")
 	public String main(Model model) {
@@ -35,10 +36,16 @@ public class MainController {
 			return "redirect:/user/login";
 		}
 		
-		List<BDListFromMainBean> listbfm = bds.getBizDailyStatusForMain();
+		List<BDListFromMainBean> listbfm = mps.getBizDailyStatusForMain();
 		
 		model.addAttribute("listbfm", listbfm);
 
+		
+		List<HashMap<String, Object>> lhso = mps.searchFindWorkForTeam();
+		System.out.println(lhso);
+		model.addAttribute("workforteam", lhso);
+		
+		
 		return "mainpage";
 		
 	}

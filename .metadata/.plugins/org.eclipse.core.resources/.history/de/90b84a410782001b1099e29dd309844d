@@ -1,0 +1,16 @@
+package kr.co.hojeon.daos;
+
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class BizWeeklyDAO {
+	@Autowired
+	private SqlSessionTemplate sqlSessionTemplate;
+	
+	public String getLastWeekPlaner(int year, int week, String userid) {
+		
+		sqlSessionTemplate.selectOne("biz.getLastWeekPlaner", parameter)
+	}
+}

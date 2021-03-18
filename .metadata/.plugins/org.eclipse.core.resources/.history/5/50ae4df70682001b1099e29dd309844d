@@ -1,0 +1,5 @@
+package kr.co.hojeon.daos;
+
+public class BizWeeklyDAO {
+
+}

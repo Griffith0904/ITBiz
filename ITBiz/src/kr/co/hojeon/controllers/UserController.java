@@ -51,4 +51,10 @@ public class UserController {
 			}
 		}
 	}
+	
+	@GetMapping("/logout")
+	public String logout() {
+		loginUserBean.setUserLoginYN(false);
+		return "/user/logout";
+	}
 }

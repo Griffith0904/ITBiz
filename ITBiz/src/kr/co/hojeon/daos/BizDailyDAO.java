@@ -20,15 +20,5 @@ public class BizDailyDAO {
 	@Autowired
 	private SqlSessionTemplate sqlSessionTemplate;
 	
-	public List<BDListFromMainBean> getBizDailyStatusForMain(String userid) {
-		//List<BDListFromMainBean> listbm = sqlSessionTemplate.selectList("main.getBizDailyStatusForMain", loginUserBean.getUserid());
-		return sqlSessionTemplate.selectList("main.getBizDailyStatusForMain", userid);
-	}
 	
-	public List<BizDailyMasterBean> searchAllDataFromStatusList(String userid, String work_status) {
-		Map map = new HashMap();
-		map.put("userid", userid);
-		map.put("work_status", work_status);
-		return sqlSessionTemplate.selectList("main.searchAllDataFromStatus", map);
-	}
 }

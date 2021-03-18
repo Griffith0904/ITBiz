@@ -1,4 +1,0 @@
-db.dirverName = com.microsoft.sqlserver.jdbc.SQLServerDriver
-db.connectionUrl = jdbc:sqlserver://103.249.28.239:1433;databaseName=ITINFRA;
-db.userName = itinfra_user
-db.password = itinfra_user

@@ -1,0 +1,42 @@
+package kr.co.hojeon.services;
+
+import java.util.HashMap;
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
+
+import kr.co.hojeon.beans.BizWeeklyBasicSubject;
+import kr.co.hojeon.beans.BizWeeklySubject;
+import kr.co.hojeon.beans.UserBean;
+import kr.co.hojeon.daos.BizWeeklyDAO;
+
+@Service
+public class BizWeeklyService {
+	@Autowired
+	private BizWeeklyDAO bwd;
+	
+	@Resource(name="loginUserBean")
+	@Lazy
+	private UserBean loginUserBean;
+	
+	public String getLastWeekPlaner(int year, int week) {
+		return bwd.getLastWeekPlaner(year, week, loginUserBean.getUserid());
+	}
+	
+	public List<BizWeeklySubject> getRegistedThisWorkSubject(int year, int week) {
+		return bwd.getRegistedThisWorkSubject(year, week, loginUserBean.getUserid());
+	}
+	
+	public List<BizWeeklySubject> getRegistedNextWorkSubject(int year, int week) {
+		return bwd.getRegistedNextWorkSubject(year, week, loginUserBean.getUserid());
+	}
+	
+	public List<BizWeeklyBasicSubject> getJustWeekBasicSubject() {
+		
+		return bwd.getJustWeekBasicSubject();
+	}
+}

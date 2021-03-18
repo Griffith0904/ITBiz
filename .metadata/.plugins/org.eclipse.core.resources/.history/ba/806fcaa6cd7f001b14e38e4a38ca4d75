@@ -1,8 +1,0 @@
-package kr.co.hojeon.daos;
-
-import org.springframework.stereotype.Repository;
-
-@Repository
-public class BDDAO {
-	
-}

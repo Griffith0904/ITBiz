@@ -21,13 +21,4 @@ public class BizDailyService {
 	@Resource(name="loginUserBean")
 	@Lazy
 	private UserBean loginUserBean;
-	
-	public List<BDListFromMainBean> getBizDailyStatusForMain() {
-		return bdd.getBizDailyStatusForMain(loginUserBean.getUserid());
-	}
-	
-	public List<BizDailyMasterBean> searchAllDataFromStatusList(String work_status) {
-		List<BizDailyMasterBean> listbdm = bdd.searchAllDataFromStatusList(loginUserBean.getUserid(), work_status);
-		return listbdm;
-	}
 }

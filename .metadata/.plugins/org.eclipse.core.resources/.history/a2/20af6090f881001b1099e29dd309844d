@@ -1,0 +1,81 @@
+package kr.co.hojeon.controllers;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+
+import javax.annotation.Resource;
+
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import kr.co.hojeon.beans.UserBean;
+
+@Controller
+@RequestMapping("/biz")
+public class BizController {
+	private static final String List = null;
+	@Resource(name="loginUserBean")
+	@Lazy
+	private UserBean loginUserBean;
+	
+	@GetMapping("/dailyRgst")
+	public String dailyRgst() {
+		return "biz/dailyRgst";
+	}
+	
+	@GetMapping("/dailyList")
+	public String dailyList() {
+		return "biz/dailyList";
+	}
+	
+	//주간 업무 보고 등록
+	@GetMapping("/weeklyRgst")
+	public String weeklyRgst(Model model) {
+		ArrayList<HashMap<String, Integer>> search_year = new ArrayList<HashMap<String, Integer>>();
+		ArrayList<HashMap<String, Integer>> search_week = new ArrayList<HashMap<String, Integer>>();
+		
+		HashMap<String, Integer> yd1 = new HashMap<String, Integer>();
+		HashMap<String, Integer> yd2 = new HashMap<String, Integer>();
+		HashMap<String, Integer> wd = new HashMap<String, Integer>();
+		
+		SimpleDateFormat format = new SimpleDateFormat("yy"); 
+		
+		Date now = new Date(); 
+		String now_dt = format.format(now); 
+		
+		for (int i=0; i<3; i++) {
+			//yd.put("20" + Integer.toString(Integer.parseInt(now_dt) - i), Integer.parseInt(now_dt) - i);
+			yd1.put("year_value", Integer.parseInt(now_dt) - i);
+			yd2.put("year_string", Integer.parseInt(now_dt) - i + 2000);
+		}
+		
+		for (int i=1; i<53; i++) {
+			wd.put(Integer.toString(i), i);
+		}
+		
+		search_year.add(yd1);
+		search_year.add(yd2);
+		search_week.add(wd);
+
+		model.addAttribute("search_data", search_year);
+		
+		return "biz/weeklyRgst";
+	}
+	
+	//주간 업무 대분류 등
+	@GetMapping("/weeklySubjectRgst")
+	public String weeklySubjectRgst() {
+		return "biz/weeklySubjectRgst";
+	}
+	
+	//주간 업무 보고 통합 조회
+	@GetMapping("/weeklyAllList")
+	public String weeklyAllList() {
+		return "biz/weeklyAllList";
+	}
+}
