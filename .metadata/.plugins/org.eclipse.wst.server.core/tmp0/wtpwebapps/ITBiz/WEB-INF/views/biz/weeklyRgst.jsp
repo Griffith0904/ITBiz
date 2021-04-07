@@ -86,7 +86,7 @@ tbody tr.active {
 				</div>
 
 				<div
-					style='margin-top: 40px; width: 100%; height: calc(100% - 169px);'>
+					style='margin-top: 20px; width: 100%; height: calc(100% - 169px);'>
 					<div class="row" style='height: 100%;'>
 						<!-- 왼쪽 (지난주) -->
 						<div class="col-xl-4 col-lg-5"
@@ -226,6 +226,7 @@ tbody tr.active {
 												<div class="col mr-2">
 													<div
 														class="text-xs font-weight-bold text-primary text-uppercase mb-1"
+														id = "testButton"
 														style='margin-left: 15px; margin-top: 10px'>b) 세부 내역</div>
 												</div>
 											</div>
@@ -455,6 +456,11 @@ tbody tr.active {
 		var main_week_num = 0;
 		
 		$(document).ready(function(){
+			// Preview 버튼
+			var child;
+			var timer;
+			timer = setInterval(checkChild, 500);
+			
 			$('#btn_reset_search').click(function() {
 				var search_year = $('#search_year').val();
 				var search_week = $('#search_week').val();
@@ -503,7 +509,7 @@ tbody tr.active {
 					type:"get",
 					dataType:'text',
 					contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-					url:'${root}biz/getLastWeekPlaner?search_year=' + search_year + '&search_week=' + search_week,
+					url:'${root}biz/getLastWeekPlaner?search_year=' + search_year + '&search_week=' + search_week + '&search_type=1',
 					success: function(result) {
 						var num_len = result.length
 						
@@ -635,8 +641,10 @@ tbody tr.active {
 	        	var getClickedRow = $(this).index()+1;
 	            var bws_seq = $('#nwct_bws_seq' + getClickedRow).text();
 	            
-	            $('tr.clicked').removeClass('clicked'); 
-	            tr.addClass('clicked')
+	            //$('tr.clicked').removeClass('clicked'); 
+	            //tr.addClass('clicked')
+	            $(this).addClass('clicked').siblings().removeClass('clicked');
+	            if (!bws_seq) { return }
 	            getUsrBizWeeklyContent(bws_seq, 2)
 	        });
 			
@@ -948,11 +956,59 @@ tbody tr.active {
 					url:'${root}biz/copyUsrBizWeekData',
 					data:{'year_num':main_year_num, 'week_num':main_week_num, 'copy_type':subject_modal},
 					success: function(result) {
-						alert('복사가 완료되었습니다!')
+						alert('복사가 완료되었습니다!');
 						resetTableSubject(result, subject_modal)						
 					}
 				})
 			})
+			
+			
+			
+			$('#btn_all_preview').click(function() {
+				if (main_year_num == 0) {
+					alert("먼저 내역을 조회 후 사용하여 주십시오!")
+					return
+				}
+				
+				var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : screen.left;
+			    var dualScreenTop = window.screenTop != undefined ? window.screenTop : screen.top;
+			    var width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+			    var height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+			    
+			    var left = ((width / 2) - (700 / 2)) + dualScreenLeft;
+			    var top = ((height / 2) - (700 / 2)) + dualScreenTop;
+			    
+			    $('#windowblock').modal({backdrop: 'static', keyboard: false}) 
+			    $('#windowblock').modal("show");
+			    
+			    var myForm = document.sendPOP;
+			    var url = "${root}biz/weeklyReportPOP";
+			    
+			    myForm.action =url;
+			    myForm.method ="post";
+			    myForm.target ="popForm";
+			    // id로 넣는 법과 name으로 넣는법. 둘다 잘됨
+			    //$('#fm_year_num').val(main_year_num)
+			    //$('#fm_week_num').val(main_week_num)
+			    $('input[name=form_year_num]').val(main_year_num)
+			    $('input[name=form_week_num]').val(main_week_num)
+			    
+			    child = window.open("", "popForm", "toolbar=no,menubar=no,width=960,height=820,top=" + top + ",left=" + left)
+			   	myForm.submit();
+			})
+			
+			function checkChild() {
+			    if (child != undefined && child.closed) {
+			    	$('#windowblock').modal('hide');
+			    	child = null;
+		        }
+		    }
+			
+			$('#testButton').click(function() {
+				
+			})
+			
+			
 			
 			// 주간 업무 subject 모달 테이블 더블 클릭
 			$('#FindSubjectModalTable').on('dblclick', 'tr', function() {
@@ -1071,6 +1127,16 @@ tbody tr.active {
 			</div>
 		</div>
 	</div>
+	
+	<div class='modal fade' id='windowblock' role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document" >
+		</div>
+	</div>
+	
+	<form name='sendPOP' id='sendPOP' style='display:none'>
+		<input name='form_year_num' id='fm_year_num'>
+		<input name='form_week_num' id='fm_week_num'>
+	</form>
 </body>
 
 </html>

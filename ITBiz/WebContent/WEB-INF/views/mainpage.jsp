@@ -36,7 +36,9 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <c:import url="/WEB-INF/views/include/main_sidebar.jsp"></c:import>
+        <c:import url="/WEB-INF/views/include/main_sidebar.jsp">
+        	<%-- <c:param name="userInfo" value='${userInfo }'></c:param> sessionScope로 잡음  --%>
+        </c:import>
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->

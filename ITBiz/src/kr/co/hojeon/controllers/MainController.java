@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -28,7 +30,7 @@ public class MainController {
 	private MainPageService mps;
 	
 	@GetMapping("/main")
-	public String main(Model model) {
+	public String main(HttpServletRequest request, Model model) {
 		System.out.println("★★★★★★★★★★ main() in MainController ★★★★★★★★★★★★");
 		
 		model.addAttribute("loginUserBean", loginUserBean);
@@ -42,9 +44,11 @@ public class MainController {
 
 		
 		List<HashMap<String, Object>> lhso = mps.searchFindWorkForTeam();
-		System.out.println(lhso);
+		
 		model.addAttribute("workforteam", lhso);
 		
+		HttpSession session = request.getSession();
+		session.setAttribute("userInfo", loginUserBean.getEmpname() + " " + loginUserBean.getJpname());
 		
 		return "mainpage";
 		

@@ -1,0 +1,752 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mabatis.org//DTD Mapper 3.0//EN"
+                       "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="biz">
+	<select id="getLastWeekPlaner" parameterType="hashmap"
+		resultType="java.lang.String">
+		<![CDATA[
+			-- 전주 내역 조회시 해당 차주 - 1 해야함
+			-- ID는 전주것만 가져올꺼 같지만, 실제로는 전주, 금주, 차주 다 가져올 수 있음
+			begin
+				Declare
+					@v_cnt int,
+					@v_rtn_text nvarchar(max),
+					@v_search_week int,
+					@v_search_year int;
+				Declare @v_table table (row_num int, bws_content nvarchar(max), bws_seq int);
+			
+				if #{search} = 1
+					begin
+						if #{week} = 1
+							begin
+								Set @v_search_week = 52;
+								Set @v_search_year = #{year} - 1;
+							end
+						else
+							begin
+								Set @v_search_week = #{week} - 1;
+								Set @v_search_year = #{year};
+							end
+					end
+				else
+					begin
+						Set @v_search_week = #{week};
+						Set @v_search_year = #{year};
+					end
+						
+				
+				Select @v_cnt = Count(*)
+				  From TB_USRBIZWK_MASTER with(nolock)
+				 Where YEAR_NUM = @v_search_year
+				   AND WEEK_NUM = @v_search_week
+				   AND WORK_USER = #{userid};
+			
+				if @v_cnt = 0
+					begin
+						Set @v_rtn_text = '';
+						Select @v_rtn_text;
+						return;
+					end
+				else
+					begin
+						if #{search} = 1 or #{search} = 3
+							begin
+								Select @v_cnt = Count(*)
+								  From TB_USRBIZNW_DETAIL with(nolock)
+								 WHERE YEAR_NUM = @v_search_year
+								   AND WEEK_NUM = @v_search_week
+								   AND WORK_USER = #{userid};
+							end
+						else
+							begin
+								Select @v_cnt = Count(*)
+								  From TB_USRBIZTW_DETAIL with(nolock)
+								 WHERE YEAR_NUM = @v_search_year
+								   AND WEEK_NUM = @v_search_week
+								   AND WORK_USER = #{userid};
+							end
+			
+						if @v_cnt = 0
+							begin
+								Set @v_rtn_text = '';
+								Select @v_rtn_text;
+								return;
+							end
+						
+						if #{search} = 1 or #{search} = 3
+							begin
+								Insert Into @v_table
+								SELECT
+									Row_number() Over(order by A.SORT_NO, a.bws_seq) row_num, B.BWS_CONTENT, A.BWS_SEQ
+								FROM
+									TB_USRBIZNW_DETAIL A WITH(NOLOCK),
+									TB_BIZWEEKLY_SUBJECT B WITH(NOLOCK)
+								WHERE
+									A.YEAR_NUM = @v_search_year AND
+									A.WEEK_NUM = @v_search_week AND
+									A.WORK_USER = #{userid} AND
+									A.BWS_SEQ = B.BWS_SEQ
+								Order by A.SORT_NO, A.BWS_SEQ;
+							end
+						else
+							begin
+								Insert Into @v_table
+								SELECT
+									Row_number() Over(order by A.SORT_NO, a.bws_seq) row_num, B.BWS_CONTENT, A.BWS_SEQ
+								FROM
+									TB_USRBIZTW_DETAIL A WITH(NOLOCK),
+									TB_BIZWEEKLY_SUBJECT B WITH(NOLOCK)
+								WHERE
+									A.YEAR_NUM = @v_search_year AND
+									A.WEEK_NUM = @v_search_week AND
+									A.WORK_USER = #{userid} AND
+									A.BWS_SEQ = B.BWS_SEQ
+								Order by A.SORT_NO, A.BWS_SEQ;
+							end
+						Select @v_cnt = Count(*) From @v_table;
+				
+						Declare
+							@v_row int,
+							@v_bws_seq int,
+							@v_content_txt nvarchar(max),
+							@v_all_content_txt nvarchar(max),
+							@v_bws_content nvarchar(max);
+			
+						Set @v_row = 1;
+			
+						While @v_row <= @v_cnt
+							begin
+								Set @v_content_txt = '';
+								Select @v_bws_seq = bws_seq, @v_bws_content = bws_content
+								  From @v_table
+								 Where row_num = @v_row;
+								
+								if #{search} = 1 or #{search} = 3
+									begin
+										SELECT @v_content_txt = CONTENT_TXT
+										  FROM TB_USRBIZNW_CONTENT WITH(NOLOCK)
+										 WHERE YEAR_NUM = @v_search_year
+										   AND WEEK_NUM = @v_search_week
+										   AND WORK_USER = #{userid}
+										   And BWS_SEQ = @v_bws_seq
+										   And SC_SEQ = 1;
+									end
+								else
+									begin
+										SELECT @v_content_txt = CONTENT_TXT
+										  FROM TB_USRBIZTW_CONTENT WITH(NOLOCK)
+										 WHERE YEAR_NUM = @v_search_year
+										   AND WEEK_NUM = @v_search_week
+										   AND WORK_USER = #{userid}
+										   And BWS_SEQ = @v_bws_seq
+										   And SC_SEQ = 1;
+									end
+			
+								if @v_row = 1
+									begin
+										--set @v_all_content_txt = '◈ ' + @v_bws_content + char(13) + char(10) + @v_content_txt
+										set @v_all_content_txt = '◈ ' + @v_bws_content + char(13) + char(10) + @v_content_txt;
+									end
+								else
+									begin
+										--set @v_all_content_txt = @v_all_content_txt + char(13) + char(10) +  + char(13) + char(10) + '◈ ' + @v_bws_content + char(13) + char(10) + @v_content_txt;
+										set @v_all_content_txt = @v_all_content_txt + char(13) + char(10) + '◈ ' + @v_bws_content + char(13) + char(10) + @v_content_txt;
+									end
+			
+								Set @v_row = @v_row + 1;
+							end
+			
+						select @v_all_content_txt; 
+					end;
+			end;
+		]]>
+	</select>
+
+	<select id="getRegistedThisWorkSubject" parameterType="hashmap"
+		resultType="kr.co.hojeon.beans.BizWeeklySubject">
+		<![CDATA[
+			Select
+				a.sort_no, a.bws_seq, b.bws_content, a.year_num, a.week_num, a.work_user, Row_number() Over(order by a.sort_no, a.bws_seq) rownum
+			From
+				TB_USRBIZTW_DETAIL a with(nolock),
+				TB_BIZWEEKLY_SUBJECT b with(nolock)
+			Where
+				a.year_num = #{year} and
+				a.week_num = #{week} and
+				a.work_user = #{userid} and
+				a.bws_seq = b.bws_seq
+			Order by a.sort_no, a.bws_seq;
+		]]>
+	</select>
+
+	<select id="getRegistedNextWorkSubject" parameterType="hashmap"
+		resultType="kr.co.hojeon.beans.BizWeeklySubject">
+		<![CDATA[
+			Select
+				a.sort_no, a.bws_seq, b.bws_content, a.year_num, a.week_num, a.work_user, Row_number() Over(order by a.sort_no, a.bws_seq) rownum
+			From
+				TB_USRBIZNW_DETAIL a with(nolock),
+				TB_BIZWEEKLY_SUBJECT b with(nolock)
+			Where
+				a.year_num = #{year} and
+				a.week_num = #{week} and
+				a.work_user = #{userid} and
+				a.bws_seq = b.bws_seq
+			Order by a.sort_no, a.bws_seq;
+		]]>
+	</select>
+
+	<select id="getLastWeekPlaner2" parameterType="hashmap"
+		resultType="java.lang.String">
+		<![CDATA[
+			begin
+				Declare @v_cnt int;
+				Declare @v_table table (row_num int, contents nvarchar(max));
+				Declare @v_rtn_txt nvarchar(max);
+				Declare @v_row_txt nvarchar(max);
+				Declare @v_row int;
+			
+				Insert Into @v_table
+				SELECT
+					ROW_NUMBER() OVER(ORDER BY A.SORT_NO) ROW_NUM,
+					CONCAT(C.BWS_CONTENT, char(13) , char(10) , B.CONTENT_TXT) CONTENTS
+			
+				FROM
+					TB_USRBIZNW_DETAIL A WITH(NOLOCK),
+					TB_USRBIZNW_CONTENT B WITH(NOLOCK),
+					TB_BIZWEEKLY_SUBJECT C WITH(NOLOCK)
+				WHERE
+					A.YEAR_NUM = #{year} AND
+					A.WEEK_NUM = #{week} AND
+					A.WORK_USER = #{userid} AND
+					A.YEAR_NUM = B.YEAR_NUM AND
+					A.WEEK_NUM = B.WEEK_NUM AND
+					A.WORK_USER = B.WORK_USER AND
+					A.BWS_SEQ = B.BWS_SEQ AND
+					A.BWS_SEQ = C.BWS_SEQ
+				ORDER BY A.SORT_NO
+				;
+			
+				Select @v_cnt = Count(*) From @v_table;
+			
+				if @v_cnt = 1
+					begin
+						Select @v_rtn_txt = CONTENTS From @v_table;
+					End
+				else if @v_cnt = 0
+					begin
+						Set @v_rtn_txt = '';
+					end
+				Else
+					begin
+						Set @v_row = 1;
+					
+						while @v_row <= @v_cnt
+							begin
+								Select @v_row_txt = CONTENTS
+								  From @v_table
+								 Where row_num = @v_row;
+			
+								if @v_row = 1
+									begin
+										Set @v_rtn_txt = @v_row_txt;
+									end
+								else
+									begin
+										Set @v_rtn_txt = @v_rtn_txt + char(13) + char(10) + @v_row_txt;
+									end
+			
+								Set @v_row = @v_row + 1;
+							end
+					end
+			
+				Select @v_rtn_txt rtn_content;
+			end;
+		]]>
+	</select>
+
+	<select id="getJustWeekBasicSubject"
+		resultType="kr.co.hojeon.beans.BizWeeklyBasicSubject">
+		<![CDATA[
+			SELECT
+				bws_seq, bws_content, remark, use_yn, just_me, sort_no, wk_date, wk_user, et_date, et_user, row_number() over(order by bws_seq) rownum
+			From
+				TB_BIZWEEKLY_SUBJECT with(nolock)
+			Order by
+				sort_no;
+		]]>
+	</select>
+
+	<insert id="insertUsrBizWeeklyDataForThisWeek"
+		parameterType='kr.co.hojeon.beans.TableUsrBizTwDetail'>
+		<![CDATA[
+			begin
+				Declare @v_cnt int;
+				Declare @v_max_sort_no int;
+				
+				Select @v_cnt = Count(*)
+				  From TB_USRBIZWK_MASTER with(nolock)
+				 Where year_num = #{year_num}
+				   And week_num = #{week_num}
+				   And work_user = #{work_user};
+				   
+				if @v_cnt = 0
+					begin
+						-- Master Data 가 없으면 자동으로 삽입
+						Insert Into TB_USRBIZWK_MASTER
+							(
+							year_num, week_num, work_user, wk_date, wk_user
+							)
+						Values
+							(
+							#{year_num}, #{week_num}, #{work_user}, getdate(), #{wk_user}
+							);
+					end
+				 
+				Select @v_max_sort_no = Max(sort_no)
+				  From TB_USRBIZTW_DETAIL with(nolock)
+				 Where year_num = #{year_num}
+				   And week_num = #{week_num}
+				   And work_user = #{work_user};
+			
+				if @v_max_sort_no is null
+					begin
+						Set @v_max_sort_no = 1;
+					end
+				else
+					begin
+						Set @v_max_sort_no = @v_max_sort_no + 1;
+					end
+			
+				Insert into TB_USRBIZTW_DETAIL
+					(
+					year_num, week_num, work_user, bws_seq, sort_no, wk_date, wk_user
+					)
+				Values
+					(
+					#{year_num}, #{week_num}, #{work_user}, #{bws_seq}, @v_max_sort_no, getdate(), #{wk_user}
+					);
+			
+			end;
+		]]>
+	</insert>
+
+	<insert id="insertUsrBizWeeklyDataForNextWeek"
+		parameterType='kr.co.hojeon.beans.TableUsrBizTwDetail'>
+		<![CDATA[
+			begin
+				Declare @v_cnt int;
+				Declare @v_max_sort_no int;
+				
+				Select @v_cnt = Count(*)
+				  From TB_USRBIZWK_MASTER with(nolock)
+				 Where year_num = #{year_num}
+				   And week_num = #{week_num}
+				   And work_user = #{work_user};
+				   
+				if @v_cnt = 0
+					begin
+						-- Master Data 가 없으면 자동으로 삽입
+						Insert Into TB_USRBIZWK_MASTER
+							(
+							year_num, week_num, work_user, wk_date, wk_user
+							)
+						Values
+							(
+							#{year_num}, #{week_num}, #{work_user}, getdate(), #{wk_user}
+							);
+					end
+				 
+				Select @v_max_sort_no = Max(sort_no)
+				  From TB_USRBIZNW_DETAIL with(nolock)
+				 Where year_num = #{year_num}
+				   And week_num = #{week_num}
+				   And work_user = #{work_user};
+			
+				if @v_max_sort_no is null
+					begin
+						Set @v_max_sort_no = 1;
+					end
+				else
+					begin
+						Set @v_max_sort_no = @v_max_sort_no + 1;
+					end
+			
+				Insert into TB_USRBIZNW_DETAIL
+					(
+					year_num, week_num, work_user, bws_seq, sort_no, wk_date, wk_user
+					)
+				Values
+					(
+					#{year_num}, #{week_num}, #{work_user}, #{bws_seq}, @v_max_sort_no, getdate(), #{wk_user}
+					);
+			
+			end;
+		]]>
+	</insert>
+
+	<select id="getUsrBizWeeklyContent" parameterType='hashmap'
+		resultType='java.lang.String'>
+		Begin
+		Declare @v_cnt int;
+		Declare @v_rtn_text nvarchar(max);
+
+		if #{search_type} = 1
+		begin
+		Select @v_cnt = Count(*)
+		From TB_USRBIZTW_content with(nolock)
+		Where year_num = #{year_num}
+		And week_num = #{week_num}
+		And work_user = #{work_user}
+		And bws_seq = #{bws_seq};
+
+		if @v_cnt = 0
+		Set @v_rtn_text = '';
+		Else
+		begin
+		Select @v_rtn_text = content_txt
+		From TB_USRBIZTW_content with(nolock)
+		Where year_num = #{year_num}
+		And week_num = #{week_num}
+		And work_user = #{work_user}
+		And bws_seq = #{bws_seq};
+		End
+		end
+		else if #{search_type} = 2
+		begin
+		Select @v_cnt = Count(*)
+		From TB_USRBIZNW_content with(nolock)
+		Where year_num = #{year_num}
+		And week_num = #{week_num}
+		And work_user = #{work_user}
+		And bws_seq = #{bws_seq};
+
+		if @v_cnt = 0
+		Set @v_rtn_text = '';
+		Else
+		begin
+		Select @v_rtn_text = content_txt
+		From TB_USRBIZNW_content with(nolock)
+		Where year_num = #{year_num}
+		And week_num = #{week_num}
+		And work_user = #{work_user}
+		And bws_seq = #{bws_seq};
+		End
+		end
+		else
+		Set @v_rtn_text = '';
+
+		Select @v_rtn_text rtn_text;
+		End
+	</select>
+
+	<delete id="deleteUsrBizWeeklyContent" parameterType='hashmap'>
+		<![CDATA[
+			begin
+				Declare @v_cnt int;
+				
+				if #{delete_type} = 1
+					begin
+						Select @v_cnt = count(*)
+				  		  From tb_usrbiztw_content with(nolock)
+				  		 Where year_num = #{year_num}
+				  		   And week_num = #{week_num}
+				  		   And work_user = #{work_user}
+				  		   And bws_seq = #{bws_seq};
+				  		   
+				  		if @v_cnt > 0
+				  			begin
+				  				Delete From tb_usrbiztw_content
+				  				Where year_num = #{year_num}
+						  		  And week_num = #{week_num}
+						  		  And work_user = #{work_user}
+						  		  And bws_seq = #{bws_seq};
+						  	end
+						  	
+						Delete From tb_usrbiztw_detail
+						Where year_num = #{year_num}
+				  		   And week_num = #{week_num}
+				  		   And work_user = #{work_user}
+				  		   And bws_seq = #{bws_seq};
+					end
+				else if #{delete_type} = 2
+					begin
+						Select @v_cnt = count(*)
+				  		  From tb_usrbiznw_content with(nolock)
+				  		 Where year_num = #{year_num}
+				  		   And week_num = #{week_num}
+				  		   And work_user = #{work_user}
+				  		   And bws_seq = #{bws_seq};
+				  		   
+				  		if @v_cnt > 0
+				  			begin
+				  				Delete From tb_usrbiznw_content
+				  				Where year_num = #{year_num}
+						  		  And week_num = #{week_num}
+						  		  And work_user = #{work_user}
+						  		  And bws_seq = #{bws_seq};
+						  	end
+						  	
+						Delete From tb_usrbiznw_detail
+						Where year_num = #{year_num}
+				  		   And week_num = #{week_num}
+				  		   And work_user = #{work_user}
+				  		   And bws_seq = #{bws_seq};
+					end
+					
+				
+			end
+		]]>
+	</delete>
+
+	<insert id="saveUsrBizWeeklyContentData" parameterType='hashmap'>
+		<![CDATA[
+			begin
+				Declare @v_cnt int;
+				
+				if #{insert_type} = 1
+					begin
+						Select @v_cnt = Count(*)
+						  From tb_usrbiztw_content with(nolock)
+						 Where year_num = #{year_num}
+						   And week_num = #{week_num}
+						   And work_user = #{work_user}
+						   And bws_seq = #{bws_seq};
+						   
+						if @v_cnt = 0
+							begin
+								Insert Into tb_usrbiztw_content
+									(
+									year_num, week_num, work_user, bws_seq, sc_seq,
+									content_txt, wk_date, wk_user
+									)
+								Values
+									(
+									#{year_num}, #{week_num}, #{work_user}, #{bws_seq}, 1,
+									#{content}, getdate(), #{work_user}
+									);
+							end
+						else
+							begin
+								Update tb_usrbiztw_content
+								   Set content_txt = #{content}, et_date = getdate(), et_user = #{work_user}
+								 Where year_num = #{year_num}
+								   And week_num = #{week_num}
+								   And work_user = #{work_user}
+								   And bws_seq = #{bws_seq};
+							end
+					end
+				else if #{insert_type} = 2
+					begin
+						Select @v_cnt = Count(*)
+						  From tb_usrbiznw_content with(nolock)
+						 Where year_num = #{year_num}
+						   And week_num = #{week_num}
+						   And work_user = #{work_user}
+						   And bws_seq = #{bws_seq};
+						   
+						if @v_cnt = 0
+							begin
+								Insert Into tb_usrbiznw_content
+									(
+									year_num, week_num, work_user, bws_seq, sc_seq,
+									content_txt, wk_date, wk_user
+									)
+								Values
+									(
+									#{year_num}, #{week_num}, #{work_user}, #{bws_seq}, 1,
+									#{content}, getdate(), #{work_user}
+									);
+							end
+						else
+							begin
+								Update tb_usrbiznw_content
+								   Set content_txt = #{content}, et_date = getdate(), et_user = #{work_user}
+								 Where year_num = #{year_num}
+								   And week_num = #{week_num}
+								   And work_user = #{work_user}
+								   And bws_seq = #{bws_seq};
+							end
+					end
+			end
+		]]>
+	</insert>
+
+	<insert id="copyToTargetWeelyData" parameterType='hashmap'>
+		<![CDATA[
+			begin
+				Declare @v_cnt int;
+				Declare @v_target_year_num int;
+				Declare @v_target_week_num int;
+				
+				Select @v_cnt = Count(*)
+				   From tb_usrbizwk_master with(nolock)
+				  Where year_num = #{year_num}
+		  		    And week_num = #{week_num}
+		  		    And work_user = #{work_user};
+		  		 
+		  		 if @v_cnt = 0
+		  		 	begin
+		  		 		insert into tb_usrbizwk_master
+		  		 			(
+		  		 			year_num, week_num, work_user, wk_date, wk_user
+		  		 			)
+		  		 		values
+		  		 			(
+		  		 			#{year_num}, #{week_num}, #{work_user}, getdate(), #{work_user}
+		  		 			);
+		  		 	end
+				
+				if #{copy_type} = 1
+					begin
+						-- 지난 주의 차주 내역을 금주 진행 업무쪽으로 복사
+						if #{week_num} = 1
+							begin
+								Set @v_target_year_num = #{year_num} - 1;
+								Set @v_target_week_num = 52;
+							end
+						else
+							begin
+								Set @v_target_year_num = #{year_num};
+								Set @v_target_week_num = #{week_num} - 1;
+							end
+							
+						Select @v_cnt = Count(*)
+				  		  From tb_usrbiztw_detail with(nolock)
+				  		 Where year_num = #{year_num}
+				  		   And week_num = #{week_num}
+				  		   And work_user = #{work_user};
+				  		   
+				  		if @v_cnt > 0
+				  			begin
+				  				Delete From tb_usrbiztw_content
+				  				Where year_num = #{year_num}
+						  		  And week_num = #{week_num}
+						  		  And work_user = #{work_user};
+						  		  
+				  				Delete From tb_usrbiztw_detail
+				  				Where year_num = #{year_num}
+						  		  And week_num = #{week_num}
+						  		  And work_user = #{work_user};
+						 	end
+						 
+						 Insert Into tb_usrbiztw_detail
+						 	(
+						 	year_num, week_num, work_user,
+						 	bws_seq, sort_no, wk_date, wk_user
+						 	)
+						 Select
+						 	#{year_num}, #{week_num}, #{work_user}, 
+						 	bws_seq, sort_no, getdate(), #{work_user}
+						 From
+						 	 tb_usrbiznw_detail with(nolock)
+						 Where
+						 	year_num = @v_target_year_num And
+						  	week_num = @v_target_week_num And
+						  	work_user = #{work_user};
+						  	
+						Insert Into tb_usrbiztw_content
+						 	(
+						 	year_num, week_num, work_user,
+						 	bws_seq, sc_seq, content_txt, wk_date, wk_user
+						 	)
+						 Select
+						 	#{year_num}, #{week_num}, #{work_user}, 
+						 	bws_seq, sc_seq, content_txt, getdate(), #{work_user}
+						 From
+						 	 tb_usrbiznw_content with(nolock)
+						 Where
+						 	year_num = @v_target_year_num And
+						  	week_num = @v_target_week_num And
+						  	work_user = #{work_user};
+					end
+				else if #{copy_type} = 2
+					begin
+						-- 금주 업무 내역을 차주 업무쪽으로 복사
+						Set @v_target_year_num = #{year_num};
+						Set @v_target_week_num = #{week_num};
+						
+						Select @v_cnt = Count(*)
+				  		  From tb_usrbiznw_detail with(nolock)
+				  		 Where year_num = #{year_num}
+				  		   And week_num = #{week_num}
+				  		   And work_user = #{work_user};
+				  		   
+				  		if @v_cnt > 0
+				  			begin
+				  				Delete From tb_usrbiznw_content
+				  				Where year_num = #{year_num}
+						  		  And week_num = #{week_num}
+						  		  And work_user = #{work_user};
+				  				
+				  				Delete From tb_usrbiznw_detail
+				  				Where year_num = #{year_num}
+						  		  And week_num = #{week_num}
+						  		  And work_user = #{work_user};						  		
+						 	end
+						 
+						 Insert Into tb_usrbiznw_detail
+						 	(
+						 	year_num, week_num, work_user,
+						 	bws_seq, sort_no, wk_date, wk_user
+						 	)
+						 Select
+						 	#{year_num}, #{week_num}, #{work_user}, 
+						 	bws_seq, sort_no, getdate(), #{work_user}
+						 From
+						 	 tb_usrbiztw_detail with(nolock)
+						 Where
+						 	year_num = @v_target_year_num And
+						  	week_num = @v_target_week_num And
+						  	work_user = #{work_user};
+						  	
+						Insert Into tb_usrbiznw_content
+						 	(
+						 	year_num, week_num, work_user,
+						 	bws_seq, sc_seq, content_txt, wk_date, wk_user
+						 	)
+						 Select
+						 	#{year_num}, #{week_num}, #{work_user}, 
+						 	bws_seq, sc_seq, content_txt, getdate(), #{work_user}
+						 From
+						 	 tb_usrbiztw_content with(nolock)
+						 Where
+						 	year_num = @v_target_year_num And
+						  	week_num = @v_target_week_num And
+						  	work_user = #{work_user};
+					end
+			end
+		]]>
+	</insert>
+	
+	<select id="searchBaseDateScope" parameterType='hashmap' resultType="java.lang.String" >
+		<![CDATA[
+			Select '(' + convert(nvarchar, work_sdate, 23) + ' ~ ' + convert(nvarchar, work_edate, 23) + ')' week_scope
+			  From tb_week_scope with(nolock)
+			 Where year_num = #{year_num} + 2000
+			   And week_num = #{week_num};
+		]]>
+	</select>
+	
+	<select id="searchWeekScopeAll" parameterType='hashmap' resultType="kr.co.hojeon.beans.BizWeekScope">
+		<![CDATA[
+			Select a.year_num, a.week_num, a.sdate, a.edate, a.work_sdate, a.work_edate, convert(nvarchar, a.work_sdate, 111) swork_sdate, convert(nvarchar, a.work_edate, 111) swork_edate, convert(nvarchar, b.next_sdate, 111) snext_sdate, convert(nvarchar, b.next_edate, 111) snext_edate 
+			  From tb_week_scope a with(nolock),
+			       (Select work_sdate next_sdate, work_edate next_edate From tb_week_scope with(nolock)
+				   Where year_num = Case When #{week_num} = 52 Then #{year_num} + 1 Else #{year_num} End + 2000
+				     And week_num = Case When #{week_num} = 52 Then 1 Else #{week_num} + 1 End) b
+			 Where year_num = #{year_num} + 2000
+			   And week_num = #{week_num};
+		]]>
+	</select>
+	
+	<select id='searchWeeklySubject' resultType='hashmap' >
+		<![CDATA[
+			Select
+				bws_seq, bws_content, isnull(remark, '') remark, use_yn, sort_no
+			From
+				TB_BIZWEEKLY_SUBJECT with(nolock)
+			Order by sort_no;
+		]]>	
+	</select>
+</mapper>

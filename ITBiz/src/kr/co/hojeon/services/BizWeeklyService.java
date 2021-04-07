@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import kr.co.hojeon.beans.BizWeekScope;
 import kr.co.hojeon.beans.BizWeeklyBasicSubject;
 import kr.co.hojeon.beans.BizWeeklySubject;
 import kr.co.hojeon.beans.TableUsrBizTwDetail;
@@ -24,8 +25,8 @@ public class BizWeeklyService {
 	@Lazy
 	private UserBean loginUserBean;
 	
-	public String getLastWeekPlaner(int year, int week) {
-		return bwd.getLastWeekPlaner(year, week, loginUserBean.getUserid());
+	public String getLastWeekPlaner(int year, int week, int search) {
+		return bwd.getLastWeekPlaner(year, week, loginUserBean.getUserid(), search);
 	}
 	
 	public List<BizWeeklySubject> getRegistedThisWorkSubject(int year, int week) {
@@ -68,4 +69,13 @@ public class BizWeeklyService {
 	public String searchBaseDateScope(int year_num, int week_num) {
 		return bwd.searchBaseDateScope(year_num, week_num);
 	}
+	
+	public BizWeekScope searchWeekScopeAll(int year_num, int week_num) {
+		return bwd.searchWeekScopeAll(year_num, week_num);
+	}
+	
+	// Weekly Subject 구하기
+	public List<HashMap<String, Object>> searchWeeklySubject() { 
+		return bwd.searchWeeklySubject();
+	}	 
 }

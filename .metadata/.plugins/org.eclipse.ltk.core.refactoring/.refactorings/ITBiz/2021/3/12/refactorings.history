@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;ITBiz/WebContent/WEB-INF/views/biz/WeeklyReportPOP.jsp&apos; to &apos;weeklyReportPOP.jsp&apos;" description="Rename resource &apos;WeeklyReportPOP.jsp&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="WebContent/WEB-INF/views/biz/WeeklyReportPOP.jsp" name="weeklyReportPOP.jsp" stamp="1616113079885" updateReferences="true"/>
+</session>

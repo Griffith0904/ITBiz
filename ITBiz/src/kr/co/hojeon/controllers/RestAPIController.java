@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.hojeon.beans.BizDailyMasterBean;
+import kr.co.hojeon.beans.BizWeekScope;
 import kr.co.hojeon.beans.BizWeeklyBasicSubject;
 import kr.co.hojeon.beans.BizWeeklySubject;
 import kr.co.hojeon.beans.TableUsrBizTwDetail;
@@ -60,11 +61,11 @@ public class RestAPIController {
 	
 	//@GetMapping("/biz/getLastWeekPlaner")
 	@RequestMapping(value="/biz/getLastWeekPlaner", method=RequestMethod.GET, produces = "application/text; charset=utf8")
-	public String getLastWeekPlaner(@RequestParam("search_year") int search_year, @RequestParam("search_week") int search_week) {
+	public String getLastWeekPlaner(@RequestParam("search_year") int search_year, @RequestParam("search_week") int search_week, @RequestParam("search_type") int search_type) {
 		System.out.println("★★★★★★★★★★ getLastWeekPlaner in RestAPIController ★★★★★★★★★★");
 		System.out.println(search_year + ", " + search_week);
 		
-		String rtn = bws.getLastWeekPlaner(search_year, search_week);
+		String rtn = bws.getLastWeekPlaner(search_year, search_week, search_type);
 		
 		String[] change_target = rtn.split("\\n");
 		
@@ -159,7 +160,7 @@ public class RestAPIController {
 		String content_txt = bws.getUsrBizWeeklyContent(year_num, week_num, bws_seq, search_type);
 		
 
-		// text 파일 읽어보자.
+		
 		// 이스케이프 문자 역슬래쉬 (\)
 		// 그냥 쓰면 에러가나는데 try ~ catch 문으로 처리해서 오류쪽 부분
 		// 명시해주어야 에러가 사라짐.
@@ -247,5 +248,16 @@ public class RestAPIController {
 		String a = bws.searchBaseDateScope(year_num, week_num);
 		System.out.println(a);
 		return bws.searchBaseDateScope(year_num, week_num);
+	}
+	
+	@PostMapping("/biz/searchWeekScopeAll")
+	public BizWeekScope searchWeekScopeAll(@RequestParam("search_year") int year_num,
+								 	  @RequestParam("search_week") int week_num) {
+		return bws.searchWeekScopeAll(year_num, week_num);
+	}
+	
+	@GetMapping("/biz/searchAllSubjectList")
+	public List<HashMap<String, Object>> searchAllSubjectList() {
+		return bws.searchWeeklySubject();
 	}
 }	

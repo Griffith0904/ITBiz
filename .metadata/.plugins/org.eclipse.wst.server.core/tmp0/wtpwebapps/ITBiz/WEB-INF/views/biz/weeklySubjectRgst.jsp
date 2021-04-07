@@ -1,388 +1,381 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix='form' uri="http://www.springframework.org/tags/form" %>
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix='form' uri="http://www.springframework.org/tags/form"%>
 <c:set var='root' value='${pageContext.request.contextPath }/' />
-<c:set var='mainpath' value='${pageContext.request.contextPath }/static/main/' />
+<c:set var='mainpath'
+	value='${pageContext.request.contextPath }/static/main/' />
 <!DOCTYPE html>
-<html lang="en">
 
 <head>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author" content="">
 
-    <title>IT Working List</title>
+<title>IT Working List</title>
 
-    <!-- Custom fonts for this template-->
-    <link href="${mainpath}vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+<!-- Custom fonts for this template-->
+<link href="${mainpath}vendor/fontawesome-free/css/all.min.css"
+	rel="stylesheet" type="text/css">
+<link
+	href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+	rel="stylesheet">
 
-    <!-- Custom styles for this template-->
-    <link href="${mainpath}css/sb-admin-2.min.css" rel="stylesheet">
+<!-- Custom styles for this template-->
+<link href="${mainpath}css/sb-admin-2.min.css" rel="stylesheet">
 
+<style>
+th {
+	position: sticky;
+	top: 0px;
+	box-shadow: 0 1px 1px -1px rgba(0, 0, 0, 0.4);
+	background-color: #F6F6F6;
+}
+
+tbody tr td {
+	padding: 0.3rem !important;
+	z-index: 1;
+}
+
+tbody tr:hover {
+	background-color: #CCF6F6;
+}
+
+tbody tr.active {
+	background-color: #E8F6F6;
+}
+
+.clicked {
+	background-color: #E8F6F6;
+}
+
+.trstyle {
+	padding: 0.3rem !important;
+}
+</style>
 </head>
 
-
-
 <body id="page-top">
-	
-    <!-- Page Wrapper -->
-    <div id="wrapper">
 
-        <!-- Sidebar -->
-        <c:import url="/WEB-INF/views/include/main_sidebar.jsp"></c:import>
-        <!-- End of Sidebar -->
+	<!-- Page Wrapper -->
+	<div id="wrapper">
 
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
+		<!-- Sidebar -->
+		<c:import url="/WEB-INF/views/include/main_sidebar.jsp"></c:import>
+		<!-- End of Sidebar -->
 
-            <!-- Main Content -->
-            <div id="content">
+		<!-- Content Wrapper -->
+		<div id="content-wrapper" class="d-flex flex-column">
 
-                <c:import url="/WEB-INF/views/include/top_bar.jsp"></c:import>
+			<!-- Main Content -->
+			<div id="content">
 
-                
-                <!-- /.container-fluid -->
-				<div>
-					<form:form>
-						
-					</form:form>
+				<c:import url="/WEB-INF/views/include/top_bar.jsp"></c:import>
+
+
+				<!-- 화면 이름 아이콘 & 이름 -->
+				<div class="col-auto" style="margin-left: 20px">
+					<i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+					<h1 class="h4 mb-0 text-gray-800"
+						style="display: inline; margin-left: 10px">Category 관리</h1>
 				</div>
-            </div>
-            <!-- End of Main Content -->
 
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; IT Team Biz work 2021</span>
-                    </div>
-                </div>
-            </footer>
-            <!-- End of Footer -->
+				<div
+					style='margin-top: 20px; width: 100%; height: calc(100% - 149px);'>
+					<!-- 타이틀 및 버튼부 -->
+					<div class="card border-left-primary shadow h-0 py-0"
+						style='height: 60px; width: calc(100% - 20px); margin-left: 10px;'>
+						<div class="card-body" style='height: 100%;'>
+							<div class="row no-gutters align-items-center"
+								style="margin-left: -20px; margin-top: -20px;">
+								<div class="col-auto"
+									style='margin-left: 20px; margin-top: 12px'>
+									<i class="fas fa-calendar fa-2x text-gray-300"></i>
+								</div>
 
-        </div>
-        <!-- End of Content Wrapper -->
+								<div class="col mr-2">
+									<div
+										class="text-xs font-weight-bold text-primary text-uppercase mb-0"
+										style='margin-left: 15px; margin-top: 14px; font-size: 14px; width: 100%'
+										id='div_left_search_header'>Category List</div>
+								</div>
 
-    </div>
-    <!-- End of Page Wrapper -->
+								<div style='margin-top: 8px;'>
+									<a href="#" class="btn btn-primary btn-icon-split" id="btn_add">
+										<span class="icon text-white-50"> <i
+											class="fas fa-bolt rotate-15"></i>
+									</span> <span class="text">Add</span>
+									</a> <a href="#" class="btn btn-success btn-icon-split"
+										id="btn_save" style='margin-left: 5px'> <span
+										class="icon text-white-50"> <i class="fas fa-check"></i>
+									</span> <span class="text">Save</span>
+									</a> <a href="#" class="btn btn-danger btn-icon-split"
+										id="btn_delete" style='margin-left: 5px'> <span
+										class="icon text-white-50"> <i class="fas fa-trash"></i>
+									</span> <span class="text">Delete</span>
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
 
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-    
-    
-    
-    <div class="modal fade" id="BizDailyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true" >
-        <div class="modal-dialog" role="document" >
-            <div class="modal-content" style='width:900px'>
-                <div class="modal-header">
-                    <h5 class="modal-title" id="bdModalTitle"></h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                	<!-- 여기 직접 넣은것 -->
-                	<!-- DataTales Example -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary"></h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="modalDataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th>요청 일자</th>
-                                            <th>요청자</th>
-                                            <th>요청 제목</th>
-                                            <th>요청 사항</th>
-                                            <th>작업 난이도</th>
-                                            <th>진도율(%)</th>
-                                            <th>예상 종료일</th>
-                                        </tr>
-                                    </thead>
-                                    
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
+					<!-- Category Table List 부 -->
+					<div class="card shadow mb-4"
+						style='margin-top: 10px; margin-left: 10px; width: calc(100% - 20px); height: calc(100% - 80px)'>
+						<div class="card-body">
+							<div class="table-responsive"
+								style='height: 570px; border: 1px solid #DEDEDE'>
+								<table class="table table-bordered" id="categoryDataTable" width="100%" cellspacing="0" height="100%">
+									<thead>
+										<tr>
+											<th
+												style='width: 60px; padding: 0.5rem !important; text-align: center'>
+												<i class="fas fa-flag"></i>
+											</th>
+											<th
+												style='width: 80px; padding: 0.5rem !important; text-align: center'>Seq.</th>
+											<th
+												style='width: 450px; padding: 0.5rem !important; text-align: center'>Subject</th>
+											<th
+												style='width: 600px; padding: 0.5rem !important; text-align: center'>비
+												고</th>
+											<th
+												style='width: 100px; padding: 0.5rem !important; text-align: center'>사용
+												유무</th>
+											<th style='padding: 0.5rem !important; text-align: center'>정렬
+												순서</th>
+										</tr>
+									</thead>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="${mainpath}vendor/jquery/jquery.min.js"></script>
-    <script src="${mainpath}vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+									<tbody>
 
-    <!-- Core plugin JavaScript-->
-    <script src="${mainpath}vendor/jquery-easing/jquery.easing.min.js"></script>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- End of Main Content -->
 
-    <!-- Custom scripts for all pages-->
-    <script src="${mainpath}js/sb-admin-2.min.js"></script>
+			<!-- Footer -->
+			<footer class="sticky-footer bg-white">
+				<div class="container my-auto">
+					<div class="copyright text-center my-auto">
+						<span>Copyright &copy; IT Team Biz work 2021</span>
+					</div>
+				</div>
+			</footer>
+			<!-- End of Footer -->
 
-    <!-- Page level plugins -->
-    <script src="${mainpath}vendor/chart.js/Chart.min.js"></script>
+		</div>
+		<!-- End of Content Wrapper -->
 
-    <!-- Page level custom scripts -->
-    <%-- <script src="${mainpath}js/demo/chart-area-demo.js"></script> --%>
-    <script src="${mainpath}js/demo/chart-pie-demo.js"></script>
-	
-	<script type="text/javascript">
-		$(document).ready(function(){
-			var chartopen = false;
-			boardCharCreate();
-			workForTeam();
-			
-			$('#btn_bd_list_1').click(function() {
-				var work_status = $('#bizDailyStatus_1').val();
-				var work_status_name = $('#bizDailyStatusName_1').val();
-				modalTableCreate(work_status, work_status_name)
-			})
-			
-			$('#btn_bd_list_2').click(function() {
-				var work_status = $('#bizDailyStatus_2').val();
-				var work_status_name = $('#bizDailyStatusName_2').val();
-				modalTableCreate(work_status, work_status_name)
-			})
-			
-			$('#btn_bd_list_3').click(function() {
-				var work_status = $('#bizDailyStatus_3').val();
-				var work_status_name = $('#bizDailyStatusName_3').val();
-				modalTableCreate(work_status, work_status_name)
-			})
-			
-			$('#btn_bd_list_4').click(function() {
-				var work_status = $('#bizDailyStatus_4').val();
-				var work_status_name = $('#bizDailyStatusName_4').val();
-				modalTableCreate(work_status, work_status_name)
-			})
-			
-			function modalTableCreate(work_status, work_status_name) {
-				$.ajax({
-					type:"get",
-					dataType:'json',
-					url:'${root}main/searchAllDataFromStatus/' + work_status,
-					success: function(result) {
-						var num_len = result.length
-						
-						if (num_len == 0) {
-							alert("등록된 데이터가 없습니다!")
-							return
-						}
-						var tbody = $('<tbody>');
-		                for (i=0; i<num_len; i++){
-		                	var row = $('<tr>').addClass('chk');
-		                    var cell1 = $('<td>').text(result[i].rec_DATE);
-		                    var cell2 = $('<td>').text(result[i].req_EMP_NAME);
-		                    var cell3 = $('<td>').text(result[i].req_SUBJECT);
-		                    var cell4 = $('<td>').text(result[i].req_CONTENT);
-		                    var cell5 = $('<td>').text(result[i].work_LEV);
-		                    var cell6 = $('<td>').text(result[i].work_PRC_PER);
-		                    var cell7 = $('<td>').text(result[i].exp_END_DATE);
+	</div>
+	<!-- End of Page Wrapper -->
 
-		                    $(row).append(cell1, cell2, cell3, cell4, cell5, cell6, cell7);
-		                    $(tbody).append(row);
-		                	
-		                }
-		                $("#modalDataTable > tbody").empty();
-		                $("#modalDataTable").append(tbody);
-		                
-						$('#bdModalTitle').text(work_status_name + ' List');
-						$('#BizDailyModal').modal('show');
-					},
-					error: function(request, status, error){
+	<!-- Scroll to Top Button-->
+	<a class="scroll-to-top rounded" href="#page-top"> <i
+		class="fas fa-angle-up"></i>
+	</a>
 
-						alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-
-					}
-				})
-			}
-			
-			function number_format(number, decimals, dec_point, thousands_sep) {
-			  // *     example: number_format(1234.56, 2, ',', ' ');
-			  // *     return: '1 234,56'
-			  number = (number + '').replace(',', '').replace(' ', '');
-			  var n = !isFinite(+number) ? 0 : +number,
-			    prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
-			    sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
-			    dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
-			    s = '',
-			    toFixedFix = function(n, prec) {
-			      var k = Math.pow(10, prec);
-			      return '' + Math.round(n * k) / k;
-			    };
-			  // Fix for IE parseFloat(0.55).toFixed(0) = 0;
-			  s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
-			  if (s[0].length > 3) {
-			    s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
-			  }
-			  if ((s[1] || '').length < prec) {
-			    s[1] = s[1] || '';
-			    s[1] += new Array(prec - s[1].length + 1).join('0');
-			  }
-			  return s.join(dec);
-			}
-			
-			// 월별 업무 접수 건수 표기
-			function boardCharCreate() {
-				if (chartopen == true) { return ;}
-				chartopen = true;
-				
-				bizDataByMonthly();
-			}
-			
-			function bizDataByMonthly() {
-				$.ajax({
-					type:'get',
-					dataType:'json',
-					url:'${root}main/searchAllDataByMonthly',
-					success : function(result) {
-						dataInsertToChart(result)
-					}				
-				})
-			}
-			
-			function dataInsertToChart(result) {
-				var ctx = document.getElementById("myAreaChart");
-				var myLineChart = new Chart(ctx, {
-				  type: 'line',
-				  data: {
-				    labels: [result[0].monthly, result[1].monthly, result[2].monthly, result[3].monthly, result[4].monthly, result[5].monthly, result[6].monthly, result[7].monthly, result[8].monthly, result[9].monthly, result[10].monthly, result[11].monthly],
-				    datasets: [{
-				      label: "건수",
-				      lineTension: 0.3,
-				      backgroundColor: "rgba(78, 115, 223, 0.05)",
-				      borderColor: "rgba(78, 115, 223, 1)",
-				      pointRadius: 3,
-				      pointBackgroundColor: "rgba(78, 115, 223, 1)",
-				      pointBorderColor: "rgba(78, 115, 223, 1)",
-				      pointHoverRadius: 3,
-				      pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
-				      pointHoverBorderColor: "rgba(78, 115, 223, 1)",
-				      pointHitRadius: 10,
-				      pointBorderWidth: 2,
-				      data: [result[0].biz_cnt, result[1].biz_cnt, result[2].biz_cnt, result[3].biz_cnt, result[4].biz_cnt, result[5].biz_cnt, result[6].biz_cnt, result[7].biz_cnt, result[8].biz_cnt, result[9].biz_cnt, result[10].biz_cnt, result[11].biz_cnt],
-				    }],
-				  },
-				  options: {
-				    maintainAspectRatio: false,
-				    layout: {
-				      padding: {
-				        left: 10,
-				        right: 25,
-				        top: 25,
-				        bottom: 0
-				      }
-				    },
-				    scales: {
-				      xAxes: [{
-				        time: {
-				          unit: 'date'
-				        },
-				        gridLines: {
-				          display: false,
-				          drawBorder: false
-				        },
-				        ticks: {
-				          maxTicksLimit: 7
-				        }
-				      }],
-				      yAxes: [{
-				        ticks: {
-				          maxTicksLimit: 5,
-				          padding: 10,
-				          // Include a dollar sign in the ticks
-				          callback: function(value, index, values) {
-				            return number_format(value);
-				          }
-				        },
-				        gridLines: {
-				          color: "rgb(234, 236, 244)",
-				          zeroLineColor: "rgb(234, 236, 244)",
-				          drawBorder: false,
-				          borderDash: [2],
-				          zeroLineBorderDash: [2]
-				        }
-				      }],
-				    },
-				    legend: {
-				      display: false
-				    },
-				    tooltips: {
-				      backgroundColor: "rgb(255,255,255)",
-				      bodyFontColor: "#858796",
-				      titleMarginBottom: 10,
-				      titleFontColor: '#6e707e',
-				      titleFontSize: 14,
-				      borderColor: '#dddfeb',
-				      borderWidth: 1,
-				      xPadding: 15,
-				      yPadding: 15,
-				      displayColors: false,
-				      intersect: false,
-				      mode: 'index',
-				      caretPadding: 10,
-				      callbacks: {
-				        label: function(tooltipItem, chart) {
-				          var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-				          return datasetLabel + ': ' + number_format(tooltipItem.yLabel);
-				        }
-				      }
-				    }
-				  }
-				});
-			}
-			
-			
-			// 공통 프로젝트 관리
-			/*
-			function workForTeam() {
-				bizWorkForTeam();
-			}
-			
-			function bizWorkForTeam() {
-				$.ajax({
-					type:'get',
-					dataType:'json',
-					url:'${root}main/searchFindWorkForTeam',
-					success : function(result) {
-						//alert(result.length)
-						for (i=0;i<result.length;i++){
-							<h4 class="small font-weight-bold">Server Migration <span
-		                            class="float-right">20%</span></h4>
-		                    <div class="progress mb-4">
-		                        <div class="progress-bar bg-danger" role="progressbar" style="width: 20%"
-		                            aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
-		                    </div>
-						}
-					}				
-				})
-			}
-			*/
-		})
-	</script>
-	
 	<!-- Bootstrap core JavaScript-->
-    <script src="${mainpath }vendor/jquery/jquery.min.js"></script>
-    <script src="${mainpath }vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    
+	<script src="${mainpath}vendor/jquery/jquery.min.js"></script>
+	<script src="${mainpath}vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+	<!-- Core plugin JavaScript-->
+	<script src="${mainpath}vendor/jquery-easing/jquery.easing.min.js"></script>
+
+	<!-- Custom scripts for all pages-->
+	<script src="${mainpath}js/sb-admin-2.min.js"></script>
+
+	<!-- Page level plugins -->
+	<script src="${mainpath}vendor/chart.js/Chart.min.js"></script>
+
+	<!-- Page level custom scripts -->
+	<%-- <script src="${mainpath}js/demo/chart-area-demo.js"></script> --%>
+	<script src="${mainpath}js/demo/chart-pie-demo.js"></script>
+	<!-- Bootstrap core JavaScript-->
+	<script src="${mainpath }vendor/jquery/jquery.min.js"></script>
+	<script src="${mainpath }vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+
+	<script type='text/javascript'>
+		$(document).ready(function() {
+			// Category 불러오기
+			searchAllSubject();
+	
+			function searchAllSubject() {
+				$.ajax({
+							type : "get",
+							dataType : 'json',
+							url : '${root}biz/searchAllSubjectList',
+							success : function(result) {
+								//alert(JSON.stringify(result))
+								if (result.length == 0) {
+									return;
+								}
+	
+								var tbody = $('<tbody>');
+	
+								for (i = 0; i < result.length; i++) {
+									var row = $(
+											'<tr id="rowid_' + i + '">')
+											.addClass('trstyle');
+									var cell0 = $('<td style="text-align:center"><i class="fas fa-caret-right" id="table_font_' + i + '"></i>')
+									var cell1 = $('<td style="text-align:center" id="bws_seq_' + i + '">').text(result[i].bws_seq)
+									var cell2 = $('<td><input type="text" class="data_text" id="bws_content_'
+											+ i
+											+ '" value="'
+											+ result[i].bws_content
+											+ '" style="width:100%; border:none">')
+									var cell3 = $('<td><input class="data_text" type="text" id="bws_remark_'
+											+ i
+											+ '" value="'
+											+ result[i].remark
+											+ '" style="width:100%;border:none">')
+									var cell4;
+									//잘됨
+									/* if (result[i].use_yn == 'Y') {
+										cell4 = $('<td><input type="checkbox" id="use_yn_' + i + '" value="' + result[i].use_yn + '" checked>')
+									} else {
+										cell4 = $('<td><input type="checkbox" id="use_yn_' + i + '" value="' + result[i].use_yn + '">')	
+									} */
+	
+									/* <p class="onoff"><input type="checkbox" value="1" id="checkboxID"><label for="checkboxID"></label></p> */
+	
+									/* cell4 = $('<p class="onoff" style="margin-left:18px;margin-top:6px"><input type="checkbox" value="1" id="use_yn_' + i + '"><label for="checkboxID"></label></p>') */
+									// 여러개는 나오는데 체크하면 최 상단 하나만 정상 작동함. 그리고 input의 id 변경(checkboxID)하면 작동 자체가 안됨
+									if (result[i].use_yn == 'Y') {
+										//cell4 = $('<p class="onoff" style="margin-left:18px;margin-top:2px;height:20px ;"><input type="checkbox" value="Y" id="checkboxID_' + i + '" checked><label for="checkboxID_' + i + '" style="height:30px"></label></p>')
+										//cell4 = $('<td><p class="onoff" style="margin-left:18px;margin-top:2px;height:20px ;"><input type="checkbox" value="Y" id="checkboxID_' + i + '" checked><label for="checkboxID_' + i + '" style="height:30px"></label></p></td>')
+										cell4 = $('<td class="data_text" style="text-align:center"><input type="checkbox" value="Y" class="data_checkbox" id="checkboxID_' + i + '" checked></td>')
+									} else {
+										//cell4 = $('<td><p class="onoff" style="margin-left:18px;margin-top:2px;height:20px ;"><input type="checkbox" value="N" id="checkboxID_' + i + '"><label for="checkboxID_' + i + '" style="height:30px"></label></p></td>')
+										cell4 = $('<td style="text-align:center"><input type="checkbox" class="data_checkbox" value="N" id="checkboxID_' + i + '"></td>')
+									}
+	
+									//var cell5 = $('<td class="data_text">').text(result[i].sort_no);
+									var cell5 = $('<td><input type="text" class="data_text" id="sort_no_' + i + '" value="'	+ result[i].sort_no + '" style="width:100%; border:none">')
+									
+									//alert(row)
+									$(row).append(cell0, cell1,
+											cell2, cell3,
+											cell4, cell5);
+									//$(row).append(cell1, cell2);
+									$(tbody).append(row);
+									$("#categoryDataTable")
+											.append(tbody);
+								}
+							}
+						})
+			}
+	
+			$("#categoryDataTable").on(	"click", "tr",	function() {
+				// 클릭시 row 컬러 변경
+				var tr = $(this);
+				var td = tr.children();
+				var getClickedRow = $(this)
+						.index() + 1;
+				var bws_seq = $('#twct_bws_seq' + getClickedRow).text();
+	
+				//잘됨.
+				//$('tr.clicked').removeClass('clicked'); 
+				//tr.addClass('clicked')
+	
+				$(this).addClass('clicked').siblings().removeClass('clicked');
+			});
+	
+			// 추가 버튼
+			$('#btn_add').click(function() {
+				var rownum = $('#categoryDataTable >tbody tr').length;
+				var tbody = $('#categoryDataTable >tbody');
+				//var row = $('#categoryDataTable >tbody tr');
+				//var tbody = $('<tbody>');
+				var row = $('<tr id="rowid_' + rownum + '">').addClass('trstyle');
+				var cell0 = $('<td style="text-align:center"><i class="fas fa-caret-right" id="table_font_' + rownum + '"></i>')
+				var cell1 = $('<td style="text-align:center" id="bws_seq_' + i + '">').text('')
+				var cell2 = $('<td><input type="text" class="data_text" id="bws_content_' + rownum + '" value="" style="width:100%; border:none">')
+				var cell3 = $('<td><input class="data_text" type="text" id="bws_remark_' + rownum + '" value="" style="width:100%;border:none">')
+				var cell4 = $('<td class="data_text" style="text-align:center"><input type="checkbox" value="Y" class="data_checkbox" id="checkboxID_' + rownum + '" checked></td>')
+				var cell5 = $('<td><input type="text" class="data_text" id="sort_no_' + rownum + '" value="999" style="width:100%; border:none">')
+				
+				$(row).append(cell0, cell1, cell2, cell3, cell4, cell5);
+				$('#categoryDataTable >tbody:last').append(row);
+				//$(tbody).append(row);
+				//$("#categoryDataTable").append(tbody);
+				//alert(rownum)
+				changeFlag(rownum, "I")
+				$('#bws_content_' + rownum).focus();
+				//$('#categoryDataTable >tbody tr').addClass('clicked').siblings().removeClass('clicked');			
+			})
+	
+			// 저장 버튼
+			$('#btn_save').click(function() {
+				alert('fefefe')
+			})
+	
+			// 삭제 버튼
+			$('#btn_delete').click(function() {
+				var rownum = $('#categoryDataTable').closest('tr').prevAll().length;
+				alert(rownum)
+			})
+			
+			$(document).on('click', '.data_checkbox', function(e) {
+				//alert(JSON.stringify(e))
+				//alert($(e.target).attr("id"))
+				//$('#table_font_0').class("fas fa-pen")
+				//$('#table_font_0').removeClass();
+				//$('#table_font_0').addClass("fas fa-pen")
+				//$('#table_font_0').attr('class', 'fas fa-pen');
+				//$('#table_font_0').toggleClass('fas fa-pen');
+				//alert('eee')
+				//var no = td.eq(0).text();
+				var rownum = $(this).closest('tr').prevAll().length;
+				//$('#table_font_' + rownum).attr('class', 'fas fa-pen');
+				changeFlag(rownum, 'U')
+			})
+			
+			
+			$(document).on('keypress', '.data_text', function(e) {
+				var rownum = $(this).closest('tr').prevAll().length;
+				changeFlag(rownum, 'U')
+			})
+			
+			// Flag Icon 변경
+			function changeFlag(rownum, rowstatus) {
+				/*
+				추가 : fas fa-plus
+				일반 : fas fa-caret-right
+				삭제 : fas fa-cut
+				업데이트 : fas fa-pen
+				*/
+				switch (rowstatus) {
+				case 'U':
+					$('#table_font_' + rownum).attr('class', 'fas fa-pen');
+					break;
+				case 'I':
+					$('#table_font_' + rownum).attr('class', 'fas fa-plus');
+					break;
+				
+				case 'R':
+					$('#table_font_' + rownum).attr('class', 'fas fa-caret-right');
+					break
+				
+				case 'D':
+					$('#table_font_' + rownum).attr('class', 'fas fa-cut');
+					break;
+				default:
+					break;
+				}
+			}
+	
+		});
+	</script>
 </body>
 
 </html>

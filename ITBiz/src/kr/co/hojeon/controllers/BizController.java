@@ -2,6 +2,7 @@ package kr.co.hojeon.controllers;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -16,10 +17,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import kr.co.hojeon.beans.BizWeekScope;
 import kr.co.hojeon.beans.TableUsrBizTwDetail;
 import kr.co.hojeon.beans.UserBean;
 import kr.co.hojeon.services.BizWeeklyService;
 import kr.co.hojeon.subclasses.GetSysDateInfo;
+import net.sf.jasperreports.engine.JasperExportManager;
 
 @Controller
 @RequestMapping("/biz")
@@ -31,6 +34,9 @@ public class BizController {
 	
 	@Autowired
 	private BizWeeklyService bws;
+	
+	@Autowired
+	private RestAPIController restapi;
 	
 	@GetMapping("/dailyRgst")
 	public String dailyRgst() {
@@ -83,9 +89,13 @@ public class BizController {
 		return "biz/weeklyRgst";
 	}
 	
-	//주간 업무 대분류 등
+	//주간 업무 대분류 등록(Subject)
 	@GetMapping("/weeklySubjectRgst")
 	public String weeklySubjectRgst() {
+		//List<HashMap<String, Object>> searchData = bws.searchWeeklySubject();
+		
+		//model.addAttribute("weeklysubject", searchData);
+		
 		return "biz/weeklySubjectRgst";
 	}
 	
@@ -95,5 +105,38 @@ public class BizController {
 		return "biz/weeklyAllList";
 	}
 	
+	//@GetMapping("/weeklyReportPOP")
+	@PostMapping("/weeklyReportPOP")
+	public void weeklyReportPOP(@RequestParam("form_year_num") int year_num,
+		 	  					@RequestParam("form_week_num") int week_num,
+		 	  					Model model) {
+		System.out.println("★★★★★★★★★★ weeklyReportPOP in BizController ★★★★★★★★★★");
+		/*
+		paramterMap.put("AAA",aaa); //key value 형태의 parameterMap을 만듭니다.
+
+		JasperReport jasperReport = JasperCompileManager.compileReport(session.getServletContext().getRealPath("/WEB-INF/jasper/reports/issuer_report.jrxml")); //..jrxml의 경로를 잡아줍니다.
+
+		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameterMap, DriverManager.getConnection("jdbc:oracle:thin:@!!!:###:bbb","aaa","ccc")); //디비정보를 넣어주세요.
+
+		ServletOutputStream sos=response.getOutputStream();
+			    			response.setHeader("Content-disposition", "attachment; filename=" + "이름.pdf");
+			    			JasperExportManager.exportReportToPdfStream(jasperPrint, sos);
+	    */
+		//return "biz/weeklyReportPOP";
+		System.out.println(year_num);
+		System.out.println(week_num);
+		String lastWeekPlan = restapi.getLastWeekPlaner(year_num, week_num, 1);
+		String thisWeekPlan = restapi.getLastWeekPlaner(year_num, week_num, 2);
+		String nextWeekPlan = restapi.getLastWeekPlaner(year_num, week_num, 3);
+		
+		BizWeekScope bwsList = restapi.searchWeekScopeAll(year_num, week_num);
+		
+		System.out.println(lastWeekPlan);
+		model.addAttribute("lastWeek", lastWeekPlan);
+		model.addAttribute("thisWeek", thisWeekPlan);
+		model.addAttribute("nextWeek", nextWeekPlan);
+		model.addAttribute("bwsList", bwsList);
+		model.addAttribute("lub", loginUserBean);
+	}
 	
 }

@@ -8,6 +8,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import kr.co.hojeon.beans.BizWeekScope;
 import kr.co.hojeon.beans.BizWeeklyBasicSubject;
 import kr.co.hojeon.beans.BizWeeklySubject;
 import kr.co.hojeon.beans.TableUsrBizTwDetail;
@@ -17,12 +18,13 @@ public class BizWeeklyDAO {
 	@Autowired
 	private SqlSessionTemplate sqlSessionTemplate;
 	
-	public String getLastWeekPlaner(int year, int week, String userid) {
+	public String getLastWeekPlaner(int year, int week, String userid, int search) {
 		HashMap<String, Object> hm = new HashMap<String, Object>();
 		
 		hm.put("year", year);
 		hm.put("week", week);
 		hm.put("userid", userid);
+		hm.put("search", search);
 		
 		return sqlSessionTemplate.selectOne("biz.getLastWeekPlaner", hm);
 	}
@@ -115,5 +117,19 @@ public class BizWeeklyDAO {
 		hm.put("week_num", week_num);
 		
 		return sqlSessionTemplate.selectOne("biz.searchBaseDateScope", hm);
+	}
+	
+	public BizWeekScope searchWeekScopeAll(int year_num, int week_num) {
+		HashMap<String, Object> hm = new HashMap<String, Object>();
+		
+		hm.put("year_num", year_num);
+		hm.put("week_num", week_num);
+		
+		return sqlSessionTemplate.selectOne("biz.searchWeekScopeAll", hm);
+	}
+	
+	// Weekly Subject 구하기
+	public List<HashMap<String, Object>> searchWeeklySubject() { 
+		return sqlSessionTemplate.selectList("biz.searchWeeklySubject"); 
 	}
 }

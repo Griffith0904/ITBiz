@@ -6,30 +6,39 @@
 		resultType="java.lang.String">
 		<![CDATA[
 			-- 전주 내역 조회시 해당 차주 - 1 해야함
+			-- ID는 전주것만 가져올꺼 같지만, 실제로는 전주, 금주, 차주 다 가져올 수 있음
 			begin
 				Declare
 					@v_cnt int,
 					@v_rtn_text nvarchar(max),
-					@v_before_week int,
-					@v_before_year int;
+					@v_search_week int,
+					@v_search_year int;
 				Declare @v_table table (row_num int, bws_content nvarchar(max), bws_seq int);
 			
-				if #{week} = 1
+				if #{search} = 1
 					begin
-						Set @v_before_week = 52;
-						Set @v_before_year = #{year} - 1;
+						if #{week} = 1
+							begin
+								Set @v_search_week = 52;
+								Set @v_search_year = #{year} - 1;
+							end
+						else
+							begin
+								Set @v_search_week = #{week} - 1;
+								Set @v_search_year = #{year};
+							end
 					end
 				else
 					begin
-						Set @v_before_week = #{week} - 1;
-						Set @v_before_year = #{year};
+						Set @v_search_week = #{week};
+						Set @v_search_year = #{year};
 					end
 						
 				
 				Select @v_cnt = Count(*)
 				  From TB_USRBIZWK_MASTER with(nolock)
-				 Where YEAR_NUM = @v_before_year
-				   AND WEEK_NUM = @v_before_week
+				 Where YEAR_NUM = @v_search_year
+				   AND WEEK_NUM = @v_search_week
 				   AND WORK_USER = #{userid};
 			
 				if @v_cnt = 0
@@ -40,73 +49,115 @@
 					end
 				else
 					begin
-					Select @v_cnt = Count(*)
-					  From TB_USRBIZNW_DETAIL with(nolock)
-					 WHERE YEAR_NUM = @v_before_year
-					   AND WEEK_NUM = @v_before_week
-					   AND WORK_USER = #{userid};
+						if #{search} = 1 or #{search} = 3
+							begin
+								Select @v_cnt = Count(*)
+								  From TB_USRBIZNW_DETAIL with(nolock)
+								 WHERE YEAR_NUM = @v_search_year
+								   AND WEEK_NUM = @v_search_week
+								   AND WORK_USER = #{userid};
+							end
+						else
+							begin
+								Select @v_cnt = Count(*)
+								  From TB_USRBIZTW_DETAIL with(nolock)
+								 WHERE YEAR_NUM = @v_search_year
+								   AND WEEK_NUM = @v_search_week
+								   AND WORK_USER = #{userid};
+							end
 			
-					if @v_cnt = 0
-						begin
-							Set @v_rtn_text = '';
-							Select @v_rtn_text;
-							return;
-						end
-			
-					Insert Into @v_table
-					SELECT
-						Row_number() Over(order by A.SORT_NO, a.bws_seq) row_num, B.BWS_CONTENT, A.BWS_SEQ
-					FROM
-						TB_USRBIZNW_DETAIL A WITH(NOLOCK),
-						TB_BIZWEEKLY_SUBJECT B WITH(NOLOCK)
-					WHERE
-						A.YEAR_NUM = @v_before_year AND
-						A.WEEK_NUM = @v_before_week AND
-						A.WORK_USER = #{userid} AND
-						A.BWS_SEQ = B.BWS_SEQ
-					Order by A.SORT_NO, A.BWS_SEQ;
-			
-					Select @v_cnt = Count(*) From @v_table;
+						if @v_cnt = 0
+							begin
+								Set @v_rtn_text = '';
+								Select @v_rtn_text;
+								return;
+							end
+						
+						if #{search} = 1 or #{search} = 3
+							begin
+								Insert Into @v_table
+								SELECT
+									Row_number() Over(order by A.SORT_NO, a.bws_seq) row_num, B.BWS_CONTENT, A.BWS_SEQ
+								FROM
+									TB_USRBIZNW_DETAIL A WITH(NOLOCK),
+									TB_BIZWEEKLY_SUBJECT B WITH(NOLOCK)
+								WHERE
+									A.YEAR_NUM = @v_search_year AND
+									A.WEEK_NUM = @v_search_week AND
+									A.WORK_USER = #{userid} AND
+									A.BWS_SEQ = B.BWS_SEQ
+								Order by A.SORT_NO, A.BWS_SEQ;
+							end
+						else
+							begin
+								Insert Into @v_table
+								SELECT
+									Row_number() Over(order by A.SORT_NO, a.bws_seq) row_num, B.BWS_CONTENT, A.BWS_SEQ
+								FROM
+									TB_USRBIZTW_DETAIL A WITH(NOLOCK),
+									TB_BIZWEEKLY_SUBJECT B WITH(NOLOCK)
+								WHERE
+									A.YEAR_NUM = @v_search_year AND
+									A.WEEK_NUM = @v_search_week AND
+									A.WORK_USER = #{userid} AND
+									A.BWS_SEQ = B.BWS_SEQ
+								Order by A.SORT_NO, A.BWS_SEQ;
+							end
+						Select @v_cnt = Count(*) From @v_table;
 				
-					Declare
-						@v_row int,
-						@v_bws_seq int,
-						@v_content_txt nvarchar(max),
-						@v_all_content_txt nvarchar(max),
-						@v_bws_content nvarchar(max);
+						Declare
+							@v_row int,
+							@v_bws_seq int,
+							@v_content_txt nvarchar(max),
+							@v_all_content_txt nvarchar(max),
+							@v_bws_content nvarchar(max);
 			
-					Set @v_row = 1;
+						Set @v_row = 1;
 			
-					While @v_row <= @v_cnt
-						begin
-							Select @v_bws_seq = bws_seq, @v_bws_content = bws_content
-							  From @v_table
-							 Where row_num = @v_row;
+						While @v_row <= @v_cnt
+							begin
+								Set @v_content_txt = '';
+								Select @v_bws_seq = bws_seq, @v_bws_content = bws_content
+								  From @v_table
+								 Where row_num = @v_row;
+								
+								if #{search} = 1 or #{search} = 3
+									begin
+										SELECT @v_content_txt = CONTENT_TXT
+										  FROM TB_USRBIZNW_CONTENT WITH(NOLOCK)
+										 WHERE YEAR_NUM = @v_search_year
+										   AND WEEK_NUM = @v_search_week
+										   AND WORK_USER = #{userid}
+										   And BWS_SEQ = @v_bws_seq
+										   And SC_SEQ = 1;
+									end
+								else
+									begin
+										SELECT @v_content_txt = CONTENT_TXT
+										  FROM TB_USRBIZTW_CONTENT WITH(NOLOCK)
+										 WHERE YEAR_NUM = @v_search_year
+										   AND WEEK_NUM = @v_search_week
+										   AND WORK_USER = #{userid}
+										   And BWS_SEQ = @v_bws_seq
+										   And SC_SEQ = 1;
+									end
 			
-							SELECT @v_content_txt = CONTENT_TXT
-							  FROM TB_USRBIZNW_CONTENT WITH(NOLOCK)
-							 WHERE YEAR_NUM = @v_before_year
-							   AND WEEK_NUM = @v_before_week
-							   AND WORK_USER = #{userid}
-							   And BWS_SEQ = @v_bws_seq
-							   And SC_SEQ = 1;
+								if @v_row = 1
+									begin
+										--set @v_all_content_txt = '◈ ' + @v_bws_content + char(13) + char(10) + @v_content_txt
+										set @v_all_content_txt = '◈ ' + @v_bws_content + char(13) + char(10) + @v_content_txt;
+									end
+								else
+									begin
+										--set @v_all_content_txt = @v_all_content_txt + char(13) + char(10) +  + char(13) + char(10) + '◈ ' + @v_bws_content + char(13) + char(10) + @v_content_txt;
+										set @v_all_content_txt = @v_all_content_txt + char(13) + char(10) + '◈ ' + @v_bws_content + char(13) + char(10) + @v_content_txt;
+									end
 			
-							if @v_row = 1
-								begin
-									--set @v_all_content_txt = '◈ ' + @v_bws_content + char(13) + char(10) + @v_content_txt
-									set @v_all_content_txt = '◈ ' + @v_bws_content + char(13) + char(10) + @v_content_txt;
-								end
-							else
-								begin
-									--set @v_all_content_txt = @v_all_content_txt + char(13) + char(10) +  + char(13) + char(10) + '◈ ' + @v_bws_content + char(13) + char(10) + @v_content_txt;
-									set @v_all_content_txt = @v_all_content_txt + char(13) + char(10) + '◈ ' + @v_bws_content + char(13) + char(10) + @v_content_txt;
-								end
+								Set @v_row = @v_row + 1;
+							end
 			
-							Set @v_row = @v_row + 1;
-						end
-			
-					select @v_all_content_txt; 
-				end;
+						select @v_all_content_txt; 
+					end;
 			end;
 		]]>
 	</select>
@@ -221,6 +272,8 @@
 				bws_seq, bws_content, remark, use_yn, just_me, sort_no, wk_date, wk_user, et_date, et_user, row_number() over(order by bws_seq) rownum
 			From
 				TB_BIZWEEKLY_SUBJECT with(nolock)
+			Where
+				use_yn = 'Y'
 			Order by
 				sort_no;
 		]]>
@@ -675,5 +728,27 @@
 			 Where year_num = #{year_num} + 2000
 			   And week_num = #{week_num};
 		]]>
+	</select>
+	
+	<select id="searchWeekScopeAll" parameterType='hashmap' resultType="kr.co.hojeon.beans.BizWeekScope">
+		<![CDATA[
+			Select a.year_num, a.week_num, a.sdate, a.edate, a.work_sdate, a.work_edate, convert(nvarchar, a.work_sdate, 111) swork_sdate, convert(nvarchar, a.work_edate, 111) swork_edate, convert(nvarchar, b.next_sdate, 111) snext_sdate, convert(nvarchar, b.next_edate, 111) snext_edate 
+			  From tb_week_scope a with(nolock),
+			       (Select work_sdate next_sdate, work_edate next_edate From tb_week_scope with(nolock)
+				   Where year_num = Case When #{week_num} = 52 Then #{year_num} + 1 Else #{year_num} End + 2000
+				     And week_num = Case When #{week_num} = 52 Then 1 Else #{week_num} + 1 End) b
+			 Where year_num = #{year_num} + 2000
+			   And week_num = #{week_num};
+		]]>
+	</select>
+	
+	<select id='searchWeeklySubject' resultType='hashmap' >
+		<![CDATA[
+			Select
+				bws_seq, bws_content, isnull(remark, '') remark, use_yn, isnull(sort_no, 99999) sort_no, 'R' flag, ROW_NUMBER() over(order by isnull(sort_no, 99999), bws_seq) row
+			From
+				TB_BIZWEEKLY_SUBJECT with(nolock)
+			Order by isnull(sort_no, 99999), bws_seq;
+		]]>	
 	</select>
 </mapper>
