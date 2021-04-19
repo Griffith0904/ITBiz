@@ -1,8 +1,9 @@
 package kr.co.hojeon.beans;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class BizWeeklyBasicSubject {
+public class BizWeeklyBasicSubject implements Serializable{
 	private int bws_seq;
 	private String bws_content;
 	private String remark;
@@ -15,7 +16,14 @@ public class BizWeeklyBasicSubject {
 	private String et_user;
 	
 	private int rownum;
+	private String status;
 	
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
 	public int getBws_seq() {
 		return bws_seq;
 	}

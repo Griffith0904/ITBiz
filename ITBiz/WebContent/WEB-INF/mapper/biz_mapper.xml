@@ -751,4 +751,57 @@
 			Order by isnull(sort_no, 99999), bws_seq;
 		]]>	
 	</select>
+	
+	<insert id="saveWeeklySubjectData" parameterType='hashmap'>
+		<![CDATA[
+			begin
+				Declare @v_cnt int;
+				
+				if #{status} = 'D'
+					begin
+						Select @v_cnt = Count(*)
+						  From TB_BIZWEEKLY_SUBJECT with(nolock)
+						 Where bws_seq = #{bws_seq};
+						 
+						if @v_cnt > 0
+							begin
+								Delete From TB_BIZWEEKLY_SUBJECT Where bws_seq = #{bws_seq};
+							end
+					end
+				else if #{status} = 'I'
+					begin
+						if #{bws_seq} = null or #{bws_seq} = ''
+							begin
+								Insert Into TB_BIZWEEKLY_SUBJECT
+									(
+									bws_content, remark, use_yn, just_me, sort_no, wk_date, wk_user
+									)
+								values
+									(
+									#{bws_content}, #{remark}, #{use_yn}, 'N', #{sort_no}, getdate(), #{userid}
+									);
+							end;
+					end;
+				else if #{status} = 'U'
+					begin
+						Select @v_cnt = Count(*)
+						  From TB_BIZWEEKLY_SUBJECT with(nolock)
+						 Where bws_seq = #{bws_seq};
+						 
+						if @v_cnt > 0
+							begin
+								Update TB_BIZWEEKLY_SUBJECT
+								   Set bws_content = #{bws_content},
+								       remark = #{remark},
+								       use_yn = #{use_yn},
+								       sort_no = #{sort_no},
+								       et_date = getdate(),
+								       et_user = #{userid}
+								 Where bws_seq = #{bws_seq}
+								       
+							end
+					end;
+			end;
+		]]>
+	</insert>
 </mapper>

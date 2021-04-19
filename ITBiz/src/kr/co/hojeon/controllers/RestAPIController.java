@@ -6,17 +6,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.hojeon.beans.BizDailyMasterBean;
@@ -259,5 +264,15 @@ public class RestAPIController {
 	@GetMapping("/biz/searchAllSubjectList")
 	public List<HashMap<String, Object>> searchAllSubjectList() {
 		return bws.searchWeeklySubject();
+	}
+	
+	@RequestMapping(value="/biz/saveWeeklySubjectData", method=RequestMethod.POST)
+	@ResponseBody
+	public String saveWeeklySubjectData(@RequestBody List<Map<String, Object>> listmap) throws Exception{
+		System.out.println("★★★★★★★★ in saveWeeklySubjectData ★★★★★★★★");
+		//String[] bws_content = request.getParameterValues("bws_content");
+		//System.out.println(listmap.size());
+		int result = bws.saveWeeklySubjectData(listmap);
+		return Integer.toString(result);
 	}
 }	

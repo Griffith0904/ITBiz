@@ -132,4 +132,19 @@ public class BizWeeklyDAO {
 	public List<HashMap<String, Object>> searchWeeklySubject() { 
 		return sqlSessionTemplate.selectList("biz.searchWeeklySubject"); 
 	}
+	
+	// Weekly Subject 저장 (변경, 삭제, 추가)
+	public int saveWeeklySubjectData(String bws_seq, String sort_no, String bws_content, String remark, String use_yn, String status, String userid) {
+		HashMap<String, Object> input_param = new HashMap<String, Object>();
+		
+		input_param.put("bws_seq", bws_seq);
+		input_param.put("sort_no", sort_no);
+		input_param.put("bws_content", bws_content);
+		input_param.put("remark", remark);
+		input_param.put("use_yn", use_yn);
+		input_param.put("status", status);
+		input_param.put("userid", userid);
+		
+		return sqlSessionTemplate.insert("biz.saveWeeklySubjectData", input_param);
+	}
 }

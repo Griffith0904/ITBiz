@@ -182,6 +182,73 @@ tbody tr.active {
 	<a class="scroll-to-top rounded" href="#page-top"> <i
 		class="fas fa-angle-up"></i>
 	</a>
+	
+	<div class="modal fade" id="InfoModal" tabindex="-1"
+		role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content" style='width: 900px'>
+				<div class="modal-header">
+					<h5 class="modal-title" id="info_Title"></h5>
+					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body" id="info_Body">
+					
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-primary" type="button"
+						data-dismiss="modal" id="btn_info_yes" onclick="changeFlag('D')">Yes</button>
+					<button class="btn btn-secondary" type="button"
+						data-dismiss="modal">No</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal fade" id="SaveInfoModal" tabindex="-1"
+		role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content" style='width: 900px'>
+				<div class="modal-header">
+					<h5 class="modal-title" id="save_info_Title"></h5>
+					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body" id="save_info_Body">
+					
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" type="button"
+						data-dismiss="modal">OK</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal fade" id="SaveCheckModal" tabindex="-1"
+		role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content" style='width: 900px'>
+				<div class="modal-header">
+					<h5 class="modal-title" id="save_check_Title"></h5>
+					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body" id="save_check_Body">
+					
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-primary" type="button"
+						data-dismiss="modal" id="btn_savecheck_yes">Yes</button>
+					<button class="btn btn-secondary" type="button"
+						data-dismiss="modal">No</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<!-- Bootstrap core JavaScript-->
 	<script src="${mainpath}vendor/jquery/jquery.min.js"></script>
@@ -205,11 +272,48 @@ tbody tr.active {
 
 
 	<script type='text/javascript'>
+		// Flag Icon 변경
+		var target_row;
+		
+		function changeFlag(rowstatus) {
+			/*
+			추가 : fas fa-plus
+			일반 : fas fa-caret-right
+			삭제 : fas fa-cut
+			업데이트 : fas fa-pen
+			*/
+			if (!target_row) {return;}
+			switch (rowstatus) {
+				case 'U':
+					var now_status = $('#table_font_' + target_row).attr('class');
+					if (now_status != 'fas fa-plus') {
+						$('#table_font_' + target_row).attr('class', 'fas fa-pen');
+					}
+					break;
+				case 'I':
+					$('#table_font_' + target_row).attr('class', 'fas fa-plus');
+					break;
+				
+				case 'R':
+					$('#table_font_' + target_row).attr('class', 'fas fa-caret-right');
+					break
+				
+				case 'D':
+					$('#table_font_' + target_row).attr('class', 'fas fa-cut');
+					break;
+				default:
+					break;
+			}
+		}
+	
 		$(document).ready(function() {
 			// Category 불러오기
 			searchAllSubject();
 	
 			function searchAllSubject() {
+				//$("#categoryDataTable").empty();
+				//$("#categoryDataTable > tbody").html("");
+				$("#categoryDataTable").find("tr:gt(0)").remove();
 				$.ajax({
 							type : "get",
 							dataType : 'json',
@@ -292,6 +396,7 @@ tbody tr.active {
 	
 			// 추가 버튼
 			$('#btn_add').click(function() {
+				target_row = 0;
 				var rownum = $('#categoryDataTable >tbody tr').length;
 				var tbody = $('#categoryDataTable >tbody');
 				//var row = $('#categoryDataTable >tbody tr');
@@ -309,22 +414,129 @@ tbody tr.active {
 				//$(tbody).append(row);
 				//$("#categoryDataTable").append(tbody);
 				//alert(rownum)
-				changeFlag(rownum, "I")
+				target_row = rownum;
+				changeFlag("I")
 				$('#bws_content_' + rownum).focus();
 				//$('#categoryDataTable >tbody tr').addClass('clicked').siblings().removeClass('clicked');			
 			})
 	
 			// 저장 버튼
 			$('#btn_save').click(function() {
-				alert('fefefe')
+				//var table = document.getElementById('categoryDataTable')
+				
+				
+				$('#save_check_Title').text('저장 확인')
+				$('#save_check_Body').html('해당 내역을 저장하시겠습니까?')
+				$('#SaveCheckModal').modal('show')
+				return;
+				
+			})
+			
+			$('#btn_savecheck_yes').click(function() {
+				var indexcnt = $('#categoryDataTable tbody tr').length
+				var sendarry = new Array();
+				
+				for (row = 0; row < indexcnt; row++) {
+					var rowdata = new Object();
+					var status = $('#table_font_' + row).attr('class')
+					//fas fa-caret-right : 변화 없음
+					//fas fa-pen : 수정
+					//fas fa-plus : 추가
+					//fas fa-cut : 삭제
+					/*
+					var bws_seq
+					var bws_content
+					var remark
+					var use_yn
+					var sort_no
+					var status
+					*/
+					rowdata.bws_seq = $('#bws_seq_' + row).text()
+					rowdata.bws_content = $('#bws_content_' + row).val()
+					rowdata.remark = $('#bws_remark_' + row).val()
+					rowdata.use_yn = $('#checkboxID_' + row).val()
+					rowdata.sort_no = $('#sort_no_' + row).val()
+					
+					if (status == 'fas fa-pen') {
+						rowdata.status = 'U'
+					} else if (status == 'fas fa-plus') {
+						rowdata.status = 'I'
+						if (!rowdata.bws_content) {
+							$('#save_info_Title').text('저장 실패')
+							$('#save_info_Body').html('신규 내역 저장시 반드시 Subject를 입력해 주십시오!')
+							$('#SaveInfoModal').modal('show')
+							return;
+						}
+					} else if (status == 'fas fa-cut') {
+						rowdata.status = 'D'
+						if (!rowdata.bws_seq) {continue;}
+					} else {
+						continue;
+					}
+					
+					sendarry.push(rowdata);
+					//var json = JSON.parse("{bws_seq:}" )
+					
+				}
+				
+				if (!sendarry || sendarry.length == 0) { 
+					$('#save_info_Title').text('저장 확인')
+					$('#save_info_Body').html('변경된 내역이 없습니다!')
+					$('#SaveInfoModal').modal('show')
+					return; 
+				}
+				
+				//alert(JSON.stringify(sendarry))
+				$.ajax({
+					type:"post",
+					dataType:'json',
+					url:'${root}biz/saveWeeklySubjectData',
+					contentType:'application/json',
+					//traditional:true, // 배열 및 리스트로 값을 넘기기 위해서는 꼭 선언되어야함.
+					data:JSON.stringify(sendarry),
+					//data: {'action_data':sendarry},
+					success: function(result) {
+						//alert('success')
+						//alert(result);
+						searchAllSubject();
+					}
+				})
 			})
 	
 			// 삭제 버튼
 			$('#btn_delete').click(function() {
-				var rownum = $('#categoryDataTable').closest('tr').prevAll().length;
-				alert(rownum)
+				target_row = 0;
+				//var rownum = $('#categoryDataTable').closest('tr').prevAll().length;
+				//var rownum = $('#categoryDataTable tbody> tr .trstyle clicked').attr('id');
+				//var id = $("#categoryDataTable").closest('tr').find(".id").html();
+				//$('table > tbody > tr.highlight');
+				var getobject = $('#categoryDataTable > tbody > tr.trstyle.clicked');
+				var clicked = getobject.attr('id');
+				
+				if (!clicked) {
+					alert('먼저 내역을 선택해주세요!')
+					return;
+				}
+				
+				var index = getobject.attr('id').substring(6)
+				var id = '#bws_content_' + index
+				var seq = $('#bws_seq_' + index).text()
+				var bws_content = $(id).val();
+				target_row = index;
+				
+				if (!seq) {
+					var table = document.getElementById('categoryDataTable')
+					changeFlag('D')
+					return;
+				}
+				
+				$('#info_Title').text('내역 삭제 확인')
+				$('#info_Body').html('해당 내역을 삭제하시겠습니까?<br/>&nbsp;<br/>&nbsp; - Subject : ' + bws_content)
+				
+				$('#InfoModal').modal('show')
 			})
 			
+			// 데이터 변경시 상태값 변경하기
 			$(document).on('click', '.data_checkbox', function(e) {
 				//alert(JSON.stringify(e))
 				//alert($(e.target).attr("id"))
@@ -337,43 +549,15 @@ tbody tr.active {
 				//var no = td.eq(0).text();
 				var rownum = $(this).closest('tr').prevAll().length;
 				//$('#table_font_' + rownum).attr('class', 'fas fa-pen');
-				changeFlag(rownum, 'U')
+				target_row = rownum;
+				changeFlag('U')
 			})
-			
 			
 			$(document).on('keypress', '.data_text', function(e) {
 				var rownum = $(this).closest('tr').prevAll().length;
-				changeFlag(rownum, 'U')
+				target_row = rownum;
+				changeFlag('U')
 			})
-			
-			// Flag Icon 변경
-			function changeFlag(rownum, rowstatus) {
-				/*
-				추가 : fas fa-plus
-				일반 : fas fa-caret-right
-				삭제 : fas fa-cut
-				업데이트 : fas fa-pen
-				*/
-				switch (rowstatus) {
-				case 'U':
-					$('#table_font_' + rownum).attr('class', 'fas fa-pen');
-					break;
-				case 'I':
-					$('#table_font_' + rownum).attr('class', 'fas fa-plus');
-					break;
-				
-				case 'R':
-					$('#table_font_' + rownum).attr('class', 'fas fa-caret-right');
-					break
-				
-				case 'D':
-					$('#table_font_' + rownum).attr('class', 'fas fa-cut');
-					break;
-				default:
-					break;
-				}
-			}
-	
 		});
 	</script>
 </body>
