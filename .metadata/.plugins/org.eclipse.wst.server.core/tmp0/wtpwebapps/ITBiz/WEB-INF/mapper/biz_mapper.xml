@@ -2,8 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mabatis.org//DTD Mapper 3.0//EN"
                        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="biz">
-	<select id="getLastWeekPlaner" parameterType="hashmap"
-		resultType="java.lang.String">
+	<select id="getLastWeekPlaner" parameterType="hashmap" resultType="java.lang.String">
 		<![CDATA[
 			-- 전주 내역 조회시 해당 차주 - 1 해야함
 			-- ID는 전주것만 가져올꺼 같지만, 실제로는 전주, 금주, 차주 다 가져올 수 있음

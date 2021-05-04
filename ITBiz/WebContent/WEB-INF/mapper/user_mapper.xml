@@ -4,10 +4,11 @@
 <mapper namespace="user">
 	<select id="getLoginUserInfo" parameterType="kr.co.hojeon.beans.UserBean" resultType="kr.co.hojeon.beans.UserBean">
 		<![CDATA[
-			Select deptseq, deptname, empid, empname, email, userid, typename, dbname, jpname, jdname, joname, dbseq, userpw
-			  From tb_user_list with(nolock)
-			 Where userid = #{userid}
-			   And userpw = #{userpw}
+			Select b.deptseq, b.deptname, b.empid, b.empname, b.email, b.userid, b.typename, b.dbname, b.jpname, b.jdname, b.joname, b.dbseq, a.userpw
+			  From tb_user_pw a with(nolock), vt_user_list b with(nolock)
+			 Where a.userid = #{userid}
+			   And a.userpw = #{userpw}
+			   And a.userid = b.userid;
 		]]>		
 	</select>
 </mapper>

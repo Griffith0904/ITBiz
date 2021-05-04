@@ -1,7 +1,9 @@
 package kr.co.hojeon.controllers;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Date;
 import java.util.HashMap;
@@ -20,7 +22,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import kr.co.hojeon.beans.BizWeekScope;
 import kr.co.hojeon.beans.TableUsrBizTwDetail;
 import kr.co.hojeon.beans.UserBean;
+import kr.co.hojeon.services.BizDailyService;
 import kr.co.hojeon.services.BizWeeklyService;
+import kr.co.hojeon.services.CommonService;
 import kr.co.hojeon.subclasses.GetSysDateInfo;
 import net.sf.jasperreports.engine.JasperExportManager;
 
@@ -36,10 +40,46 @@ public class BizController {
 	private BizWeeklyService bws;
 	
 	@Autowired
+	private BizDailyService bds;
+	
+	@Autowired
+	private CommonService cms;
+	
+	@Autowired
 	private RestAPIController restapi;
 	
 	@GetMapping("/dailyRgst")
-	public String dailyRgst() {
+	public String dailyRgst(Model model) {
+		//ArrayList<HashMap<String, Object>> search_rec_user = new ArrayList<HashMap<String, Object>>();
+		//ArrayList<HashMap<String, Object>> search_work_status = new ArrayList<HashMap<String, Object>>();
+		
+		List<HashMap<String, Object>> search_work_status = cms.getBaseData("W0002", "Y");
+		List<HashMap<String, Object>> search_work_status_noall = cms.getBaseData("W0002", "N");
+		List<HashMap<String, Object>> search_rec_user = cms.getITUserInfo("Y");
+		
+		/*
+		SimpleDateFormat format = new SimpleDateFormat ( "yyyy-MM-dd");
+				
+		Date time = new Date();
+				
+		String times = format.format(time);
+		
+		System.out.println(times);
+		*/
+		
+		Calendar cal = Calendar.getInstance();
+        cal.setTime(new Date());
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        //System.out.println("current: " + df.format(cal.getTime()));
+        model.addAttribute("getToday", df.format(cal.getTime()));
+        
+        cal.add(Calendar.MONTH, -3);
+        model.addAttribute("getBeforeday", df.format(cal.getTime()));
+        
+		model.addAttribute("search_work_status_noall", search_work_status_noall);
+		model.addAttribute("search_work_status", search_work_status);
+		model.addAttribute("search_rec_user", search_rec_user);		
+		
 		return "biz/dailyRgst";
 	}
 	

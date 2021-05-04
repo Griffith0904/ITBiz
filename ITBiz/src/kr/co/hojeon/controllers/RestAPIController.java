@@ -30,7 +30,9 @@ import kr.co.hojeon.beans.BizWeeklyBasicSubject;
 import kr.co.hojeon.beans.BizWeeklySubject;
 import kr.co.hojeon.beans.TableUsrBizTwDetail;
 import kr.co.hojeon.beans.UserBean;
+import kr.co.hojeon.services.BizDailyService;
 import kr.co.hojeon.services.BizWeeklyService;
+import kr.co.hojeon.services.CommonService;
 import kr.co.hojeon.services.MainPageService;
 
 @RestController
@@ -44,6 +46,12 @@ public class RestAPIController {
 	
 	@Autowired
 	private BizWeeklyService bws;
+	
+	@Autowired
+	private BizDailyService bds;
+	
+	@Autowired
+	private CommonService cms;
 	
 	@GetMapping("/main/searchAllDataFromStatus/{work_status}")
 	public List<BizDailyMasterBean> searchAllDataFromStatus(@PathVariable String work_status) {
@@ -274,5 +282,37 @@ public class RestAPIController {
 		//System.out.println(listmap.size());
 		int result = bws.saveWeeklySubjectData(listmap);
 		return Integer.toString(result);
+	}
+	
+	
+	@PostMapping("/biz/getBizDailyList")
+	public List<HashMap<String, Object>> getBizDailyData(@RequestParam("rec_user") String rec_user,
+								@RequestParam("empname") String empname,
+								@RequestParam("req_subject") String req_subject,
+								@RequestParam("sdate") String sdate,
+								@RequestParam("edate") String edate,
+								@RequestParam("work_status") String work_status) {
+		
+		return bds.getBizDailyList(rec_user, empname, req_subject, sdate, edate, work_status);
+	}
+	
+	@PostMapping("/biz/getBizDailySubAll")
+	public Map<String, Object> getBizDailyExecuter(@RequestParam("bd_seq") String bd_seq) {
+		List<HashMap<String, Object>> data1 = bds.getBizDailyExecuter(bd_seq);
+		List<HashMap<String, Object>> data2 = bds.getBizDailyDetail(bd_seq);
+		
+		Map<String, Object> data_all = new HashMap<String, Object>();
+		
+		data_all.put("data1", data1);
+		data_all.put("data2", data2);
+		//return bds.getBizDailyExecuter(bd_seq);
+		return data_all;
+	}
+	
+	@PostMapping("/biz/getITUserInfoFromCheck")
+	public List<HashMap<String, Object>> getITUserInfoFromCheck(@RequestParam("reg_user") String[] reg_user) {
+		System.out.println("★★★★★★★★★★★★ getITUserInfoFromCheck ★★★★★★★★★★★★");
+		System.out.println(reg_user.length);
+		return cms.getITUserInfoFromCheck(reg_user);
 	}
 }	

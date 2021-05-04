@@ -8,59 +8,80 @@
 <!DOCTYPE html>
 
 <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	
+	<title>IT Working List</title>
+	
+	<!-- Custom fonts for this template-->
+	<link href="${mainpath}vendor/fontawesome-free/css/all.min.css"
+		rel="stylesheet" type="text/css">
+	<link
+		href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+		rel="stylesheet">
+	
+	<!-- Custom styles for this template-->
+	<link href="${mainpath}css/sb-admin-2.min.css" rel="stylesheet">
+	
+	<script src="${mainpath}vendor/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="${mainpath}js/jquery.tablesorter.min.js"></script>
+	
+	<!-- Bootstrap core JavaScript-->
+	<script src="${mainpath}vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="">
-<meta name="author" content="">
+	<!-- Core plugin JavaScript-->
+	<script src="${mainpath}vendor/jquery-easing/jquery.easing.min.js"></script>
 
-<title>IT Working List</title>
+	<!-- Custom scripts for all pages-->
+	<script src="${mainpath}js/sb-admin-2.min.js"></script>
 
-<!-- Custom fonts for this template-->
-<link href="${mainpath}vendor/fontawesome-free/css/all.min.css"
-	rel="stylesheet" type="text/css">
-<link
-	href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-	rel="stylesheet">
+	<!-- Page level plugins -->
+	<script src="${mainpath}vendor/chart.js/Chart.min.js"></script>
 
-<!-- Custom styles for this template-->
-<link href="${mainpath}css/sb-admin-2.min.css" rel="stylesheet">
+	<!-- Page level custom scripts -->
+	<%-- <script src="${mainpath}js/demo/chart-area-demo.js"></script> --%>
+	<script src="${mainpath}js/demo/chart-pie-demo.js"></script>
 
-<style>
-th {
-	position: sticky;
-	top: 0px;
-	box-shadow: 0 1px 1px -1px rgba(0, 0, 0, 0.4);
-	background-color: #F6F6F6;
-}
-
-tbody tr td {
-	padding: 0.3rem !important;
-	z-index: 1;
-}
-
-tbody tr:hover {
-	background-color: #CCF6F6;
-}
-
-tbody tr.active {
-	background-color: #E8F6F6;
-}
-
-.clicked {
-	background-color: #E8F6F6;
-}
-
-.trstyle {
-	padding: 0.3rem !important;
-}
-</style>
+	<style>
+		th {
+			position: sticky;
+			top: 0px;
+			box-shadow: 0 1px 1px -1px rgba(0, 0, 0, 0.4);
+			background-color: #F6F6F6;
+		}
+		
+		tbody tr td {
+			padding: 0.3rem !important;
+			z-index: 1;
+		}
+		
+		tbody tr {
+			height:30px;
+		}
+		
+		tbody tr:hover {
+			background-color: #CCF6F6;
+		}
+		
+		tbody tr.active {
+			background-color: #E8F6F6;
+		}
+		
+		.clicked {
+			background-color: #E8F6F6;
+		}
+		
+		.trstyle {
+			padding: 0.3rem !important;
+		}
+	</style>
 </head>
 
 <body id="page-top">
-
 	<!-- Page Wrapper -->
 	<div id="wrapper">
 
@@ -69,21 +90,20 @@ tbody tr.active {
 		<!-- End of Sidebar -->
 
 		<!-- Content Wrapper -->
+		<!-- Content Wrapper -->
 		<div id="content-wrapper" class="d-flex flex-column">
 
 			<!-- Main Content -->
 			<div id="content">
-
 				<c:import url="/WEB-INF/views/include/top_bar.jsp"></c:import>
-
-
+				
 				<!-- 화면 이름 아이콘 & 이름 -->
 				<div class="col-auto" style="margin-left: 20px">
 					<i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
 					<h1 class="h4 mb-0 text-gray-800"
 						style="display: inline; margin-left: 10px">Category 관리</h1>
 				</div>
-
+				
 				<div
 					style='margin-top: 20px; width: 100%; height: calc(100% - 149px);'>
 					<!-- 타이틀 및 버튼부 -->
@@ -129,7 +149,7 @@ tbody tr.active {
 						<div class="card-body">
 							<div class="table-responsive"
 								style='height: 570px; border: 1px solid #DEDEDE'>
-								<table class="table table-bordered" id="categoryDataTable" width="100%" cellspacing="0" height="100%">
+								<table class="tablesorter table table-bordered" id="categoryDataTable" width="100%" cellspacing="0">
 									<thead>
 										<tr>
 											<th
@@ -150,10 +170,6 @@ tbody tr.active {
 												순서</th>
 										</tr>
 									</thead>
-
-									<tbody>
-
-									</tbody>
 								</table>
 							</div>
 						</div>
@@ -174,106 +190,85 @@ tbody tr.active {
 
 		</div>
 		<!-- End of Content Wrapper -->
-
-	</div>
-	<!-- End of Page Wrapper -->
-
-	<!-- Scroll to Top Button-->
-	<a class="scroll-to-top rounded" href="#page-top"> <i
-		class="fas fa-angle-up"></i>
-	</a>
-	
-	<div class="modal fade" id="InfoModal" tabindex="-1"
-		role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content" style='width: 900px'>
-				<div class="modal-header">
-					<h5 class="modal-title" id="info_Title"></h5>
-					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">×</span>
-					</button>
+		
+		<!-- Scroll to Top Button-->
+		<a class="scroll-to-top rounded" href="#page-top"> <i
+			class="fas fa-angle-up"></i>
+		</a>
+		
+		<div class="modal fade" id="InfoModal" tabindex="-1"
+			role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content" style='width: 900px'>
+					<div class="modal-header">
+						<h5 class="modal-title" id="info_Title"></h5>
+						<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>
+					</div>
+					<div class="modal-body" id="info_Body">
+						
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-primary" type="button"
+							data-dismiss="modal" id="btn_info_yes" onclick="changeFlag('D')">Yes</button>
+						<button class="btn btn-secondary" type="button"
+							data-dismiss="modal">No</button>
+					</div>
 				</div>
-				<div class="modal-body" id="info_Body">
-					
+			</div>
+		</div>
+		
+		<div class="modal fade" id="SaveInfoModal" tabindex="-1"
+			role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content" style='width: 900px'>
+					<div class="modal-header">
+						<h5 class="modal-title" id="save_info_Title"></h5>
+						<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>
+					</div>
+					<div class="modal-body" id="save_info_Body">
+						
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-secondary" type="button"
+							data-dismiss="modal">OK</button>
+					</div>
 				</div>
-				<div class="modal-footer">
-					<button class="btn btn-primary" type="button"
-						data-dismiss="modal" id="btn_info_yes" onclick="changeFlag('D')">Yes</button>
-					<button class="btn btn-secondary" type="button"
-						data-dismiss="modal">No</button>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="SaveCheckModal" tabindex="-1"
+			role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content" style='width: 900px'>
+					<div class="modal-header">
+						<h5 class="modal-title" id="save_check_Title"></h5>
+						<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">×</span>
+						</button>
+					</div>
+					<div class="modal-body" id="save_check_Body">
+						
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-primary" type="button"
+							data-dismiss="modal" id="btn_savecheck_yes">Yes</button>
+						<button class="btn btn-secondary" type="button"
+							data-dismiss="modal">No</button>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 	
-	<div class="modal fade" id="SaveInfoModal" tabindex="-1"
-		role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content" style='width: 900px'>
-				<div class="modal-header">
-					<h5 class="modal-title" id="save_info_Title"></h5>
-					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">×</span>
-					</button>
-				</div>
-				<div class="modal-body" id="save_info_Body">
-					
-				</div>
-				<div class="modal-footer">
-					<button class="btn btn-secondary" type="button"
-						data-dismiss="modal">OK</button>
-				</div>
-			</div>
-		</div>
-	</div>
 	
-	<div class="modal fade" id="SaveCheckModal" tabindex="-1"
-		role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content" style='width: 900px'>
-				<div class="modal-header">
-					<h5 class="modal-title" id="save_check_Title"></h5>
-					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">×</span>
-					</button>
-				</div>
-				<div class="modal-body" id="save_check_Body">
-					
-				</div>
-				<div class="modal-footer">
-					<button class="btn btn-primary" type="button"
-						data-dismiss="modal" id="btn_savecheck_yes">Yes</button>
-					<button class="btn btn-secondary" type="button"
-						data-dismiss="modal">No</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<!-- Bootstrap core JavaScript-->
-	<script src="${mainpath}vendor/jquery/jquery.min.js"></script>
-	<script src="${mainpath}vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-	<!-- Core plugin JavaScript-->
-	<script src="${mainpath}vendor/jquery-easing/jquery.easing.min.js"></script>
-
-	<!-- Custom scripts for all pages-->
-	<script src="${mainpath}js/sb-admin-2.min.js"></script>
-
-	<!-- Page level plugins -->
-	<script src="${mainpath}vendor/chart.js/Chart.min.js"></script>
-
-	<!-- Page level custom scripts -->
-	<%-- <script src="${mainpath}js/demo/chart-area-demo.js"></script> --%>
-	<script src="${mainpath}js/demo/chart-pie-demo.js"></script>
-	<!-- Bootstrap core JavaScript-->
-	<script src="${mainpath }vendor/jquery/jquery.min.js"></script>
-	<script src="${mainpath }vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-
 	<script type='text/javascript'>
 		// Flag Icon 변경
 		var target_row;
+		
 		
 		function changeFlag(rowstatus) {
 			/*
@@ -308,12 +303,42 @@ tbody tr.active {
 	
 		$(document).ready(function() {
 			// Category 불러오기
+			//$("#categoryDataTable").tablesorter();
+			$.tablesorter.addParser({
+				id:"input_text",
+				is:function() {
+					return false;
+				},
+				format: function( s, table, cell) {
+			        return $("input", cell).val();
+			    },
+			    type: 'text'
+			})
+			
+			$.tablesorter.addParser({
+				id:"checkbox",
+				is:function() {
+					return false;
+				},
+				format: function( s, table, cell) {
+			        return $("input", cell).val();
+			    },
+			    type: 'text'
+			})
+			
 			searchAllSubject();
 	
 			function searchAllSubject() {
+				
 				//$("#categoryDataTable").empty();
 				//$("#categoryDataTable > tbody").html("");
-				$("#categoryDataTable").find("tr:gt(0)").remove();
+				// 원래 하던거 $("#categoryDataTable").find("tr:gt(0)").remove();
+				//$('#categoryDataTable').find('tbody').empty();
+				//$('#categoryDataTable tbody').empty();
+				//$('#categoryDataTable tbody').remove();
+				//$('#categoryDataTable tr').eq(1).remove();
+				
+				$('#categoryDataTable tbody').remove();
 				$.ajax({
 							type : "get",
 							dataType : 'json',
@@ -370,13 +395,28 @@ tbody tr.active {
 									$(row).append(cell0, cell1,
 											cell2, cell3,
 											cell4, cell5);
-									//$(row).append(cell1, cell2);
 									$(tbody).append(row);
-									$("#categoryDataTable")
-											.append(tbody);
+									//$("#categoryDataTable > tbody").append(row);
+									
 								}
+								$("#categoryDataTable").append(tbody);
+								$("#categoryDataTable").trigger('update')
+								categorytablesort();
 							}
 						})
+				
+			}
+			
+			categorytablesort = function() {
+				$('#categoryDataTable').tablesorter({
+					headers: {
+						2 : {sorter : 'input_text'},
+						3 : {sorter : 'input_text'},
+						4 : {sorter : 'input_text'},
+						5 : {sorter : 'input_text'}
+					}
+					
+				});
 			}
 	
 			$("#categoryDataTable").on(	"click", "tr",	function() {
@@ -393,7 +433,7 @@ tbody tr.active {
 	
 				$(this).addClass('clicked').siblings().removeClass('clicked');
 			});
-	
+			
 			// 추가 버튼
 			$('#btn_add').click(function() {
 				target_row = 0;
@@ -417,7 +457,7 @@ tbody tr.active {
 				target_row = rownum;
 				changeFlag("I")
 				$('#bws_content_' + rownum).focus();
-				//$('#categoryDataTable >tbody tr').addClass('clicked').siblings().removeClass('clicked');			
+				//$('#categoryDataTable >tbody tr').addClass('clicked').siblings().removeClass('clicked');
 			})
 	
 			// 저장 버튼
@@ -454,8 +494,13 @@ tbody tr.active {
 					rowdata.bws_seq = $('#bws_seq_' + row).text()
 					rowdata.bws_content = $('#bws_content_' + row).val()
 					rowdata.remark = $('#bws_remark_' + row).val()
-					rowdata.use_yn = $('#checkboxID_' + row).val()
 					rowdata.sort_no = $('#sort_no_' + row).val()
+					
+					if ($('#checkboxID_' + row).is(":checked")) {
+						rowdata.use_yn = 'Y'
+					} else {
+						rowdata.use_yn = 'N'
+					}
 					
 					if (status == 'fas fa-pen') {
 						rowdata.status = 'U'
@@ -553,13 +598,12 @@ tbody tr.active {
 				changeFlag('U')
 			})
 			
-			$(document).on('keypress', '.data_text', function(e) {
+			$(document).on('keydown', '.data_text', function(e) {
 				var rownum = $(this).closest('tr').prevAll().length;
 				target_row = rownum;
 				changeFlag('U')
 			})
 		});
-	</script>
+	</script>	
 </body>
-
 </html>

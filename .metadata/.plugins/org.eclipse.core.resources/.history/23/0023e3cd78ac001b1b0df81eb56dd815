@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mabatis.org//DTD Mapper 3.0//EN"
+                       "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="comm">
+	<select id="getBaseData" parameterType="hashmap" resultType="hashmap">
+		/***********************************************************
+		SQLID       : COMMON_MAPPER.XML
+		ID          : getBaseData
+		DESCRIPTION : 공용 코드 DETAIL 조회
+		************************************************************/
+		<![CDATA[
+			SELECT
+				BASE_CODE, BASE_NAME
+			FROM
+				(
+				SELECT '%' BASE_CODE, '전체' BASE_NAME, 0 SORT_NO WHERE #{all_yn} = 'Y'
+				UNION
+				SELECT BCD_CODE, BCD_NAME, SORT_NO FROM TB_BASE_DETAIL WITH(NOLOCK) WHERE BCH_CODE = #{bch_code} AND USE_YN = 'Y'
+				) A
+			ORDER BY A.SORT_NO;
+		]]>
+	</select>
+	
+	<select id="getITUserInfo" parameterType="java.lang.String" resultType="hashmap">
+		/***********************************************************
+		SQLID       : COMMON_MAPPER.XML
+		ID          : getITUserInfo
+		DESCRIPTION : 공용 코드 DETAIL 조회
+		************************************************************/
+		<![CDATA[
+			SELECT
+				BASE_CODE, BASE_NAME
+			FROM
+				(
+				SELECT '%' BASE_CODE, '전체' BASE_NAME, 0 SORT_NO WHERE #{all_yn} = 'Y'
+				UNION
+				SELECT EMPID, EMPNAME, ROW_NUMBER() OVER(ORDER BY JDNAME DESC) SORT_NO FROM VT_USER_LIST WHERE DEPTSEQ = 68 AND TYPENAME = '재직'
+				) A
+			ORDER BY A.SORT_NO;
+		]]>
+	</select>
+</mapper>

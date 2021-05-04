@@ -1,0 +1,198 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>ITBiz</groupId>
+	<artifactId>ITBiz</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.0</version>
+				<configuration>
+					<release>12</release>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.2.1</version>
+				<configuration>
+					<warSourceDirectory>WebContent</warSourceDirectory>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<!-- 라이브러리 버전 관리 -->
+	<properties>
+		<javax.servlet-version>4.0.1</javax.servlet-version>
+		<javax.servlet.jsp-version>2.3.3</javax.servlet.jsp-version>
+		<javax.servlet.jsp.jstl-version>1.2</javax.servlet.jsp.jstl-version>
+		<org.springframework-version>5.3.3</org.springframework-version>
+		<!-- <org.springframework-version>4.3.30.RELEASE</org.springframework-version> -->
+		<javax.validation-version>2.0.1.Final</javax.validation-version>
+		<!-- <org.hibernate.validator-version>7.0.1.Final</org.hibernate.validator-version> -->
+		<org.hibernate.validator-version>6.1.2.Final</org.hibernate.validator-version>
+
+		<!-- com.microsoft.sqlserver -->
+		<com.microsoft.sqlserver-version>9.2.0.jre8</com.microsoft.sqlserver-version>
+
+		<!-- org.apache.commons -->
+		<org.apache.commons-version>2.8.0</org.apache.commons-version>
+
+		<!-- org.mybatis -->
+		<org.mybatis-version>3.5.6</org.mybatis-version>
+
+		<!-- mybatis-spring -->
+		<mybatis-spring-version>2.0.6</mybatis-spring-version>
+
+		<com.fasterxml.jackson.core-version>2.12.1</com.fasterxml.jackson.core-version>
+		
+		<javax.annotation-version>1.3.2</javax.annotation-version>
+		
+		<!-- ireport 연동 -->
+		<com.jaspersoft-version>3.7.5</com.jaspersoft-version>
+		<net.sf.jasperreports-version>6.16.0</net.sf.jasperreports-version>
+		
+		<!-- 쿼리 실행 로그 확인 -->
+		<org.lazyluke-version>0.2.7</org.lazyluke-version>
+	</properties>
+
+	<!-- 라이브러리 셋팅 -->
+	<dependencies>
+		<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${javax.servlet-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/javax.servlet.jsp/javax.servlet.jsp-api -->
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>javax.servlet.jsp-api</artifactId>
+			<version>${javax.servlet.jsp-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/javax.servlet.jsp.jstl/jstl -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>${javax.servlet.jsp.jstl-version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/javax.validation/validation-api -->
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>${javax.validation-version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.hibernate.validator/hibernate-validator -->
+		<dependency>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${org.hibernate.validator-version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc -->
+		<dependency>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>mssql-jdbc</artifactId>
+			<version>${com.microsoft.sqlserver-version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-dbcp2 -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-dbcp2</artifactId>
+			<version>${org.apache.commons-version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>${org.mybatis-version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.mybatis/mybatis-spring -->
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis-spring</artifactId>
+			<version>${mybatis-spring-version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${com.fasterxml.jackson.core-version}</version>
+		</dependency>
+		
+		<!-- Resource -->
+		<dependency>
+			<groupId>javax.annotation</groupId>
+			<artifactId>javax.annotation-api</artifactId>
+			<version>${javax.annotation-version}</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports -->
+		
+		<!-- <dependency>
+		    <groupId>net.sf.jasperreports</groupId>
+		    <artifactId>jasperreports</artifactId>
+		    <version>${com.jaspersoft-version}</version>
+		</dependency> -->
+		
+		<!-- https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports -->
+		<!-- IReport(jasperreports) Library -->
+		<dependency>
+		    <groupId>net.sf.jasperreports</groupId>
+		    <artifactId>jasperreports</artifactId>
+		    <version>${net.sf.jasperreports-version}</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports-functions -->
+		<!-- IReport(jasperreports) function -->
+		<dependency>
+		    <groupId>net.sf.jasperreports</groupId>
+		    <artifactId>jasperreports-functions</artifactId>
+		    <version>${net.sf.jasperreports-version}</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports-fonts -->
+		<!-- IReport(jasperreports) fonts -->
+		<dependency>
+		    <groupId>net.sf.jasperreports</groupId>
+		    <artifactId>jasperreports-fonts</artifactId>
+		    <version>${net.sf.jasperreports-version}</version>
+		</dependency>
+		
+		<!-- 쿼리 실행 로그 확인 -->
+		<dependency>
+		    <groupId>org.lazyluke</groupId>
+		    <artifactId>log4jdbc-remix</artifactId>
+		    <version>${org.lazyluke-version}</version>
+		</dependency>
+	</dependencies>
+</project>

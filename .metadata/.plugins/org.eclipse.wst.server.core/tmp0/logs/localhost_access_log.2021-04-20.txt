@@ -1,0 +1,17 @@
+127.0.0.1 - - [20/Apr/2021:18:36:38 +0900] "GET / HTTP/1.1" 404 807
+0:0:0:0:0:0:0:1 - - [20/Apr/2021:18:36:39 +0900] "GET /ITBiz/ HTTP/1.1" 302 -
+0:0:0:0:0:0:0:1 - - [20/Apr/2021:18:36:39 +0900] "GET /ITBiz/main HTTP/1.1" 302 -
+0:0:0:0:0:0:0:1 - - [20/Apr/2021:18:36:39 +0900] "GET /ITBiz/user/login;jsessionid=CB2407D67BE78CC7AADFAC9290DB53F4 HTTP/1.1" 200 2890
+0:0:0:0:0:0:0:1 - - [20/Apr/2021:18:36:39 +0900] "GET /ITBiz/user/images/icons/favicon.ico HTTP/1.1" 302 -
+0:0:0:0:0:0:0:1 - - [20/Apr/2021:18:36:39 +0900] "GET /ITBiz/user/not_login HTTP/1.1" 200 150
+0:0:0:0:0:0:0:1 - - [20/Apr/2021:18:36:44 +0900] "POST /ITBiz/user/trylogin HTTP/1.1" 302 -
+0:0:0:0:0:0:0:1 - - [20/Apr/2021:18:36:45 +0900] "GET /ITBiz/main HTTP/1.1" 200 37038
+0:0:0:0:0:0:0:1 - - [20/Apr/2021:18:36:45 +0900] "GET /favicon.ico HTTP/1.1" 404 818
+0:0:0:0:0:0:0:1 - - [20/Apr/2021:18:36:45 +0900] "GET /ITBiz/main/searchAllDataByMonthly HTTP/1.1" 200 397
+0:0:0:0:0:0:0:1 - - [20/Apr/2021:18:36:48 +0900] "GET /ITBiz/biz/weeklyRgst HTTP/1.1" 200 53860
+0:0:0:0:0:0:0:1 - - [20/Apr/2021:18:36:49 +0900] "POST /ITBiz/biz/searchBaseDateScope HTTP/1.1" 200 25
+0:0:0:0:0:0:0:1 - - [20/Apr/2021:18:36:49 +0900] "GET /ITBiz/biz/getNextWeekSubject?search_year=21&search_week=17 HTTP/1.1" 200 12
+0:0:0:0:0:0:0:1 - - [20/Apr/2021:18:36:49 +0900] "GET /ITBiz/biz/getLastWeekPlaner?search_year=21&search_week=17&search_type=1 HTTP/1.1" 200 518
+0:0:0:0:0:0:0:1 - - [20/Apr/2021:18:36:49 +0900] "GET /ITBiz/biz/getThisWeekSubject?search_year=21&search_week=17 HTTP/1.1" 200 277
+0:0:0:0:0:0:0:1 - - [20/Apr/2021:18:36:50 +0900] "POST /ITBiz/biz/getUsrBizWeeklyContent HTTP/1.1" 200 124
+0:0:0:0:0:0:0:1 - - [20/Apr/2021:18:38:29 +0900] "POST /ITBiz/biz/saveUsrBizWeeklyContentData HTTP/1.1" 200 2

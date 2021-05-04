@@ -24,17 +24,17 @@ public class MainPageService {
 	private UserBean loginUserBean;
 	
 	public List<BDListFromMainBean> getBizDailyStatusForMain() {
-		return msd.getBizDailyStatusForMain(loginUserBean.getUserid());
+		return msd.getBizDailyStatusForMain(loginUserBean.getEmpid());
 	}
 	
 	public List<BizDailyMasterBean> searchAllDataFromStatusList(String work_status) {
-		List<BizDailyMasterBean> listbdm = msd.searchAllDataFromStatusList(loginUserBean.getUserid(), work_status);
+		List<BizDailyMasterBean> listbdm = msd.searchAllDataFromStatusList(loginUserBean.getEmpid(), work_status);
 		return listbdm;
 	}
 	
 	public List<HashMap<String, Object>> searchAllDataByMonthly() {
 		//HashMap<String, Object> hso = new HashMap<String, Object>();
-		return msd.searchAllDataByMonthly(loginUserBean.getUserid());
+		return msd.searchAllDataByMonthly(loginUserBean.getEmpid());
 	}
 	
 	public List<HashMap<String, Object>> searchFindWorkForTeam() {

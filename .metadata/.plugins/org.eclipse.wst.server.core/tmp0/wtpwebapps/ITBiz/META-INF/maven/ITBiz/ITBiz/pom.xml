@@ -57,6 +57,8 @@
 		<com.jaspersoft-version>3.7.5</com.jaspersoft-version>
 		<net.sf.jasperreports-version>6.16.0</net.sf.jasperreports-version>
 		
+		<!-- 쿼리 실행 로그 확인 -->
+		<log4j-version>1.2.15</log4j-version>
 	</properties>
 
 	<!-- 라이브러리 셋팅 -->
@@ -186,5 +188,33 @@
 		    <version>${net.sf.jasperreports-version}</version>
 		</dependency>
 		
+		<!-- 쿼리 실행 로그 확인 -->
+		<!-- <dependency>
+		    <groupId>log4j</groupId>
+		    <artifactId>log4j</artifactId>
+		    <version>${log4j-version}</version>
+		    <exclusions>
+		    	<exclusion>
+		    		<groupId>javax.mail</groupId>
+		    		<artifactId>mail</artifactId>
+		    	</exclusion>
+		    	
+		    	<exclusion>
+		    		<groupId>javax.jms</groupId>
+		    		<artifactId>jms</artifactId>
+		    	</exclusion>
+		    	
+		    	<exclusion>
+		    		<groupId>com.sun.jdmk</groupId>
+		    		<artifactId>jmxtools</artifactId>
+		    	</exclusion>
+		    	
+		    	<exclusion>
+		    		<groupId>com.sun.jmx</groupId>
+		    		<artifactId>jmxri</artifactId>
+		    	</exclusion>
+		    </exclusions>
+		    <scope>runtime</scope>
+		</dependency> -->
 	</dependencies>
 </project>

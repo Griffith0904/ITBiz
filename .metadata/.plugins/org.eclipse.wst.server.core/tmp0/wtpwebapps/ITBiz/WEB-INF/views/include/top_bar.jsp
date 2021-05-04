@@ -106,7 +106,8 @@
     
                 <!-- End of Topbar -->
 	<!-- Bootstrap core JavaScript-->
-    <script src="${mainpath }vendor/jquery/jquery.min.js"></script>
+	<!-- 밑에꺼 주석 빼면 tablesorter가 안먹음.. 210426 14:51  -->
+    <%-- <script src="${mainpath }vendor/jquery/jquery.min.js"></script> --%>
     <script src="${mainpath }vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->

@@ -155,3 +155,54 @@
 4월 02, 2021 10:38:44.89 [8208:17784:0402/103844.892:ERROR:device_event_log_impl.cc(214)] [10:38:44.891] USB: usb_device_win.cc:93 Failed to read descriptors from \\?\usb#vid_10a5&pid_0007#5&18d341bf&0&8#{a5dcbf10-6530-11d2-901f-00c04fb951ed}.
 4월 02, 2021 11:44:11.15 [8208:17784:0402/114411.157:ERROR:device_event_log_impl.cc(214)] [11:44:11.157] USB: usb_service_win.cc:258 Failed to get device driver name: 요소가 없습니다. (0x490)
 4월 02, 2021 13:35:08.44 [8208:14848:0402/133508.447:ERROR:connection_factory_impl.cc(428)] Failed to connect to MCS endpoint with error -105
+
+4월 26, 2021 14:40:35.57 NEW SESSION
+4월 26, 2021 14:40:35.57 [34540:44724:0426/144035.569:ERROR:device_event_log_impl.cc(214)] [14:40:35.569] USB: usb_device_handle_win.cc:1054 Failed to read descriptor from node connection: 시스템에 부착된 장치가 작동하지 않습니다. (0x1F)
+4월 26, 2021 14:40:35.57 [34540:44724:0426/144035.577:ERROR:device_event_log_impl.cc(214)] [14:40:35.577] USB: usb_device_handle_win.cc:1054 Failed to read descriptor from node connection: 시스템에 부착된 장치가 작동하지 않습니다. (0x1F)
+4월 26, 2021 14:40:35.57 [34540:44724:0426/144035.577:ERROR:usb_descriptors.cc(140)] Failed to read length for configuration 1.
+4월 26, 2021 14:40:35.57 [34540:44724:0426/144035.577:ERROR:usb_descriptors.cc(100)] Failed to read all configuration descriptors. Expected 2, got 1.
+4월 26, 2021 14:40:35.57 [34540:44724:0426/144035.577:ERROR:device_event_log_impl.cc(214)] [14:40:35.577] USB: usb_device_win.cc:93 Failed to read descriptors from \\?\usb#vid_10a5&pid_0007#5&18d341bf&0&8#{a5dcbf10-6530-11d2-901f-00c04fb951ed}.
+
+4월 29, 2021 08:22:21.84 NEW SESSION
+4월 29, 2021 08:22:21.84 [10544:19200:0429/082221.839:ERROR:device_event_log_impl.cc(214)] [08:22:21.840] USB: usb_device_handle_win.cc:1054 Failed to read descriptor from node connection: 시스템에 부착된 장치가 작동하지 않습니다. (0x1F)
+4월 29, 2021 08:22:21.84 [10544:19200:0429/082221.846:ERROR:device_event_log_impl.cc(214)] [08:22:21.846] USB: usb_device_handle_win.cc:1054 Failed to read descriptor from node connection: 시스템에 부착된 장치가 작동하지 않습니다. (0x1F)
+4월 29, 2021 08:22:21.84 [10544:19200:0429/082221.846:ERROR:usb_descriptors.cc(140)] Failed to read length for configuration 1.
+4월 29, 2021 08:22:21.84 [10544:19200:0429/082221.846:ERROR:usb_descriptors.cc(100)] Failed to read all configuration descriptors. Expected 2, got 1.
+4월 29, 2021 08:22:21.84 [10544:19200:0429/082221.846:ERROR:device_event_log_impl.cc(214)] [08:22:21.847] USB: usb_device_win.cc:93 Failed to read descriptors from \\?\usb#vid_10a5&pid_0007#5&18d341bf&0&8#{a5dcbf10-6530-11d2-901f-00c04fb951ed}.
+
+4월 29, 2021 18:35:53.71 NEW SESSION
+4월 29, 2021 18:35:53.71 [30092:15080:0429/183553.708:ERROR:device_event_log_impl.cc(214)] [18:35:53.708] USB: usb_device_handle_win.cc:1054 Failed to read descriptor from node connection: 시스템에 부착된 장치가 작동하지 않습니다. (0x1F)
+4월 29, 2021 18:35:53.71 [30092:15080:0429/183553.715:ERROR:device_event_log_impl.cc(214)] [18:35:53.715] USB: usb_device_handle_win.cc:1054 Failed to read descriptor from node connection: 시스템에 부착된 장치가 작동하지 않습니다. (0x1F)
+4월 29, 2021 18:35:53.71 [30092:15080:0429/183553.715:ERROR:usb_descriptors.cc(140)] Failed to read length for configuration 1.
+4월 29, 2021 18:35:53.71 [30092:15080:0429/183553.715:ERROR:usb_descriptors.cc(100)] Failed to read all configuration descriptors. Expected 2, got 1.
+4월 29, 2021 18:35:53.71 [30092:15080:0429/183553.715:ERROR:device_event_log_impl.cc(214)] [18:35:53.715] USB: usb_device_win.cc:93 Failed to read descriptors from \\?\usb#vid_10a5&pid_0007#5&18d341bf&0&8#{a5dcbf10-6530-11d2-901f-00c04fb951ed}.
+
+5월 03, 2021 08:39:23.03 NEW SESSION
+5월 03, 2021 08:39:23.03 [12260:28156:0503/083923.029:ERROR:device_event_log_impl.cc(214)] [08:39:23.029] USB: usb_device_handle_win.cc:1054 Failed to read descriptor from node connection: 시스템에 부착된 장치가 작동하지 않습니다. (0x1F)
+5월 03, 2021 08:39:23.03 [12260:28156:0503/083923.036:ERROR:device_event_log_impl.cc(214)] [08:39:23.036] USB: usb_device_handle_win.cc:1054 Failed to read descriptor from node connection: 시스템에 부착된 장치가 작동하지 않습니다. (0x1F)
+5월 03, 2021 08:39:23.03 [12260:28156:0503/083923.036:ERROR:usb_descriptors.cc(140)] Failed to read length for configuration 1.
+5월 03, 2021 08:39:23.03 [12260:28156:0503/083923.036:ERROR:usb_descriptors.cc(100)] Failed to read all configuration descriptors. Expected 2, got 1.
+5월 03, 2021 08:39:23.03 [12260:28156:0503/083923.036:ERROR:device_event_log_impl.cc(214)] [08:39:23.036] USB: usb_device_win.cc:93 Failed to read descriptors from \\?\usb#vid_10a5&pid_0007#5&18d341bf&0&8#{a5dcbf10-6530-11d2-901f-00c04fb951ed}.
+
+5월 03, 2021 15:41:26.78 NEW SESSION
+5월 03, 2021 15:41:26.78 [16408:21116:0503/154126.778:ERROR:device_event_log_impl.cc(214)] [15:41:26.778] USB: usb_device_handle_win.cc:1054 Failed to read descriptor from node connection: 시스템에 부착된 장치가 작동하지 않습니다. (0x1F)
+5월 03, 2021 15:41:26.78 [16408:21116:0503/154126.786:ERROR:device_event_log_impl.cc(214)] [15:41:26.786] USB: usb_device_handle_win.cc:1054 Failed to read descriptor from node connection: 시스템에 부착된 장치가 작동하지 않습니다. (0x1F)
+5월 03, 2021 15:41:26.78 [16408:21116:0503/154126.786:ERROR:usb_descriptors.cc(140)] Failed to read length for configuration 1.
+5월 03, 2021 15:41:26.78 [16408:21116:0503/154126.786:ERROR:usb_descriptors.cc(100)] Failed to read all configuration descriptors. Expected 2, got 1.
+5월 03, 2021 15:41:26.78 [16408:21116:0503/154126.786:ERROR:device_event_log_impl.cc(214)] [15:41:26.786] USB: usb_device_win.cc:93 Failed to read descriptors from \\?\usb#vid_10a5&pid_0007#5&18d341bf&0&8#{a5dcbf10-6530-11d2-901f-00c04fb951ed}.
+5월 03, 2021 15:45:53.22 [16408:21116:0503/154553.227:ERROR:CONSOLE(0)] "Access to XMLHttpRequest at 'https://www.google.com/cloudprint/invites?xsrf=&hl=ko&client=chrome' from origin 'chrome://print' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.", source: chrome://print/ (0)
+5월 03, 2021 15:45:53.22 [16408:21116:0503/154553.228:ERROR:CONSOLE(0)] "Access to XMLHttpRequest at 'https://www.google.com/cloudprint/search?xsrf=&hl=ko&connection_status=ALL&client=chrome&use_cdd=true&q=%255Erecent' from origin 'chrome://print' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.", source: chrome://print/ (0)
+5월 03, 2021 15:45:53.23 [16408:21116:0503/154553.233:ERROR:CONSOLE(0)] "Access to XMLHttpRequest at 'https://www.google.com/cloudprint/search?xsrf=&hl=ko&connection_status=ALL&client=chrome&use_cdd=true' from origin 'chrome://print' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.", source: chrome://print/ (0)
+5월 03, 2021 15:47:30.40 [16408:21116:0503/154730.403:ERROR:CONSOLE(0)] "Access to XMLHttpRequest at 'https://www.google.com/cloudprint/search?xsrf=&hl=ko&connection_status=ALL&client=chrome&use_cdd=true&q=%255Erecent' from origin 'chrome://print' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.", source: chrome://print/ (0)
+5월 03, 2021 15:47:30.40 [16408:21116:0503/154730.404:ERROR:CONSOLE(0)] "Access to XMLHttpRequest at 'https://www.google.com/cloudprint/invites?xsrf=&hl=ko&client=chrome' from origin 'chrome://print' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.", source: chrome://print/ (0)
+5월 03, 2021 15:47:30.40 [16408:21116:0503/154730.404:ERROR:CONSOLE(0)] "Access to XMLHttpRequest at 'https://www.google.com/cloudprint/search?xsrf=&hl=ko&connection_status=ALL&client=chrome&use_cdd=true' from origin 'chrome://print' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.", source: chrome://print/ (0)
+5월 03, 2021 15:47:45.93 [16408:21116:0503/154745.938:ERROR:CONSOLE(0)] "Access to XMLHttpRequest at 'https://www.google.com/cloudprint/invites?xsrf=&hl=ko&client=chrome' from origin 'chrome://print' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.", source: chrome://print/ (0)
+5월 03, 2021 15:47:45.97 [16408:21116:0503/154745.970:ERROR:CONSOLE(0)] "Access to XMLHttpRequest at 'https://www.google.com/cloudprint/search?xsrf=&hl=ko&connection_status=ALL&client=chrome&use_cdd=true' from origin 'chrome://print' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.", source: chrome://print/ (0)
+5월 03, 2021 15:47:45.97 [16408:21116:0503/154745.971:ERROR:CONSOLE(0)] "Access to XMLHttpRequest at 'https://www.google.com/cloudprint/search?xsrf=&hl=ko&connection_status=ALL&client=chrome&use_cdd=true&q=%255Erecent' from origin 'chrome://print' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.", source: chrome://print/ (0)
+
+5월 04, 2021 08:46:03.08 NEW SESSION
+5월 04, 2021 08:46:03.08 [32064:10552:0504/084603.083:ERROR:device_event_log_impl.cc(214)] [08:46:03.084] USB: usb_device_handle_win.cc:1054 Failed to read descriptor from node connection: 시스템에 부착된 장치가 작동하지 않습니다. (0x1F)
+5월 04, 2021 08:46:03.08 [32064:10552:0504/084603.088:ERROR:device_event_log_impl.cc(214)] [08:46:03.088] USB: usb_device_handle_win.cc:1054 Failed to read descriptor from node connection: 시스템에 부착된 장치가 작동하지 않습니다. (0x1F)
+5월 04, 2021 08:46:03.08 [32064:10552:0504/084603.088:ERROR:usb_descriptors.cc(140)] Failed to read length for configuration 1.
+5월 04, 2021 08:46:03.08 [32064:10552:0504/084603.088:ERROR:usb_descriptors.cc(100)] Failed to read all configuration descriptors. Expected 2, got 1.
+5월 04, 2021 08:46:03.08 [32064:10552:0504/084603.088:ERROR:device_event_log_impl.cc(214)] [08:46:03.088] USB: usb_device_win.cc:93 Failed to read descriptors from \\?\usb#vid_10a5&pid_0007#5&18d341bf&0&8#{a5dcbf10-6530-11d2-901f-00c04fb951ed}.

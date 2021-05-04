@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="div_left_search_header"/>
+		<item key="selection" value="getITUserInfo"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
-			<item value="div_left_search_header"/>
-			<item value="category list"/>
-			<item value="searchAllSubject"/>
-			<item value="alert(&apos;saveAction&apos;)"/>
-			<item value="modal"/>
-			<item value="SaveInfoModal"/>
-			<item value="biz_ma"/>
-			<item value="ajax"/>
-			<item value="utf-8"/>
+			<item value="getITUserInfo"/>
+			<item value="user"/>
+			<item value="getBizDailyExecuter"/>
+			<item value="eq("/>
+			<item value="&apos;click"/>
+			<item value="업무 배치"/>
+			<item value="data_text"/>
 			<item value="changeFlag"/>
-			<item value="target_row = rownum;"/>
-			<item value="&apos;U&apos;"/>
-			<item value="btn_ccm_copy"/>
-			<item value="info_body"/>
-			<item value="br"/>
+			<item value="clicked"/>
+			<item value="접수 일자"/>
+			<item value="접수자"/>
+			<item value="search_condition"/>
+			<item value="search_data"/>
+			<item value="solid red"/>
+			<item value="BizDailyDetail"/>
 		</list>
 		<list key="replacehistory">
 		</list>

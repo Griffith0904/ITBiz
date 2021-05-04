@@ -8,24 +8,102 @@
 <html lang="en">
 
 <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	
+	<title>IT Working List</title>
+	
+	<!-- Custom fonts for this template-->
+	<link href="${mainpath}vendor/fontawesome-free/css/all.min.css"
+		rel="stylesheet" type="text/css">
+	<link
+		href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+		rel="stylesheet">
+	
+	<!-- Custom styles for this template-->
+	<link href="${mainpath}css/sb-admin-2.min.css" rel="stylesheet">
+	
+	<script src="${mainpath}vendor/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="${mainpath}js/jquery.tablesorter.min.js"></script>
+	
+	<!-- Bootstrap core JavaScript-->
+	<script src="${mainpath}vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+	<!-- Core plugin JavaScript-->
+	<script src="${mainpath}vendor/jquery-easing/jquery.easing.min.js"></script>
 
-    <title>IT Working List</title>
+	<!-- Custom scripts for all pages-->
+	<script src="${mainpath}js/sb-admin-2.min.js"></script>
 
-    <!-- Custom fonts for this template-->
-    <link href="${mainpath}vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+	<!-- Page level plugins -->
+	<script src="${mainpath}vendor/chart.js/Chart.min.js"></script>
 
-    <!-- Custom styles for this template-->
-    <link href="${mainpath}css/sb-admin-2.min.css" rel="stylesheet">
+	<!-- Page level custom scripts -->
+	<%-- <script src="${mainpath}js/demo/chart-area-demo.js"></script> --%>
+	<script src="${mainpath}js/demo/chart-pie-demo.js"></script>
 
+	<style>
+		th {
+			position: sticky;
+			top: 0px;
+			box-shadow: 0 1px 1px -1px rgba(0, 0, 0, 0.4);
+			background-color: #F6F6F6;
+		}
+		
+		tbody tr td {
+			padding: 0.3rem !important;
+			z-index: 1;
+		}
+		
+		tbody tr {
+			height:30px;
+		}
+		
+		tbody tr:hover {
+			background-color: #CCF6F6;
+		}
+		
+		tbody tr.active {
+			background-color: #E8F6F6;
+		}
+		
+		.clicked {
+			background-color: #E8F6F6;
+		}
+		
+		.trstyle {
+			padding: 0.3rem !important;
+		}
+		
+		.search_condition {
+			margin-top: 8px; 
+			font-size: 12px; 
+			width:60px; 
+			text-align:right; 
+			margin-left:10px;
+		}
+		
+		.table_header {
+			padding: 0.5rem !important; 
+			text-align: center
+		}
+		
+		.table_tr {
+			font-size:12px;
+			width:100%;
+			border:none;
+		}
+		
+		.search_data {
+			font-size:12px;
+			margin-left:4px;
+			margin-top:2px;
+		}
+	</style>
 </head>
 
 
@@ -47,12 +125,230 @@
 
                 <c:import url="/WEB-INF/views/include/top_bar.jsp"></c:import>
 
-                
+                <!-- 화면 이름 아이콘 & 이름 -->
+				<div class="col-auto" style="margin-left: 20px">
+					<i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+					<h1 class="h4 mb-0 text-gray-800" style="display: inline; margin-left: 10px">개별 항목 등록</h1>
+				</div>
+				
                 <!-- /.container-fluid -->
-				<div>
-					<form:form>
+				<div style='height:calc(100% - 420px); width:calc(100% - 4px);'>
+					<div class="col-xl-12 col-lg-5" style='margin-left: 10px; margin-top:10px; width:calc(100% - 14px);'>
+						<div class="card border-left-primary shadow h-0 py-0" style='height: 60px;'>
+							<div class="card-body" style='height: 100%; width:100%; '>
+								<div class="row no-gutters align-items-center" style="margin-left: -20px; margin-top: -20px;">
+									<div class="col-auto"
+										style='margin-left: 20px; margin-top: 12px; '>
+										<i class="fas fa-calendar fa-2x text-gray-300"></i>
+									</div>
+
+									<div class="col mr-2">
+										<div class="text-xs font-weight-bold text-primary text-uppercase mb-0" 
+											style='margin-left: 15px; margin-top: 14px; font-size: 14px; width: 100%' id='div_left_search_header'>조회 조건</div>
+									</div>
+
+									<div class='row' style="margin-top: 10px; width:1250px;">
+										<!-- 접수자 -->
+										<div class='search_condition'>접수자</div>
+										<select id="search_rec_user" class='search_data' style='width:120px;'>
+											<c:forEach var='obj' items='${search_rec_user }'>
+												<option value="${obj.BASE_CODE }">${obj.BASE_NAME }</option>
+											</c:forEach>
+										</select>
+										
+										<!-- 요청자 -->
+										<div class='search_condition'>요청자</div>
+										<input type='text' class='search_data' style='width:100px;' id='search_empname'>
+										
+										<!-- 요청 제목 -->
+										<div class='search_condition'>요청 제목</div>
+										<input type='text' class='search_data' id='search_req_subject'>
+										
+										<!-- 접수 일자 -->
+										<div class='search_condition'>접수 일자</div>
+										<input id='search_sdate' type="date" style="margin-left:4px;font-size:12px; width:124px; margin-top:4px" value=${getBeforeday}></td>
+																            
+										<div style="margin-top:2px; margin-left:2px;">~</div>
+							            <input id='search_edate' type="date" style='font-size:12px;width:124px; margin-left:2px; margin-top:4px' value=${getToday}></td>
+										
+										<!-- 업무 상태 -->
+										<div class='search_condition'>업무 상태</div>
+										<select id="search_work_status" class='search_data' style='width:120px;'>
+											<c:forEach var='obj' items='${search_work_status }'>
+												<option value="${obj.BASE_CODE }">${obj.BASE_NAME }</option>
+											</c:forEach>
+
+										</select>
+										
+										<!-- 검색 버튼 -->
+										<a id="btn_reset_search"> <i
+											class="fas fa-search fa-1x text-gray-800"
+											style='margin-left: 18px; margin-top:6px;'></i>
+										</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="row" style='height: 100%; margin-left:5px'>
+						<div class="card shadow mb-4" style='height: calc(100% - 100px); margin-top: 10px; width:70%; margin-left: 10px; '>
+							<!-- Card Header - Dropdown -->
+							<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between" style='height:52px;'>
+								<h6 class="m-0 font-weight-bold text-primary" id="div_left_header">업무 Master</h6>
+								<div>
+									<a href="#" class="btn btn-primary btn-icon-split" id="btn_mst_add">
+										<span class="icon text-white-50">
+											<i class="fas fa-bolt rotate-15"></i>
+										</span>
+										<span class="text">Add</span>
+									</a>
+									<a href="#" class="btn btn-success btn-icon-split" id="btn_mst_save" style='margin-left: 5px'> 
+										<span class="icon text-white-50">
+											<i class="fas fa-check"></i>
+										</span> 
+										<span class="text">Save</span>
+									</a> 
+									<a href="#" class="btn btn-danger btn-icon-split" id="btn_mst_delete" style='margin-left: 5px'>
+										<span class="icon text-white-50">
+											<i class="fas fa-trash"></i>
+										</span>
+										<span class="text">Delete</span>
+									</a>
+								</div>
+							</div>
+							<!-- Card Body -->
+							<div class="card-body">
+								<!-- Category Table List 부 -->
+								<div class="card shadow mb-4" style='width: 100%; height: 100%;'>
+									<div class="card-body">
+										<div class="table-responsive" style='margin-left:-10px;margin-top:-10px;width: calc(100% + 20px); height:222px; border: 1px solid #DEDEDE'>
+											<table class="tablesorter table table-bordered" id="BizDailyMaster" cellspacing="0" style='width:2000px; table-layout: fixed;'>
+												<thead>
+													<tr>
+														<th style='width: 20px; padding: 0.5rem !important; text-align: center'>
+															<i style='width:10px' class="fas fa-flag"></i>
+														</th>
+														<th class='table_header' style='width: 50px;'>접수자</th>
+														<th class='table_header' style='width: 60px;'>접수 일자</th>
+														<th class='table_header' style='width: 50px;'>요청자</th>
+														<th class='table_header' style='width: 120px;'>요청 부서/팀</th>
+														<th class='table_header' style='width: 140px;'>요청 사항</th>
+														<th class='table_header' style='width: 160px;'>요청 세부 내역</th>
+														<th class='table_header' style='width: 160px;'>분석 사항</th>
+														<th class='table_header' style='width: 40px;'>난이도</th>
+														<th class='table_header' style='width: 80px;'>상태</th>
+														<th class='table_header' style='width: 40px;'>#</th>
+													</tr>
+												</thead>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 						
-					</form:form>
+						<div class="card shadow mb-4" style='height: calc(100% - 100px); margin-top: 10px; width:calc(30% - 40px); margin-left: 10px; '>
+							<!-- Card Header - Dropdown -->
+							<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between" style='height:52px;'>
+								<h6 class="m-0 font-weight-bold text-primary" id="div_left_header">업무 배치</h6>
+								<div style='margin-left:40px;'>
+									<a href="#" class="btn btn-primary btn-icon-split" id="btn_exec_add">
+										<span class="icon text-white-50">
+											<i class="fas fa-bolt rotate-15"></i>
+										</span>
+										<span class="text">Add</span>
+									</a>
+									<a href="#" class="btn btn-success btn-icon-split" id="btn_exec_save" style='margin-left: 2px'> 
+										<span class="icon text-white-50">
+											<i class="fas fa-check"></i>
+										</span> 
+										<span class="text">Save</span>
+									</a> 
+									<a href="#" class="btn btn-danger btn-icon-split" id="btn_exec_delete" style='margin-left: 2px'>
+										<span class="icon text-white-50">
+											<i class="fas fa-trash"></i>
+										</span>
+										<span class="text">Delete</span>
+									</a>
+								</div>
+								<div class="dropdown no-arrow"></div>
+							</div>
+							<!-- Card Body -->
+							<div class="card-body">
+								<!-- Category Table List 부 -->
+								<div class="card shadow mb-4"
+									style='width: 100%; height: 100%;'>
+									<div class="card-body">
+										<div class="table-responsive" style='margin-left:-10px;margin-top:-10px;width: calc(100% + 20px); height:calc(100% + 20px); border: 1px solid #DEDEDE'>
+											<table class="tablesorter table table-bordered" id="BizDailyExecuter" cellspacing="0" style='width:400px;table-layout: fixed;'>
+												<thead>
+													<tr>
+														<th class='table_header' style='width: 50px;'>작업자</th>
+														<th class='table_header' style='width: 50px;'>비중</th>
+														<th class='table_header' style='width: 150px;'>비고</th>
+													</tr>
+												</thead>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div style='height:calc(100% - 574px); width:calc(100% - 16px);margin-left:10px; '>
+					<div class="card shadow mb-4" style='height: calc(100% - 10px); margin-top: 2px; width:calc(100% - 10px); margin-left:5px;'>
+						<!-- Card Header - Dropdown -->
+						<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between" style='height:52px;'>
+							<h6 class="m-0 font-weight-bold text-primary" id="div_left_header">업무 상세 (Detail)</h6>
+							<div>
+								<a href="#" class="btn btn-primary btn-icon-split" id="btn_dtl_add">
+									<span class="icon text-white-50">
+										<i class="fas fa-bolt rotate-15"></i>
+									</span>
+									<span class="text">Add</span>
+								</a>
+								<a href="#" class="btn btn-success btn-icon-split" id="btn_dtl_save" style='margin-left: 2px'> 
+									<span class="icon text-white-50">
+										<i class="fas fa-check"></i>
+									</span> 
+									<span class="text">Save</span>
+								</a> 
+								<a href="#" class="btn btn-danger btn-icon-split" id="btn_dtl_delete" style='margin-left: 2px'>
+									<span class="icon text-white-50">
+										<i class="fas fa-trash"></i>
+									</span>
+									<span class="text">Delete</span>
+								</a>
+							</div>
+						</div>
+						<!-- Card Body -->
+						<div class="card-body" style='height:100px;'>
+							<div class="card shadow mb-4" style='width: 100%; height: 200px; margin-top:-10px;'>
+									<div class="card-body">
+										<div class="table-responsive" style='margin-left:-10px;margin-top:-10px;width: calc(100% + 20px); height:180px; border: 1px solid #DEDEDE'>
+											<table class="tablesorter table table-bordered" id="BizDailyDetail" cellspacing="0" style='width:1570px;table-layout: fixed;'>
+												<thead>
+													<tr>
+														<th style='width: 20px; padding: 0.5rem !important; text-align: center'>
+															<i style='width:10px' class="fas fa-flag"></i>
+														</th>
+														<th class='table_header' style='width: 20px;'>No.</th>
+														<th class='table_header' style='width: 20px;'>처리자</th>
+														<th class='table_header' style='width: 100px;'>처리 사항</th>
+														<th class='table_header' style='width: 20px;'>난이도</th>
+														<th class='table_header' style='width: 40px;'>상태</th>
+														<th class='table_header' style='width: 40px;'>처리 일자</th>
+														<th class='table_header' style='width: 100px;'>비고</th>
+													</tr>
+												</thead>
+											</table>
+										</div>
+									</div>
+								</div>
+						</div>
+					</div>
 				</div>
             </div>
             <!-- End of Main Content -->
@@ -78,54 +374,28 @@
         <i class="fas fa-angle-up"></i>
     </a>
     
-    
-    
-    <div class="modal fade" id="BizDailyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true" >
-        <div class="modal-dialog" role="document" >
-            <div class="modal-content" style='width:900px'>
-                <div class="modal-header">
-                    <h5 class="modal-title" id="bdModalTitle"></h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                	<!-- 여기 직접 넣은것 -->
-                	<!-- DataTales Example -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary"></h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="modalDataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th>요청 일자</th>
-                                            <th>요청자</th>
-                                            <th>요청 제목</th>
-                                            <th>요청 사항</th>
-                                            <th>작업 난이도</th>
-                                            <th>진도율(%)</th>
-                                            <th>예상 종료일</th>
-                                        </tr>
-                                    </thead>
-                                    
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="modal fade" id="SaveCheckModal" tabindex="-1"
+		role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content" style='width: 900px'>
+				<div class="modal-header">
+					<h5 class="modal-title" id="save_check_Title"></h5>
+					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body" id="save_check_Body">
+					
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-primary" type="button"
+						data-dismiss="modal" id="btn_savecheck_yes">Yes</button>
+					<button class="btn btn-secondary" type="button"
+						data-dismiss="modal">No</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
     <!-- Bootstrap core JavaScript-->
     <script src="${mainpath}vendor/jquery/jquery.min.js"></script>
@@ -145,237 +415,279 @@
     <script src="${mainpath}js/demo/chart-pie-demo.js"></script>
 	
 	<script type="text/javascript">
+		function changeFlag(rowstatus, tablename, rownum) {
+			/*
+			추가 : fas fa-plus
+			일반 : fas fa-caret-right
+			삭제 : fas fa-cut
+			업데이트 : fas fa-pen
+			*/
+			var obj;
+			switch (tablename) {
+				case 'BizDailyMaster' :
+					obj = '#bdm_flag_' + rownum;
+					break;
+				case 'BizDailyDetail' :
+					obj = '#bdd_flag_' + rownum;
+					break;
+				default:
+					return;
+					break;
+			}
+			
+			switch (rowstatus) {
+				case 'U':
+					//var now_status = $('#table_font_' + target_row).attr('class');
+					var now_status = $(obj).attr('class');
+					if (now_status != 'fas fa-plus') {
+						$(obj).attr('class', 'fas fa-pen');
+					}
+					break;
+				case 'I':
+					$(obj).attr('class', 'fas fa-plus');
+					break;
+				
+				case 'R':
+					$(obj).attr('class', 'fas fa-caret-right');
+					break
+				
+				case 'D':
+					$(obj).attr('class', 'fas fa-cut');
+					break;
+				default:
+					break;
+			}
+		}
+		
 		$(document).ready(function(){
-			var chartopen = false;
-			boardCharCreate();
-			workForTeam();
 			
-			$('#btn_bd_list_1').click(function() {
-				var work_status = $('#bizDailyStatus_1').val();
-				var work_status_name = $('#bizDailyStatusName_1').val();
-				modalTableCreate(work_status, work_status_name)
+			$("#BizDailyMaster").on("click", "tr",	function() {addClickClass(this);});
+			$("#BizDailyExecuter").on("click", "tr",	function() {addClickClass(this);});
+			$("#BizDailyDetail").on("click", "tr",	function() {addClickClass(this);});
+			
+			// 클릭시 로우 색깔 설정
+			function addClickClass(obj) {
+				$(obj).addClass('clicked').siblings().removeClass('clicked');
+			}
+			
+			// 데이터 변경시 Flag 변경
+			$(document).on('keydown', '.data_text', function(e) {
+				var rownum = $(this).closest('tr').prevAll().length;
+				var tableid = $(this).closest('table').attr('id')
+				
+				changeFlag('U', tableid, rownum)
 			})
 			
-			$('#btn_bd_list_2').click(function() {
-				var work_status = $('#bizDailyStatus_2').val();
-				var work_status_name = $('#bizDailyStatusName_2').val();
-				modalTableCreate(work_status, work_status_name)
+			// 데이터 변경시 Flag 변경
+			$(document).on('change', '.data_text', function(e) {
+				var rownum = $(this).closest('tr').prevAll().length;
+				var tableid = $(this).closest('table').attr('id')
+				
+				changeFlag('U', tableid, rownum)
 			})
 			
-			$('#btn_bd_list_3').click(function() {
-				var work_status = $('#bizDailyStatus_3').val();
-				var work_status_name = $('#bizDailyStatusName_3').val();
-				modalTableCreate(work_status, work_status_name)
-			})
-			
-			$('#btn_bd_list_4').click(function() {
-				var work_status = $('#bizDailyStatus_4').val();
-				var work_status_name = $('#bizDailyStatusName_4').val();
-				modalTableCreate(work_status, work_status_name)
-			})
-			
-			function modalTableCreate(work_status, work_status_name) {
+			// 업무 마스터 조회
+			$('#btn_reset_search').click(function() {
+				var rec_user = $('#search_rec_user').val()
+				var empname = $('#search_empname').val()
+				var req_subject = $('#search_req_subject').val()
+				var sdate = $('#search_sdate').val()
+				var edate = $('#search_edate').val()
+				var work_status = $('#search_work_status').val()
+				
+				//alert(rec_user)
+				
+				if (!empname) {
+					empname = '%'
+				} else {
+					empname = '%' + empname + '%'
+				}
+				
+				if (!req_subject) {
+					req_subject = '%'
+				} else {
+					req_subject = '%' + req_subject + '%'
+				}
+				
+				if (!sdate || !edate) {
+					alert('접수일자를 올바르게 기입해 주세요!')
+					
+					if (!sdate) {
+						$('#search_sdate').focus()
+					} else {
+						$('#search_edate').focus()
+					}
+					
+					return;
+				}
+				
+				$('#BizDailyMaster tbody').remove();
+				$('#BizDailyExecuter tbody').remove();
+				$('#BizDailyDetail tbody').remove();
+				
 				$.ajax({
-					type:"get",
-					dataType:'json',
-					url:'${root}main/searchAllDataFromStatus/' + work_status,
+					type:'post',
+					url:'${root}biz/getBizDailyList',
+					data:{'rec_user':rec_user, 'empname':empname, 'req_subject':req_subject, 'sdate':sdate, 'edate':edate, 'work_status': work_status},
 					success: function(result) {
-						var num_len = result.length
-						
-						if (num_len == 0) {
-							alert("등록된 데이터가 없습니다!")
-							return
+						//alert(JSON.stringify(result))
+						if (result.length == 0) {
+							return;
 						}
-						var tbody = $('<tbody>');
-		                for (i=0; i<num_len; i++){
-		                	var row = $('<tr>').addClass('chk');
-		                    var cell1 = $('<td>').text(result[i].rec_DATE);
-		                    var cell2 = $('<td>').text(result[i].req_EMP_NAME);
-		                    var cell3 = $('<td>').text(result[i].req_SUBJECT);
-		                    var cell4 = $('<td>').text(result[i].req_CONTENT);
-		                    var cell5 = $('<td>').text(result[i].work_LEV);
-		                    var cell6 = $('<td>').text(result[i].work_PRC_PER);
-		                    var cell7 = $('<td>').text(result[i].exp_END_DATE);
 
-		                    $(row).append(cell1, cell2, cell3, cell4, cell5, cell6, cell7);
-		                    $(tbody).append(row);
-		                	
-		                }
-		                $("#modalDataTable > tbody").empty();
-		                $("#modalDataTable").append(tbody);
-		                
-						$('#bdModalTitle').text(work_status_name + ' List');
-						$('#BizDailyModal').modal('show');
+						var tbody = $('<tbody>');
+
+						for (i = 0; i < result.length; i++) {
+							var row = $('<tr id="rowid_' + i + '">').addClass('trstyle');
+							var cell0 = $('<td style="text-align:center"><i class="fas fa-caret-right" style="width:100%" id="bdm_flag_' + i + '"></i>')
+							//var cell1 = $('<td><div class="table_tr" style="margin-top:8px; text-align:center;" id="bdm_rec_name_' + i + '">').text(result[i].REC_NAME)
+							//var cell1 = $('<td><input class="table_tr" style="border:none" id="bdm_rec_name_' + i + '" value="' + result[i].REC_NAME + '" readonly>')
+							var cell1 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].REC_NAME + '</h6>')
+							var cell2 = $('<td><input type="date" class="table_tr data_text" id="bdm_rec_date_' + i + '" value="' + result[i].REC_DATE + '">')
+							//var cell3 = $('<td><input class="table_tr data_text" style="width:100%" type="text" id="bdm_rec_name_' + i + '" value="' + result[i].REQ_NAME + '">')
+							//var cell4 = $('<td class="table_tr" style="text-align:center; margin-top:10px" id="bdm_rec_name_' + i + '">').text(result[i].DEPTNAME)
+							var cell3 = $('<td><h6 class="table_tr data_text" style="margin-top:8px; text-align:center;">' + result[i].REQ_NAME + '</h6>')
+							var cell4 = $('<td><h6 class="table_tr data_text" style="margin-top:8px; text-align:center;">' + result[i].DEPTNAME + '</h6>')							
+							var cell5 = $('<td><input class="table_tr data_text" type="text" value="' + result[i].REQ_SUBJECT + '">')
+							var cell6 = $('<td><input class="table_tr data_text" type="text" value="' + result[i].REQ_CONTENT + '">')
+							var cell7 = $('<td><input class="table_tr data_text" type="text" value="' + result[i].ANL_CONTENT + '">')
+							var cell8 = $('<td><input class="table_tr data_text" type="text" value="' + result[i].WORK_LEV + '">')
+							//alert('new7 : ' + result[i].WORK_STATUS)
+							
+							var cell9 = $('<td><select id="bdm_work_status_' + i + '" class="table_tr data_text"> <c:forEach var="obj" items="${search_work_status_noall }"> <option value="${obj.BASE_CODE}">${obj.BASE_NAME}</option> </c:forEach> </select>')
+							var cell10 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].BD_SEQ + '</h6>')
+							$(row).append(cell0, cell1, cell2, cell3, cell4, cell5, cell6, cell7, cell8, cell9, cell10);
+							$(tbody).append(row);
+							//$("#categoryDataTable > tbody").append(row);
+							//$('#bdm_work_status_' + i).val(result[i].WORK_STATUS).prop("selected", true);
+						}
+						$("#BizDailyMaster").append(tbody);
+						$("#BizDailyMaster").trigger('update')
+						
+						// c:if로 selected가 안먹음 ㅜㅜ...
+						for (i = 0; i < result.length; i++) {
+							$('#bdm_work_status_' + i).val(result[i].WORK_STATUS).prop("selected", true);							
+						}
 					},
 					error: function(request, status, error){
-
 						alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-
 					}
 				})
-			}
+			})
 			
-			function number_format(number, decimals, dec_point, thousands_sep) {
-			  // *     example: number_format(1234.56, 2, ',', ' ');
-			  // *     return: '1 234,56'
-			  number = (number + '').replace(',', '').replace(' ', '');
-			  var n = !isFinite(+number) ? 0 : +number,
-			    prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
-			    sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
-			    dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
-			    s = '',
-			    toFixedFix = function(n, prec) {
-			      var k = Math.pow(10, prec);
-			      return '' + Math.round(n * k) / k;
-			    };
-			  // Fix for IE parseFloat(0.55).toFixed(0) = 0;
-			  s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
-			  if (s[0].length > 3) {
-			    s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
-			  }
-			  if ((s[1] || '').length < prec) {
-			    s[1] = s[1] || '';
-			    s[1] += new Array(prec - s[1].length + 1).join('0');
-			  }
-			  return s.join(dec);
-			}
-			
-			// 월별 업무 접수 건수 표기
-			function boardCharCreate() {
-				if (chartopen == true) { return ;}
-				chartopen = true;
+			// 업무 Master 클릭시 배치자 및 상세 내역 조회
+			$("#BizDailyMaster").on('click', 'tr', function(){
+				var row = this.rowIndex;
+				if (row == 0) return;
 				
-				bizDataByMonthly();
-			}
-			
-			function bizDataByMonthly() {
-				$.ajax({
-					type:'get',
-					dataType:'json',
-					url:'${root}main/searchAllDataByMonthly',
-					success : function(result) {
-						dataInsertToChart(result)
-					}				
-				})
-			}
-			
-			function dataInsertToChart(result) {
-				var ctx = document.getElementById("myAreaChart");
-				var myLineChart = new Chart(ctx, {
-				  type: 'line',
-				  data: {
-				    labels: [result[0].monthly, result[1].monthly, result[2].monthly, result[3].monthly, result[4].monthly, result[5].monthly, result[6].monthly, result[7].monthly, result[8].monthly, result[9].monthly, result[10].monthly, result[11].monthly],
-				    datasets: [{
-				      label: "건수",
-				      lineTension: 0.3,
-				      backgroundColor: "rgba(78, 115, 223, 0.05)",
-				      borderColor: "rgba(78, 115, 223, 1)",
-				      pointRadius: 3,
-				      pointBackgroundColor: "rgba(78, 115, 223, 1)",
-				      pointBorderColor: "rgba(78, 115, 223, 1)",
-				      pointHoverRadius: 3,
-				      pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
-				      pointHoverBorderColor: "rgba(78, 115, 223, 1)",
-				      pointHitRadius: 10,
-				      pointBorderWidth: 2,
-				      data: [result[0].biz_cnt, result[1].biz_cnt, result[2].biz_cnt, result[3].biz_cnt, result[4].biz_cnt, result[5].biz_cnt, result[6].biz_cnt, result[7].biz_cnt, result[8].biz_cnt, result[9].biz_cnt, result[10].biz_cnt, result[11].biz_cnt],
-				    }],
-				  },
-				  options: {
-				    maintainAspectRatio: false,
-				    layout: {
-				      padding: {
-				        left: 10,
-				        right: 25,
-				        top: 25,
-				        bottom: 0
-				      }
-				    },
-				    scales: {
-				      xAxes: [{
-				        time: {
-				          unit: 'date'
-				        },
-				        gridLines: {
-				          display: false,
-				          drawBorder: false
-				        },
-				        ticks: {
-				          maxTicksLimit: 7
-				        }
-				      }],
-				      yAxes: [{
-				        ticks: {
-				          maxTicksLimit: 5,
-				          padding: 10,
-				          // Include a dollar sign in the ticks
-				          callback: function(value, index, values) {
-				            return number_format(value);
-				          }
-				        },
-				        gridLines: {
-				          color: "rgb(234, 236, 244)",
-				          zeroLineColor: "rgb(234, 236, 244)",
-				          drawBorder: false,
-				          borderDash: [2],
-				          zeroLineBorderDash: [2]
-				        }
-				      }],
-				    },
-				    legend: {
-				      display: false
-				    },
-				    tooltips: {
-				      backgroundColor: "rgb(255,255,255)",
-				      bodyFontColor: "#858796",
-				      titleMarginBottom: 10,
-				      titleFontColor: '#6e707e',
-				      titleFontSize: 14,
-				      borderColor: '#dddfeb',
-				      borderWidth: 1,
-				      xPadding: 15,
-				      yPadding: 15,
-				      displayColors: false,
-				      intersect: false,
-				      mode: 'index',
-				      caretPadding: 10,
-				      callbacks: {
-				        label: function(tooltipItem, chart) {
-				          var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-				          return datasetLabel + ': ' + number_format(tooltipItem.yLabel);
-				        }
-				      }
-				    }
-				  }
-				});
-			}
-			
-			
-			// 공통 프로젝트 관리
-			/*
-			function workForTeam() {
-				bizWorkForTeam();
-			}
-			
-			function bizWorkForTeam() {
-				$.ajax({
-					type:'get',
-					dataType:'json',
-					url:'${root}main/searchFindWorkForTeam',
-					success : function(result) {
-						//alert(result.length)
-						for (i=0;i<result.length;i++){
-							<h4 class="small font-weight-bold">Server Migration <span
-		                            class="float-right">20%</span></h4>
-		                    <div class="progress mb-4">
-		                        <div class="progress-bar bg-danger" role="progressbar" style="width: 20%"
-		                            aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
-		                    </div>
+				var bd_seq = $('#BizDailyMaster tr:eq(' + row + ')>td:eq(10)').text();
+				
+				$('#BizDailyExecuter tbody').remove();
+				$('#BizDailyDetail tbody').remove();
+				
+				if (!bd_seq) {
+					
+					
+				} else {
+					
+					$.ajax({
+						type:"post",
+						url:'${root}biz/getBizDailySubAll',
+						data:{'bd_seq':bd_seq},
+						success: function(result) {
+							//alert(JSON.stringify(result))
+							var data1 = result.data1;
+							var data2 = result.data2;
+							
+							if (data1.length != 0) {
+								var tbody = $('<tbody>');
+
+								for (i = 0; i < data1.length; i++) {
+									var row = $('<tr id="rowid_' + i + '">').addClass('trstyle');
+									var cell1 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + data1[i].EMPNAME + '</h6>')
+									var cell2 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + data1[i].EXC_WEIGHT + '</h6>')
+									var cell3 = $('<td><input class="table_tr data_text" type="text" value="' + data1[i].REMARK + '">')							
+									var cell4 = $('<td style="display:none">').text(data1[i].BD_SEQ)
+									var cell5 = $('<td style="display:none">').text(data1[i].EMPID)
+									
+									$(row).append(cell1, cell2, cell3, cell4, cell5);
+									$(tbody).append(row);
+								}
+								
+								$("#BizDailyExecuter").append(tbody);
+								$("#BizDailyExecuter").trigger('update')
+							}
+							
+							if (data2.length != 0) {
+								var tbody = $('<tbody>');
+
+								for (i = 0; i < data2.length; i++) {
+									var row = $('<tr id="rowid_' + i + '">').addClass('trstyle');
+									var cell0 = $('<td style="text-align:center"><i class="fas fa-caret-right" style="width:100%" id="bdd_flag_' + i + '"></i>')
+									var cell1 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + data2[i].EXC_SEQ + '</h6>')
+									var cell2 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + data2[i].EMPNAME + '</h6>')
+									var cell3 = $('<td><input class="table_tr data_text" type="text" value="' + data2[i].EXC_CONTENT + '">')
+									var cell4 = $('<td><input class="table_tr data_text" type="text" value="' + data2[i].WORK_LEV + '">')
+									var cell5 = $('<td><select id="bdd_work_status_' + i + '" class="table_tr data_text"> <c:forEach var="obj" items="${search_work_status_noall }"> <option value="${obj.BASE_CODE}">${obj.BASE_NAME}</option> </c:forEach> </select>')
+									var cell6 = $('<td><input type="date" class="table_tr data_text" id="bdd_rec_date_' + i + '" value="' + data2[i].ACT_END_DATE + '">')
+									var cell7 = $('<td><input class="table_tr data_text" type="text" value="' + data2[i].REMARK + '">')
+									var cell8 = $('<td style="display:none">').text(data2[i].BD_SEQ)
+									
+									$(row).append(cell0, cell1, cell2, cell3, cell4, cell5, cell6, cell7, cell8);
+									$(tbody).append(row);
+								}
+								
+								$("#BizDailyDetail").append(tbody);
+								$("#BizDailyDetail").trigger('update')
+								
+								// c:if로 selected가 안먹음 ㅜㅜ...
+								for (i = 0; i < data2.length; i++) {
+									$('#bdd_work_status_' + i).val(data2[i].WORK_STATUS).prop("selected", true);							
+								}
+							}
+
+							
+						},
+						error: function(request, status, error){
+							alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 						}
-					}				
+					})
+				}
+			})
+			
+			// 업무 Master 추가
+			$('#btn_mst_add').click(function() {
+				var i = 0;
+				var x = '00004'
+				$('#bdm_work_status_' + i).val(x).prop("selected", true);
+			})
+			
+			// 업무 배치자 추가
+			$('#btn_exec_add').click(function() {
+				var all_rows = $('#BizDailyExecuter tbody tr').length;
+				var all_reg_user = []
+				
+				if (all_rows != 0) {					
+					$('#BizDailyExecuter tr').each(function(index, item) {
+	                    if (!this.rowIndex) return; // skip first row
+	                    var exec_user = $('#BizDailyExecuter tr:eq(' + index + ')>td:eq(4)').text();
+	                    //alert(exec_user)
+	                    //var eqi_no = $(this).find('#id_eqi_no').val();
+	                    all_reg_user.push(exec_user)
+	                });
+				}
+				
+				$.ajax({
+					type:"post",
+					url:'${root}biz/getITUserInfoFromCheck',
+					data:{'reg_user':JSON.stringify(all_reg_user)},
+					success: function(result) {
+						alert(JSON.stringify(result))
+					}
 				})
-			}
-			*/
+			})
+			
+			
 		})
 	</script>
 	
