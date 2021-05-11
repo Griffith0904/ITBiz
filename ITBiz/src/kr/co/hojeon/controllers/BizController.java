@@ -79,6 +79,7 @@ public class BizController {
 		model.addAttribute("search_work_status_noall", search_work_status_noall);
 		model.addAttribute("search_work_status", search_work_status);
 		model.addAttribute("search_rec_user", search_rec_user);		
+		model.addAttribute("lub", loginUserBean);
 		
 		return "biz/dailyRgst";
 	}

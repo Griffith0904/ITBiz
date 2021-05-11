@@ -1028,3 +1028,9 @@
 0:0:0:0:0:0:0:1 - - [04/May/2021:12:19:30 +0900] "POST /ITBiz/biz/getBizDailyList HTTP/1.1" 200 1548
 0:0:0:0:0:0:0:1 - - [04/May/2021:12:19:31 +0900] "POST /ITBiz/biz/getBizDailySubAll HTTP/1.1" 200 1435
 0:0:0:0:0:0:0:1 - - [04/May/2021:12:19:32 +0900] "POST /ITBiz/biz/getITUserInfoFromCheck HTTP/1.1" 200 165
+127.0.0.1 - - [04/May/2021:14:42:59 +0900] "GET / HTTP/1.1" 404 807
+0:0:0:0:0:0:0:1 - - [04/May/2021:14:43:01 +0900] "GET /ITBiz/ HTTP/1.1" 302 -
+0:0:0:0:0:0:0:1 - - [04/May/2021:14:43:01 +0900] "GET /ITBiz/main HTTP/1.1" 302 -
+0:0:0:0:0:0:0:1 - - [04/May/2021:14:43:02 +0900] "GET /ITBiz/user/login;jsessionid=2F152BB06D3830D487ED4A05A21FDCCD HTTP/1.1" 200 2890
+0:0:0:0:0:0:0:1 - - [04/May/2021:14:43:02 +0900] "GET /ITBiz/user/images/icons/favicon.ico HTTP/1.1" 302 -
+0:0:0:0:0:0:0:1 - - [04/May/2021:14:43:02 +0900] "GET /ITBiz/user/not_login HTTP/1.1" 200 150

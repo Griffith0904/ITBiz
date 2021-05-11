@@ -310,9 +310,16 @@ public class RestAPIController {
 	}
 	
 	@PostMapping("/biz/getITUserInfoFromCheck")
-	public List<HashMap<String, Object>> getITUserInfoFromCheck(@RequestParam("reg_user") String[] reg_user) {
+	public List<HashMap<String, Object>> getITUserInfoFromCheck(@RequestParam(value="reg_user", required=false) String[] reg_user) {
 		System.out.println("★★★★★★★★★★★★ getITUserInfoFromCheck ★★★★★★★★★★★★");
-		System.out.println(reg_user.length);
+		//System.out.println(reg_user.length);
 		return cms.getITUserInfoFromCheck(reg_user);
+	}
+	
+	@PostMapping("/user/getUserListByDeptEmp")
+	public List<HashMap<String, Object>> getUserListByDeptEmp(@RequestParam("deptname") String deptname,
+															  @RequestParam("empname") String empname) {
+		
+		return cms.getUserListByDeptEmp(deptname, empname);
 	}
 }	

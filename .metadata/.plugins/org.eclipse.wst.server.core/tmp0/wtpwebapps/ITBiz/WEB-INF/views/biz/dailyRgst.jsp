@@ -396,6 +396,64 @@
 			</div>
 		</div>
 	</div>
+	
+	<div class="modal fade" id="findUserList" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content" style='width: 900px'>
+				<div class="modal-header">
+					<h5 class="modal-title" id="findUserList_Title">유저 검색</h5>
+					<button class="close" type="button" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<!-- 여기 직접 넣은것 -->
+					<!-- DataTales Example -->
+					<div class="card shadow mb-4">
+						<!-- <div class="card-header py-3"> -->
+						<div class="card-header py-3 d-flex flex-row align-items-center" style='height:52px;'>
+							<h6  style='width:60px; margin-top:10px;'>부서명</h6>
+							<input id="findUserList_ip_deptname" style="margin-left:4px"/>
+							
+							<h6  style='width:60px; margin-top:10px; margin-left:20px;'>유저명</h6>
+							<input id="findUserList_ip_empname" style="margin-left:4px"/>
+							
+							<a id="btn_findUserList_search"> 
+								<i class="fas fa-search fa-1x text-gray-800" style='margin-left: 28px; margin-top:10px;'></i>
+							</a>
+						</div>
+						<div class="card-body">
+							<div class="table-responsive">
+								<table class="table table-bordered" id="findUserList_Table" width="100%" cellspacing="0">
+									<thead>
+										<tr>
+											<th>부서/팀</th>
+											<th>사원 번호</th>
+											<th>성명</th>
+											<th>E-MAIL</th>
+											<th>ID</th>
+											<th>직급</th>
+											<th>직책</th>
+										</tr>
+									</thead>
+
+									<tbody>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" type="button"
+						data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
     <!-- Bootstrap core JavaScript-->
     <script src="${mainpath}vendor/jquery/jquery.min.js"></script>
@@ -415,6 +473,11 @@
     <script src="${mainpath}js/demo/chart-pie-demo.js"></script>
 	
 	<script type="text/javascript">
+		var login_empid = "${lub.empid}";
+		var login_empname = "${lub.empname}";
+		var login_userid = "${lub.userid}";
+		var login_jpname = "${lub.jpname}";
+		
 		function changeFlag(rowstatus, tablename, rownum) {
 			/*
 			추가 : fas fa-plus
@@ -486,6 +549,31 @@
 				changeFlag('U', tableid, rownum)
 			})
 			
+			// 업무 마스터 유저 더블 클릭
+			/*
+			$('#BizDailyMaster').on('dblclick', 'tr', function(e) {
+				//alert(JSON.stringify(e))
+				var $This = $(this);
+			    var col = $This.parent().children().index($(this)) + 1; // row
+			    
+			    var empname = $This.closest("tr").find("h6[name='userinfo_empname']");
+			    var deptname = $This.closest("tr").find("h6[name='userinfo_deptname']");
+			    
+			    alert(empname.text())
+			    alert(deptname.text())
+			})
+			*/
+			$('#BizDailyMaster').on('dblclick', 'td', function(e) {
+				//alert(JSON.stringify(e))
+				//alert($(e.target).attr('name'))
+				var dbl_cell = $(e.target).attr('name')
+				//alert(dbl_cell)
+				if (dbl_cell == 'userinfo_deptname' || dbl_cell == 'userinfo_empname') {
+					$('#findUserList').modal('show')
+				}
+			})
+			
+			
 			// 업무 마스터 조회
 			$('#btn_reset_search').click(function() {
 				var rec_user = $('#search_rec_user').val()
@@ -546,8 +634,8 @@
 							var cell2 = $('<td><input type="date" class="table_tr data_text" id="bdm_rec_date_' + i + '" value="' + result[i].REC_DATE + '">')
 							//var cell3 = $('<td><input class="table_tr data_text" style="width:100%" type="text" id="bdm_rec_name_' + i + '" value="' + result[i].REQ_NAME + '">')
 							//var cell4 = $('<td class="table_tr" style="text-align:center; margin-top:10px" id="bdm_rec_name_' + i + '">').text(result[i].DEPTNAME)
-							var cell3 = $('<td><h6 class="table_tr data_text" style="margin-top:8px; text-align:center;">' + result[i].REQ_NAME + '</h6>')
-							var cell4 = $('<td><h6 class="table_tr data_text" style="margin-top:8px; text-align:center;">' + result[i].DEPTNAME + '</h6>')							
+							var cell3 = $('<td><h6 class="table_tr data_text" style="margin-top:8px; text-align:center;" name="userinfo_empname">' + result[i].REQ_NAME + '</h6>')
+							var cell4 = $('<td><h6 class="table_tr data_text" style="margin-top:8px; text-align:center;" name="userinfo_deptname">' + result[i].DEPTNAME + '</h6>')							
 							var cell5 = $('<td><input class="table_tr data_text" type="text" value="' + result[i].REQ_SUBJECT + '">')
 							var cell6 = $('<td><input class="table_tr data_text" type="text" value="' + result[i].REQ_CONTENT + '">')
 							var cell7 = $('<td><input class="table_tr data_text" type="text" value="' + result[i].ANL_CONTENT + '">')
@@ -556,7 +644,8 @@
 							
 							var cell9 = $('<td><select id="bdm_work_status_' + i + '" class="table_tr data_text"> <c:forEach var="obj" items="${search_work_status_noall }"> <option value="${obj.BASE_CODE}">${obj.BASE_NAME}</option> </c:forEach> </select>')
 							var cell10 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].BD_SEQ + '</h6>')
-							$(row).append(cell0, cell1, cell2, cell3, cell4, cell5, cell6, cell7, cell8, cell9, cell10);
+							var cell11 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].REQ_USER + '</h6>')
+							$(row).append(cell0, cell1, cell2, cell3, cell4, cell5, cell6, cell7, cell8, cell9, cell10, cell11);
 							$(tbody).append(row);
 							//$("#categoryDataTable > tbody").append(row);
 							//$('#bdm_work_status_' + i).val(result[i].WORK_STATUS).prop("selected", true);
@@ -673,21 +762,114 @@
 	                    var exec_user = $('#BizDailyExecuter tr:eq(' + index + ')>td:eq(4)').text();
 	                    //alert(exec_user)
 	                    //var eqi_no = $(this).find('#id_eqi_no').val();
-	                    all_reg_user.push(exec_user)
+	                    var add_user = exec_user.toString()
+	                    all_reg_user.push(add_user)
 	                });
 				}
-				
+				//alert(JSON.stringify(all_reg_user))
+
 				$.ajax({
 					type:"post",
 					url:'${root}biz/getITUserInfoFromCheck',
-					data:{'reg_user':JSON.stringify(all_reg_user)},
+					traditional:true,
+					//data:{'reg_user':JSON.stringify(all_reg_user)},
+					data:{'reg_user':all_reg_user},
 					success: function(result) {
 						alert(JSON.stringify(result))
 					}
 				})
 			})
 			
+			// 업무 master add 버튼
+			$('#btn_mst_add').click(function() {
+				
+				var rownum = $('#BizDailyMaster >tbody tr').length;
+				var tbody = $('#BizDailyMaster >tbody');
+				
+				var row = $('<tr id="bdm_rowid_' + rownum + '">').addClass('trstyle');
+				var cell0 = $('<td style="text-align:center"><i class="fas fa-caret-right" style="width:100%" id="bdm_flag_' + rownum + '"></i>')
+				var cell1 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + login_empname + '</h6>')
+				var cell2 = $('<td><input type="date" class="table_tr data_text" id="bdm_rec_date_' + rownum + '" value="">')
+				var cell3 = $('<td><h6 class="table_tr data_text" style="margin-top:8px; text-align:center;" name="userinfo_empname"></h6>')
+				var cell4 = $('<td><h6 class="table_tr data_text" style="margin-top:8px; text-align:center;" name="userinfo_deptname"></h6>')
+				var cell5 = $('<td><input class="table_tr data_text" type="text" value="">')
+				var cell6 = $('<td><input class="table_tr data_text" type="text" value="">')
+				var cell7 = $('<td><input class="table_tr data_text" type="text" value="">')
+				var cell8 = $('<td><input class="table_tr data_text" type="text" value="">')
+				var cell9 = $('<td><select id="bdm_work_status_' + rownum + '" class="table_tr data_text"> <c:forEach var="obj" items="${search_work_status_noall }"> <option value="${obj.BASE_CODE}">${obj.BASE_NAME}</option> </c:forEach> </select>')
+				var cell10 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;"></h6>')				
+				var cell11 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + login_empid + '</h6>')
+				$(row).append(cell0, cell1, cell2, cell3, cell4, cell5, cell6, cell7, cell8, cell9, cell10, cell11);
+				$('#BizDailyMaster >tbody:last').append(row);
+				
+				target_row = rownum;
+				changeFlag("I", 'BizDailyMaster', rownum)
+				$('#bdm_rec_date_' + rownum).focus();
+				
+			})
 			
+			
+			// 업무 마스터 유저 검색 버튼
+			$('#btn_findUserList_search').click(function() {
+				var deptname = $('#findUserList_ip_deptname').val()
+				var empname = $('#findUserList_ip_empname').val()
+				
+				if (!deptname) {
+					deptname = '%'
+				} else {
+					deptname = '%' + deptname + '%'
+				}
+				
+				if (!empname) {
+					empname = '%'
+				} else {
+					empname = '%' + empname + '%'
+				}
+				
+				
+				$.ajax({
+					type:"post",
+					url:'${root}user/getUserListByDeptEmp',
+					data:{'deptname':deptname, 'empname':empname},
+					success: function(result) {
+						$('#findUserList_Table tbody').remove();
+						//alert(JSON.stringify(result))
+						if (result.length == 0) {
+							return;
+						}
+
+						var tbody = $('<tbody>');
+						
+						/*
+						<th>부서/팀</th>
+						<th>사원 번호</th>
+						<th>성명</th>
+						<th>E-MAIL</th>
+						<th>ID</th>
+						<th>직급</th>
+						<th>직책</th>
+						*/
+						
+						for (i = 0; i < result.length; i++) {
+							var row = $('<tr id="rowid_' + i + '">').addClass('trstyle');
+							//var cell0 = $('<td style="text-align:center"><i class="fas fa-caret-right" style="width:100%" id="bdd_flag_' + i + '"></i>')
+							var cell1 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].DEPTNAME + '</h6>')
+							var cell2 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].EMPID + '</h6>')
+							var cell3 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].EMPNAME + '</h6>')
+							var cell4 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].EMAIL + '</h6>')
+							var cell5 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].USERID + '</h6>')
+							var cell6 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].JPNAME + '</h6>')
+							var cell7 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].JDNAME + '</h6>')
+							
+							$(row).append(cell1, cell2, cell3, cell4, cell5, cell6, cell7);
+							$(tbody).append(row);
+						}
+						
+						$("#findUserList_Table").append(tbody);
+						$("#findUserList_Table").trigger('update')
+					}
+				})
+			})
 		})
 	</script>
 	

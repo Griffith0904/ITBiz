@@ -1,5 +1,6 @@
 package kr.co.hojeon.daos;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,21 +27,34 @@ public class CommonDAO {
 	}
 	
 	public List<HashMap<String, Object>> getITUserInfoFromCheck(String[] reg_user) {
-		String reg_users = "";
-		for (int i = 0; i < reg_user.length; i++) {
-			if (i == 0) {
-				reg_users = reg_user[i];
-			} else {
-				reg_users = reg_users + "," + reg_user[i];
-			}	 
+		System.out.println("★★★★★★★★★★★★ getITUserInfoFromCheck dao ★★★★★★★★★★★★");
+		List<String> reg_users = new ArrayList<String>();
+		
+		if (reg_user != null) {
+			if (reg_user.length > 0) {
+				for (int i = 0; i < reg_user.length; i++) {
+					String set_user = reg_user[i].toString();
+					reg_users.add(set_user);
+				}
+			}
+		} else {
+			reg_users.add("XXXXX");
 		}
-		String asdf = "fefefe";
-		System.out.println(reg_users);
-		System.out.println(asdf);
-		asdf = reg_users;
-		System.out.println(reg_user.getClass().getName());
-		System.out.println(reg_users.getClass().getName());
-		String reg = "'HJ16031401','HJ16082201','HJ18021901'";
-		return sqlSessionTemplate.selectList("comm.getITUserInfoFromCheck", reg);
+		
+		HashMap input_param = new HashMap();
+		input_param.put("reg_users", reg_users);
+		
+		return sqlSessionTemplate.selectList("comm.getITUserInfoFromCheck", input_param);
 	}
+	
+	// 부서명, 사용자 이름으로 전체 유저 검색
+	public List<HashMap<String, Object>> getUserListByDeptEmp(String deptname, String empname) {
+		HashMap<String, Object> input_param = new HashMap<String, Object>();
+		
+		input_param.put("deptname", deptname);
+		input_param.put("empname", empname);
+		
+		return sqlSessionTemplate.selectList("comm.getUserListByDeptEmp", input_param);
+	}
+	
 }

@@ -31,6 +31,12 @@ public class CommonService {
 	}
 	
 	public List<HashMap<String, Object>> getITUserInfoFromCheck(String[] reg_user) {
+		System.out.println("★★★★★★★★★★★★ getITUserInfoFromCheck service ★★★★★★★★★★★★");
 		return cd.getITUserInfoFromCheck(reg_user);
+	}
+	
+	// 부서명, 사용자 이름으로 전체 유저 검색
+	public List<HashMap<String, Object>> getUserListByDeptEmp(String deptname, String empname) {
+		return cd.getUserListByDeptEmp(deptname, empname);
 	}
 }

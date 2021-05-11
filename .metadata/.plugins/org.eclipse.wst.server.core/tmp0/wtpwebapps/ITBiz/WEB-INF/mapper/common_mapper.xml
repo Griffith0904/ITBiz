@@ -48,13 +48,13 @@
 		]]>
 	</select>
 	
-	<select id="getITUserInfoFromCheck" parameterType="java.lang.String" resultType="hashmap">
+	<select id="getITUserInfoFromCheck" parameterType="java.util.Map" resultType="hashmap">
 		/***********************************************************
 		SQLID       : COMMON_MAPPER.XML
 		ID          : getITUserInfoFromCheck
 		DESCRIPTION : IT 인원 조회 (별도 인원 제외용)
 		************************************************************/
-		<![CDATA[
+		
 			SELECT
 				BASE_CODE, BASE_NAME
 			FROM
@@ -66,9 +66,28 @@
 					(SELECT ETC_COL01 EMPID, SORT_NO FROM TB_BASE_DETAIL WITH(NOLOCK) WHERE BCH_CODE = 'Z0001' AND USE_YN = 'Y') B
 				WHERE
 					A.EMPID = B.EMPID And
-					A.EMPID NOT IN (#{reg_users})
+					A.EMPID not in
+					<foreach collection="reg_users" item="reg_user" open="(" close=")" separator=",">
+			            #{reg_user}
+			        </foreach>
 				) A
 			ORDER BY A.SORT_NO;
+	</select>
+	
+	<select id="getUserListByDeptEmp" parameterType="hashmap" resultType="hashmap">
+		/***********************************************************
+		SQLID       : COMMON_MAPPER.XML
+		ID          : getUserListFromArguments
+		DESCRIPTION : 재직자 유저 조회
+		************************************************************/
+		<![CDATA[
+			SELECT DEPTNAME, EMPID, EMPNAME, EMAIL, USERID, JPNAME, JDNAME 
+			  FROM VT_USERALL_LIST
+			 WHERE typename = '재직' 
+			   And deptseq <> '9999'
+			   And empname like #{empname}
+			   And deptname like #{deptname}
+			Order by deptseq;
 		]]>
 	</select>
 </mapper>
