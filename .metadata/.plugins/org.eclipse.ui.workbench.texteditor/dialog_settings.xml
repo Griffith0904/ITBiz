@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="myb"/>
+		<item key="selection" value="allSearch"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
-			<item value="myb"/>
-			<item value="getITUserInfoFromCheck"/>
-			<item value=".remove"/>
-			<item value="/us"/>
-			<item value="업무 상태"/>
-			<item value="업무 배치"/>
-			<item value="preview"/>
-			<item value="userinfo"/>
-			<item value="loginUserBean"/>
+			<item value="allSearch"/>
+			<item value="saveDailyExecData"/>
+			<item value="saveDailyExecData."/>
+			<item value="_delete"/>
+			<item value="btn_exec_save"/>
+			<item value="btn_exec_add"/>
+			<item value="BizDailyExecuter"/>
+			<item value="bde_flag_"/>
 			<item value="changeFlag"/>
-			<item value="category list"/>
-			<item value="업무 master"/>
-			<item value="getITUserInfo"/>
-			<item value="user"/>
-			<item value="getBizDailyExecuter"/>
+			<item value="BizDailye"/>
+			<item value="BizDaliyE"/>
+			<item value="savedaily"/>
+			<item value="savearry"/>
+			<item value="btn_mst_save"/>
+			<item value="btn_"/>
 		</list>
 		<list key="replacehistory">
 		</list>

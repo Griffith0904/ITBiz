@@ -59,6 +59,12 @@
 		
 		<!-- 쿼리 실행 로그 확인 -->
 		<log4j-version>1.2.15</log4j-version>
+		
+		<!-- JSONObject -->
+		<com.googlecode.json-simple-version>1.1.1</com.googlecode.json-simple-version>
+		
+		<!-- https://mvnrepository.com/artifact/net.sf.json-lib/json-lib -->
+		<net.sf.json-lib-version>2.4</net.sf.json-lib-version>
 	</properties>
 
 	<!-- 라이브러리 셋팅 -->
@@ -186,6 +192,21 @@
 		    <groupId>net.sf.jasperreports</groupId>
 		    <artifactId>jasperreports-fonts</artifactId>
 		    <version>${net.sf.jasperreports-version}</version>
+		</dependency>
+		
+		<!-- JSONObject -->
+		<dependency>
+		    <groupId>com.googlecode.json-simple</groupId>
+		    <artifactId>json-simple</artifactId>
+		    <version>${com.googlecode.json-simple-version}</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/net.sf.json-lib/json-lib -->
+		<dependency>
+		    <groupId>net.sf.json-lib</groupId>
+		    <artifactId>json-lib</artifactId>
+		    <version>${net.sf.json-lib-version}</version>
+		    <classifier>jdk15</classifier>
 		</dependency>
 		
 		<!-- 쿼리 실행 로그 확인 -->

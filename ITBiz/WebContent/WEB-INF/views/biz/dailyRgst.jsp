@@ -230,14 +230,17 @@
 															<i style='width:10px' class="fas fa-flag"></i>
 														</th>
 														<th class='table_header' style='width: 50px;'>접수자</th>
-														<th class='table_header' style='width: 60px;'>접수 일자</th>
+														<th class='table_header' style='width: 80px;'>접수 일자</th>
 														<th class='table_header' style='width: 50px;'>요청자</th>
 														<th class='table_header' style='width: 120px;'>요청 부서/팀</th>
+														<th class='table_header' style='width: 100px;'>Subject</th>
 														<th class='table_header' style='width: 140px;'>요청 사항</th>
 														<th class='table_header' style='width: 160px;'>요청 세부 내역</th>
 														<th class='table_header' style='width: 160px;'>분석 사항</th>
 														<th class='table_header' style='width: 40px;'>난이도</th>
 														<th class='table_header' style='width: 80px;'>상태</th>
+														<th class='table_header' style='width: 80px;'>예상 종료일</th>
+														<th class='table_header' style='width: 80px;'>실제 종료일</th>
 														<th class='table_header' style='width: 40px;'>#</th>
 													</tr>
 												</thead>
@@ -284,6 +287,9 @@
 											<table class="tablesorter table table-bordered" id="BizDailyExecuter" cellspacing="0" style='width:400px;table-layout: fixed;'>
 												<thead>
 													<tr>
+														<th style='width: 20px; padding: 0.5rem !important; text-align: center'>
+															<i style='width:10px' class="fas fa-flag"></i>
+														</th>
 														<th class='table_header' style='width: 50px;'>작업자</th>
 														<th class='table_header' style='width: 50px;'>비중</th>
 														<th class='table_header' style='width: 150px;'>비고</th>
@@ -377,7 +383,7 @@
 	<div class="modal fade" id="SaveCheckModal" tabindex="-1"
 		role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
-			<div class="modal-content" style='width: 900px'>
+			<div class="modal-content" style='width: 600px'>
 				<div class="modal-header">
 					<h5 class="modal-title" id="save_check_Title"></h5>
 					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
@@ -392,6 +398,27 @@
 						data-dismiss="modal" id="btn_savecheck_yes">Yes</button>
 					<button class="btn btn-secondary" type="button"
 						data-dismiss="modal">No</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal fade" id="JustInfoModal" tabindex="-1"
+		role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content" style='width: 600px'>
+				<div class="modal-header">
+					<h5 class="modal-title" id="JustInfoModal_Title"></h5>
+					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body" id="JustInfoModal_Body">
+					
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-primary" type="button"
+						data-dismiss="modal" id="btn_savecheck_yes">OK</button>
 				</div>
 			</div>
 		</div>
@@ -412,6 +439,7 @@
 					<!-- 여기 직접 넣은것 -->
 					<!-- DataTales Example -->
 					<div class="card shadow mb-4">
+						<h6 style='display:none' id='findUserList_setrow'></h6>
 						<!-- <div class="card-header py-3"> -->
 						<div class="card-header py-3 d-flex flex-row align-items-center" style='height:52px;'>
 							<h6  style='width:60px; margin-top:10px;'>부서명</h6>
@@ -425,8 +453,8 @@
 							</a>
 						</div>
 						<div class="card-body">
-							<div class="table-responsive">
-								<table class="table table-bordered" id="findUserList_Table" width="100%" cellspacing="0">
+							<div class="table-responsive" style='height:400px'>
+								<table class="table table-bordered" id="findUserList_Table" width="100%" cellspacing="0" style="table-layout: fixed;">
 									<thead>
 										<tr>
 											<th>부서/팀</th>
@@ -440,6 +468,110 @@
 									</thead>
 
 									<tbody>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" type="button"
+						data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal fade" id="findITUserList" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content" style='width: 350px'>
+				<div class="modal-header">
+					<h5 class="modal-title" id="findITUserList_Title">유저 검색</h5>
+					<button class="close" type="button" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<!-- 여기 직접 넣은것 -->
+					<!-- DataTales Example -->
+					<div class="card shadow mb-4">
+						<h6 style='display:none' id='findITUserList_bd_seq'></h6>
+						<h6 style='display:none' id='findITUserList_setrow'></h6>
+						<!-- <div class="card-header py-3"> -->
+						<div class="card-body">
+							<div class="table-responsive">
+								<table class="table table-bordered" id="findITUserList_Table" width="100%" cellspacing="0" style="table-layout: fixed;">
+									<thead>
+										<tr>
+											<th class='table_header' style="width:120px">사원 번호</th>
+											<th class='table_header' style="width:80px">성명</th>
+										</tr>
+									</thead>
+
+									<tbody>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" type="button"
+						data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal fade" id="findSubjectList" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content" style='width: 900px'>
+				<div class="modal-header">
+					<h5 class="modal-title" id="findSujectList_Title">Subject 검색</h5>
+					<button class="close" type="button" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<!-- 여기 직접 넣은것 -->
+					<!-- DataTales Example -->
+					<div class="card shadow mb-4">
+						<h6 style='display:none' id='findSubjectList_rowindex'></h6>
+						<!-- <div class="card-header py-3"> -->
+						<div class="card-header py-3 d-flex flex-row align-items-center" style='height:52px;'>
+							<!-- <h6  style='width:60px; margin-top:10px;'>부서명</h6>
+							<input id="findUserList_ip_deptname" style="margin-left:4px"/>
+							
+							<h6  style='width:60px; margin-top:10px; margin-left:20px;'>유저명</h6>
+							<input id="findUserList_ip_empname" style="margin-left:4px"/>
+							
+							<a id="btn_findUserList_search"> 
+								<i class="fas fa-search fa-1x text-gray-800" style='margin-left: 28px; margin-top:10px;'></i>
+							</a> -->
+						</div>
+						<div class="card-body">
+							<div class="table-responsive" style='height:400px'>
+								<table class="table table-bordered" id="findSubjectList_Table" width="100%" cellspacing="0" style="table-layout: fixed;">
+									<thead>
+										<tr>
+											<th class='table_header' style="width:60px">SEQ</th>
+											<th class='table_header' style="width:200px">Subject</th>
+										</tr>
+									</thead>
+										
+									<tbody>
+										<c:forEach var="obj_subject" items="${search_subjects}">
+											<tr>
+				                    			<td style="text-align:center">${obj_subject.bws_seq}</td>
+				                    			<td>${obj_subject.bws_content}</td>
+				                    		</tr>
+										</c:forEach>
 									</tbody>
 								</table>
 							</div>
@@ -477,8 +609,9 @@
 		var login_empname = "${lub.empname}";
 		var login_userid = "${lub.userid}";
 		var login_jpname = "${lub.jpname}";
+		var today = "${getToday}"; 
 		
-		function changeFlag(rowstatus, tablename, rownum) {
+		function changeFlag(rowstatus, tablename, row_index) {
 			/*
 			추가 : fas fa-plus
 			일반 : fas fa-caret-right
@@ -486,12 +619,19 @@
 			업데이트 : fas fa-pen
 			*/
 			var obj;
+			var flag;
 			switch (tablename) {
 				case 'BizDailyMaster' :
-					obj = '#bdm_flag_' + rownum;
+					obj = '#bdm_flag_' + row_index;
+					flag = '#BizDailyMaster tr:eq(' + (row_index+1) + ')>td:eq(15)>h6'
 					break;
 				case 'BizDailyDetail' :
-					obj = '#bdd_flag_' + rownum;
+					obj = '#bdd_flag_' + row_index;
+					flag = '#BizDailyDetail tr:eq(' + (row_index+1) + ')>td:eq(9)>h6'
+					break;
+				case 'BizDailyExecuter' :
+					obj = '#BizDailyExecuter tr:eq(' + (row_index+1) + ')>td:eq(0)>i'
+					flag = '#BizDailyExecuter tr:eq(' + (row_index+1) + ')>td:eq(6)'
 					break;
 				default:
 					return;
@@ -504,18 +644,22 @@
 					var now_status = $(obj).attr('class');
 					if (now_status != 'fas fa-plus') {
 						$(obj).attr('class', 'fas fa-pen');
+						$(flag).text('U');
 					}
 					break;
 				case 'I':
 					$(obj).attr('class', 'fas fa-plus');
+					$(flag).text('I');
 					break;
 				
 				case 'R':
 					$(obj).attr('class', 'fas fa-caret-right');
-					break
+					$(flag).text('R');
+					break;
 				
 				case 'D':
 					$(obj).attr('class', 'fas fa-cut');
+					$(flag).text('D');
 					break;
 				default:
 					break;
@@ -534,56 +678,102 @@
 			}
 			
 			// 데이터 변경시 Flag 변경
+			/*
 			$(document).on('keydown', '.data_text', function(e) {
 				var rownum = $(this).closest('tr').prevAll().length;
 				var tableid = $(this).closest('table').attr('id')
-				
+				alert('f-1')
 				changeFlag('U', tableid, rownum)
 			})
+			*/
 			
 			// 데이터 변경시 Flag 변경
 			$(document).on('change', '.data_text', function(e) {
 				var rownum = $(this).closest('tr').prevAll().length;
 				var tableid = $(this).closest('table').attr('id')
-				
 				changeFlag('U', tableid, rownum)
 			})
 			
-			// 업무 마스터 유저 더블 클릭
-			/*
-			$('#BizDailyMaster').on('dblclick', 'tr', function(e) {
-				//alert(JSON.stringify(e))
-				var $This = $(this);
-			    var col = $This.parent().children().index($(this)) + 1; // row
-			    
-			    var empname = $This.closest("tr").find("h6[name='userinfo_empname']");
-			    var deptname = $This.closest("tr").find("h6[name='userinfo_deptname']");
-			    
-			    alert(empname.text())
-			    alert(deptname.text())
-			})
-			*/
+			// 업무 Master 더블클릭시 현업 유저 List 조회
 			$('#BizDailyMaster').on('dblclick', 'td', function(e) {
-				//alert(JSON.stringify(e))
-				//alert($(e.target).attr('name'))
+			    var col = $(this).index();
+			    var row = $(this).parent().index();
+			    
+			    $('#findUserList_setrow').text(row)
 				var dbl_cell = $(e.target).attr('name')
-				//alert(dbl_cell)
+				
 				if (dbl_cell == 'userinfo_deptname' || dbl_cell == 'userinfo_empname') {
+					$('#findUserList_Table tbody').remove();
+					$('#findUserList_ip_empname').val('');
+					$('#findUserList_ip_deptname').val('');
 					$('#findUserList').modal('show')
+				} else if (dbl_cell == 'bws_content') {
+					//$('#findSujectList_Table tbody').remove();
+					$('#findSubjectList_rowindex').text(row)
+					$('#findSubjectList').modal('show')
 				}
 			})
 			
+			// 업무 Master Subject DoubleClick
+			$('#findSubjectList_Table').on('dblclick', 'td', function(e) {
+				$('#findSubjectList').modal('hide')
+				var col = $(this).index();
+			    var row = $(this).parent().index();
+			    //alert(row)
+			    //alert($('#findSubjectList_rowindex').text())
+			    
+			    var table_row = Number($('#findSubjectList_rowindex').text())
+			    var bws_seq = $('#findSubjectList_Table tr:eq(' + (row + 1) + ')>td:eq(0)').text();
+			    var bws_content = $('#findSubjectList_Table tr:eq(' + (row + 1) + ')>td:eq(1)').text();
+			    
+			    //alert(bws_seq + " : " + bws_content)
+			    var bws_seq_chk = $('#BizDailyMaster tr:eq(' + (table_row + 1) + ')>td:eq(17)').text();
+			    
+			    if (bws_seq != bws_seq_chk) {
+			    	$('#BizDailyMaster tr:eq(' + (table_row + 1) + ')>td:eq(17)>h6').text(bws_seq)
+			    	$('#BizDailyMaster tr:eq(' + (table_row + 1) + ')>td:eq(5)>h6').text(bws_content)
+			    	
+			    	changeFlag("U", 'BizDailyMaster', table_row)
+			    }
+			})
 			
-			// 업무 마스터 조회
-			$('#btn_reset_search').click(function() {
+			//업무 Master 건별 삭제
+			$('#btn_mst_delete').click(function() {
+				/*
+				var rowCount = $('#BizDailyMaster tbody tr').length;
+				alert(rowCount)
+				for (i=0; i < rowCount; i++) {
+					var a = $('#BizDailyMaster tr:eq(' + (i + 1) + ')>td:eq(17)').text();
+					alert(i + " : " + a)
+				}
+				*/
+				
+				var getobject = $('#BizDailyMaster > tbody > tr.trstyle.clicked');
+				var clicked = getobject.attr('id');
+				//alert(JSON.stringify(getobject))
+				//alert(clicked)
+				
+				if (!clicked) {
+					$('#JustInfoModal_Title').text('삭제 확인')
+					$('#JustInfoModal_Body').text('먼저 삭제할 업무 Master 데이터를 선택해 주십시오!')
+					$('#JustInfoModal').modal('show')
+					return;
+				}
+				
+				var index = clicked.substring(6)
+				
+				changeFlag('D', 'BizDailyMaster', Number(index))
+				
+			})
+			
+			// 전제 조회
+			allSearch = function() {
 				var rec_user = $('#search_rec_user').val()
 				var empname = $('#search_empname').val()
 				var req_subject = $('#search_req_subject').val()
 				var sdate = $('#search_sdate').val()
 				var edate = $('#search_edate').val()
 				var work_status = $('#search_work_status').val()
-				
-				//alert(rec_user)
 				
 				if (!empname) {
 					empname = '%'
@@ -618,7 +808,6 @@
 					url:'${root}biz/getBizDailyList',
 					data:{'rec_user':rec_user, 'empname':empname, 'req_subject':req_subject, 'sdate':sdate, 'edate':edate, 'work_status': work_status},
 					success: function(result) {
-						//alert(JSON.stringify(result))
 						if (result.length == 0) {
 							return;
 						}
@@ -635,17 +824,26 @@
 							//var cell3 = $('<td><input class="table_tr data_text" style="width:100%" type="text" id="bdm_rec_name_' + i + '" value="' + result[i].REQ_NAME + '">')
 							//var cell4 = $('<td class="table_tr" style="text-align:center; margin-top:10px" id="bdm_rec_name_' + i + '">').text(result[i].DEPTNAME)
 							var cell3 = $('<td><h6 class="table_tr data_text" style="margin-top:8px; text-align:center;" name="userinfo_empname">' + result[i].REQ_NAME + '</h6>')
-							var cell4 = $('<td><h6 class="table_tr data_text" style="margin-top:8px; text-align:center;" name="userinfo_deptname">' + result[i].DEPTNAME + '</h6>')							
-							var cell5 = $('<td><input class="table_tr data_text" type="text" value="' + result[i].REQ_SUBJECT + '">')
-							var cell6 = $('<td><input class="table_tr data_text" type="text" value="' + result[i].REQ_CONTENT + '">')
-							var cell7 = $('<td><input class="table_tr data_text" type="text" value="' + result[i].ANL_CONTENT + '">')
-							var cell8 = $('<td><input class="table_tr data_text" type="text" value="' + result[i].WORK_LEV + '">')
+							var cell4 = $('<td><h6 class="table_tr data_text" style="margin-top:8px; text-align:center;" name="userinfo_deptname">' + result[i].DEPTNAME + '</h6>')
+							var cell5 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;" name="bws_content">' + result[i].BWS_CONTENT + '</h6>')
+							//var cell5 = $('<td><textarea class="table_tr data_text" type="text" value="' + result[i].REQ_SUBJECT + '">')
+							//alert(result[i].REQ_CONTENT)
+							var cell6 = $('<td><textarea class="table_tr data_text" rows="3">' + result[i].REQ_SUBJECT + '</textarea>')
+							var cell7 = $('<td><textarea class="table_tr data_text" rows="3">' + result[i].REQ_CONTENT + '</textarea>')
+							var cell8 = $('<td><textarea class="table_tr data_text" rows="3">' + result[i].ANL_CONTENT + '</textarea>')
+							var cell9 = $('<td><input class="table_tr data_text" type="number" value="' + result[i].WORK_LEV + '" min="0" max="10">')
 							//alert('new7 : ' + result[i].WORK_STATUS)
 							
-							var cell9 = $('<td><select id="bdm_work_status_' + i + '" class="table_tr data_text"> <c:forEach var="obj" items="${search_work_status_noall }"> <option value="${obj.BASE_CODE}">${obj.BASE_NAME}</option> </c:forEach> </select>')
-							var cell10 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].BD_SEQ + '</h6>')
-							var cell11 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].REQ_USER + '</h6>')
-							$(row).append(cell0, cell1, cell2, cell3, cell4, cell5, cell6, cell7, cell8, cell9, cell10, cell11);
+							var cell10 = $('<td><select id="bdm_work_status_' + i + '" class="table_tr data_text"> <c:forEach var="obj" items="${search_work_status_noall }"> <option value="${obj.BASE_CODE}">${obj.BASE_NAME}</option> </c:forEach> </select>')
+							var cell11 = $('<td><input type="date" class="table_tr data_text" value="' + result[i].EXP_END_DATE + '">')
+							var cell12 = $('<td><input type="date" class="table_tr data_text" value="' + result[i].ACT_END_DATE + '">')
+							var cell13 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].BD_SEQ + '</h6>')
+							var cell14 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].REQ_USER + '</h6>')
+							var cell15 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].FLAG + '</h6>')
+							var cell16 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].REC_USER + '</h6>')
+							var cell17 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].BWS_SEQ + '</h6>')
+							
+							$(row).append(cell0, cell1, cell2, cell3, cell4, cell5, cell6, cell7, cell8, cell9, cell10, cell11, cell12, cell13, cell14, cell15, cell16, cell17);
 							$(tbody).append(row);
 							//$("#categoryDataTable > tbody").append(row);
 							//$('#bdm_work_status_' + i).val(result[i].WORK_STATUS).prop("selected", true);
@@ -662,6 +860,11 @@
 						alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 					}
 				})
+			}
+			
+			// 업무 마스터 조회
+			$('#btn_reset_search').click(function() {
+				allSearch();
 			})
 			
 			// 업무 Master 클릭시 배치자 및 상세 내역 조회
@@ -669,7 +872,7 @@
 				var row = this.rowIndex;
 				if (row == 0) return;
 				
-				var bd_seq = $('#BizDailyMaster tr:eq(' + row + ')>td:eq(10)').text();
+				var bd_seq = $('#BizDailyMaster tr:eq(' + row + ')>td:eq(13)').text();
 				
 				$('#BizDailyExecuter tbody').remove();
 				$('#BizDailyDetail tbody').remove();
@@ -693,13 +896,15 @@
 
 								for (i = 0; i < data1.length; i++) {
 									var row = $('<tr id="rowid_' + i + '">').addClass('trstyle');
+									var cell0 = $('<td style="text-align:center"><i class="fas fa-caret-right" style="width:100%"></i>')
 									var cell1 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + data1[i].EMPNAME + '</h6>')
-									var cell2 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + data1[i].EXC_WEIGHT + '</h6>')
+									var cell2 = $('<td><input class="table_tr data_text" style="text-align:center;" type="number" value="' + data1[i].EXC_WEIGHT + '"</h6>')
 									var cell3 = $('<td><input class="table_tr data_text" type="text" value="' + data1[i].REMARK + '">')							
 									var cell4 = $('<td style="display:none">').text(data1[i].BD_SEQ)
 									var cell5 = $('<td style="display:none">').text(data1[i].EMPID)
+									var cell6 = $('<td style="display:none">').text(data1[i].FLAG)
 									
-									$(row).append(cell1, cell2, cell3, cell4, cell5);
+									$(row).append(cell0, cell1, cell2, cell3, cell4, cell5, cell6);
 									$(tbody).append(row);
 								}
 								
@@ -721,8 +926,8 @@
 									var cell6 = $('<td><input type="date" class="table_tr data_text" id="bdd_rec_date_' + i + '" value="' + data2[i].ACT_END_DATE + '">')
 									var cell7 = $('<td><input class="table_tr data_text" type="text" value="' + data2[i].REMARK + '">')
 									var cell8 = $('<td style="display:none">').text(data2[i].BD_SEQ)
-									
-									$(row).append(cell0, cell1, cell2, cell3, cell4, cell5, cell6, cell7, cell8);
+									var cell9 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + data2[i].FLAG + '</h6>')
+									$(row).append(cell0, cell1, cell2, cell3, cell4, cell5, cell6, cell7, cell8, cell9);
 									$(tbody).append(row);
 								}
 								
@@ -744,22 +949,176 @@
 				}
 			})
 			
-			// 업무 Master 추가
-			$('#btn_mst_add').click(function() {
-				var i = 0;
-				var x = '00004'
-				$('#bdm_work_status_' + i).val(x).prop("selected", true);
+			// 업무 Master 저장
+			$('#btn_mst_save').click(function() {
+				var rowCount = $('#BizDailyMaster tbody tr').length;
+				
+				if (rowCount == 0) {
+					$('#JustInfoModal_Title').text('저장 실패')
+					$('#JustInfoModal_Body').text('조회된 내역이 없습니다!')
+					$('#JustInfoModal').modal('show')
+					return;
+				}
+				
+				var savearry = new Array();
+				
+				for (i = 0; i < rowCount; i++) {
+					var rowdata = new Object();
+					var flag = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(15)>h6').text()
+					//alert(i + " : " + flag)
+					if (flag == 'U' || flag == 'I' || flag == 'D') {
+						var req_date = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(2)>input').val()
+						var req_name = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(3)>h6').text()
+						var req_subject = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(6)>textarea').val()
+						var req_content = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(7)>textarea').val()
+						var anl_content = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(8)>textarea').val()
+						var work_lev = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(9)>input').val()
+						var work_status = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(10)>select').val()
+						
+						if (flag != 'D') {
+							if (!req_name || req_name == '요청자 선택') {
+								$('#JustInfoModal_Title').text('저장 실패')
+								$('#JustInfoModal_Body').text('요청자를 선택해 주세요!')
+								$('#JustInfoModal').modal('show')
+								
+								$('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(2)>input').focus();
+								
+								return;
+							}
+							
+							if (!req_subject) {
+								$('#JustInfoModal_Title').text('저장 실패')
+								$('#JustInfoModal_Body').text('요청 사항(제목)을 입력하여 주십시오!')
+								$('#JustInfoModal').modal('show')
+								
+								$('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(6)>input').focus();
+								return;
+							}
+								
+							if (!req_content) {
+								$('#JustInfoModal_Title').text('저장 실패')
+								$('#JustInfoModal_Body').text('요청 세부 내역을 입력하여 주십시오!')
+								$('#JustInfoModal').modal('show')
+								
+								$('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(7)>input').focus();
+								return;
+							}
+							
+							if (!work_lev) {
+								$('#JustInfoModal_Title').text('저장 실패')
+								$('#JustInfoModal_Body').text('업무 레벨을 정의하여 주십시오!')
+								$('#JustInfoModal').modal('show')
+								
+								$('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(9)>input').focus();
+								return;
+							} else {
+								if (work_lev < 0 || work_lev > 10) {
+									$('#JustInfoModal_Title').text('저장 실패')
+									$('#JustInfoModal_Body').text('업무 레벨은 0~10까지의 데이터만 입력 가능합니다!')
+									$('#JustInfoModal').modal('show')
+									
+									$('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(9)>input').focus();
+									return;
+								}
+							}
+							
+							if (work_status !== '00001') {
+								// requested (단순 접수 상태) 가 아닌 경우 분석 사항 무조껀 기입
+								if (!anl_content) {
+									$('#JustInfoModal_Title').text('저장 실패')
+									$('#JustInfoModal_Body').text('접수 상태 이상의 경우 반드시 분석 사항을 입력하십시오!')
+									$('#JustInfoModal').modal('show')
+									
+									$('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(8)>input').focus();
+									return;
+								}
+								
+								if (work_status == '00004') {
+									var act_end_date = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(12)>input').val()
+									
+									if (!act_end_date) {
+										$('#JustInfoModal_Title').text('저장 실패')
+										$('#JustInfoModal_Body').text('처리 완료의 경우 실제 종료일일 입력해 주십시오!')
+										$('#JustInfoModal').modal('show')
+										
+										$('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(12)>input').focus();
+										return;
+									}
+								}
+							}
+						}
+						
+						rowdata.REC_DATE = req_date
+						rowdata.REQ_SUBJECT = req_subject
+						rowdata.REQ_CONTENT = req_content
+						rowdata.ANL_CONTENT = anl_content
+						rowdata.WORK_LEV = work_lev
+						rowdata.WORK_STATUS = work_status
+						rowdata.BD_SEQ = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(13)>h6').text()
+						rowdata.REQ_USER = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(14)>h6').text()
+						rowdata.FLAG = flag 
+						rowdata.REC_USER = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(16)>h6').text()
+						rowdata.EXP_END_DATE = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(11)>input').val()
+						rowdata.ACT_END_DATE = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(12)>input').val()
+						rowdata.BWS_SEQ = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(17)>h6').text()
+						
+						savearry.push(rowdata);
+					}
+				}
+				
+				if (!savearry || savearry.length == 0) { 
+					$('#JustInfoModal_Title').text('저장 실패')
+					$('#JustInfoModal_Body').text('변경 혹은 추가된 내역이 없습니다!')
+					$('#JustInfoModal').modal('show')
+					return;
+				} else {
+					// 저장 Action 시작
+					//alert(JSON.stringify(savearry))
+					$.ajax({
+						type:"post",
+						dataType:'json',
+						url:'${root}biz/saveDailyMasterData',
+						contentType:'application/json',
+						//traditional:true, // 배열 및 리스트로 값을 넘기기 위해서는 꼭 선언되어야함.
+						data:JSON.stringify(savearry),
+						//data: {'action_data':sendarry},
+						success: function(result) {
+							//alert('success')
+							//alert(result);
+							allSearch();
+						}
+					})
+				}
 			})
-			
-			// 업무 배치자 추가
+						
+			// 업무 Master 작업 배치자 추가
 			$('#btn_exec_add').click(function() {
 				var all_rows = $('#BizDailyExecuter tbody tr').length;
 				var all_reg_user = []
 				
+				var getobject = $('#BizDailyMaster > tbody > tr.trstyle.clicked');
+				var clicked = getobject.attr('id');
+				//alert(JSON.stringify(getobject))
+				//alert(clicked)
+				
+				if (!clicked) {
+					$('#JustInfoModal_Title').text('배치자 추가 확인')
+					$('#JustInfoModal_Body').text('먼저 업무 Master 데이터를 선택해 주십시오!')
+					$('#JustInfoModal').modal('show')
+					return;
+				}
+				
+				var index = Number(clicked.substring(6))
+				
+				bd_seq = $('#BizDailyMaster tr:eq(' + (index + 1) + ')>td:eq(13)').text()
+				
+				$('#findITUserList_bd_seq').text(bd_seq)
+				$('#findITUserList_setrow').text(index)
+				
 				if (all_rows != 0) {					
 					$('#BizDailyExecuter tr').each(function(index, item) {
 	                    if (!this.rowIndex) return; // skip first row
-	                    var exec_user = $('#BizDailyExecuter tr:eq(' + index + ')>td:eq(4)').text();
+	                    var exec_user = $('#BizDailyExecuter tr:eq(' + index + ')>td:eq(5)').text();
 	                    //alert(exec_user)
 	                    //var eqi_no = $(this).find('#id_eqi_no').val();
 	                    var add_user = exec_user.toString()
@@ -767,7 +1126,8 @@
 	                });
 				}
 				//alert(JSON.stringify(all_reg_user))
-
+				$('#findITUserList_Table tbody').remove();
+				
 				$.ajax({
 					type:"post",
 					url:'${root}biz/getITUserInfoFromCheck',
@@ -775,37 +1135,111 @@
 					//data:{'reg_user':JSON.stringify(all_reg_user)},
 					data:{'reg_user':all_reg_user},
 					success: function(result) {
-						alert(JSON.stringify(result))
+						//alert(JSON.stringify(result))
+						if (result.length > 0) {
+							var tbody = $('<tbody>');
+							for (i = 0; i < result.length; i++) {
+								var row = $('<tr id="rowid_' + i + '">').addClass('trstyle');
+								//var cell0 = $('<td style="text-align:center"><i class="fas fa-caret-right" style="width:100%" id="bdd_flag_' + i + '"></i>')
+								var cell1 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].BASE_CODE + '</h6>')
+								var cell2 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].BASE_NAME + '</h6>')
+								$(row).append(cell1, cell2);
+								$(tbody).append(row);
+							}
+							$("#findITUserList_Table").append(tbody);
+							$("#findITUserList_Table").trigger('update');
+							$('#findITUserList').modal('show')
+						} else {
+							$('#JustInfoModal_Title').text('IT 작업 배치')
+							$('#JustInfoModal_Body').text('현재 모든 IT 팀원이 추가되어 있습니다!')
+							$('#JustInfoModal').modal('show')
+						}
 					}
 				})
 			})
 			
+			// 업무 Master IT 작업 배치자 리스트 더블클릭
+			$('#findITUserList_Table').on('dblclick', 'tr', function(e) {
+				// 업무 배치 작업자 추가
+				//alert('findITUserList_Table dblclick')
+				//var rownum = $('#BizDailyExecuter >tbody tr').length;
+				var tbody = $('#BizDailyExecuter >tbody');
+				
+				var $This = $(this);
+				var row = Number($This.parent().children().index($(this)) + 1)
+				
+				var emp_id = $('#findITUserList_Table tr:eq(' + row + ')>td:eq(0)').text()
+				var emp_name = $('#findITUserList_Table tr:eq(' + row + ')>td:eq(1)').text()
+				var bd_seq = $('#findITUserList_bd_seq').text()
+				
+				var row = $('<tr id="rowid_' + i + '">').addClass('trstyle');
+				//var cell0 = $('<td style="text-align:center"><i class="fas fa-caret-right" style="width:100%" id="bdd_flag_' + i + '"></i>')
+				var cell0 = $('<td style="text-align:center"><i class="fas fa-plus" style="width:100%"></i>')
+				var cell1 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + emp_name + '</h6>')
+				var cell2 = $('<td><input class="table_tr data_text" style="text-align:center;" type="number" value="0"/>')
+				var cell3 = $('<td><input class="table_tr data_text" type="text" value="">')	
+				var cell4 = $('<td style="display:none">').text(bd_seq)
+				var cell5 = $('<td style="display:none">').text(emp_id)
+				var cell6 = $('<td style="display:none">').text('I')
+				$(row).append(cell0, cell1, cell2, cell3, cell4, cell5, cell6);
+				$(tbody).append(row);
+			
+				//alert($('#findITUserList_bd_seq').text())
+				/* 작업자 더블클릭시 추가되는거 작업 전.. 21.05.24 09:28
+				var row = $('<tr id="rowid_' + i + '">').addClass('trstyle');
+				var cell1 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + data1[i].EMPNAME + '</h6>')
+				var cell2 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + data1[i].EXC_WEIGHT + '</h6>')
+				var cell3 = $('<td><input class="table_tr data_text" type="text" value="' + data1[i].REMARK + '">')							
+				var cell4 = $('<td style="display:none">').text(data1[i].BD_SEQ)
+				var cell5 = $('<td style="display:none">').text(data1[i].EMPID)
+				*/
+				$('#findITUserList').modal('hide')
+			})
+			
 			// 업무 master add 버튼
 			$('#btn_mst_add').click(function() {
-				
 				var rownum = $('#BizDailyMaster >tbody tr').length;
 				var tbody = $('#BizDailyMaster >tbody');
 				
 				var row = $('<tr id="bdm_rowid_' + rownum + '">').addClass('trstyle');
 				var cell0 = $('<td style="text-align:center"><i class="fas fa-caret-right" style="width:100%" id="bdm_flag_' + rownum + '"></i>')
 				var cell1 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + login_empname + '</h6>')
-				var cell2 = $('<td><input type="date" class="table_tr data_text" id="bdm_rec_date_' + rownum + '" value="">')
-				var cell3 = $('<td><h6 class="table_tr data_text" style="margin-top:8px; text-align:center;" name="userinfo_empname"></h6>')
-				var cell4 = $('<td><h6 class="table_tr data_text" style="margin-top:8px; text-align:center;" name="userinfo_deptname"></h6>')
-				var cell5 = $('<td><input class="table_tr data_text" type="text" value="">')
-				var cell6 = $('<td><input class="table_tr data_text" type="text" value="">')
-				var cell7 = $('<td><input class="table_tr data_text" type="text" value="">')
-				var cell8 = $('<td><input class="table_tr data_text" type="text" value="">')
-				var cell9 = $('<td><select id="bdm_work_status_' + rownum + '" class="table_tr data_text"> <c:forEach var="obj" items="${search_work_status_noall }"> <option value="${obj.BASE_CODE}">${obj.BASE_NAME}</option> </c:forEach> </select>')
-				var cell10 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;"></h6>')				
-				var cell11 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + login_empid + '</h6>')
-				$(row).append(cell0, cell1, cell2, cell3, cell4, cell5, cell6, cell7, cell8, cell9, cell10, cell11);
-				$('#BizDailyMaster >tbody:last').append(row);
+				var cell2 = $('<td><input type="date" class="table_tr data_text" id="bdm_rec_date_' + rownum + '" value="${getToday}">')
+				var cell3 = $('<td><h6 class="table_tr data_text" style="margin-top:8px; text-align:center;" name="userinfo_empname">요청자 선택</h6>')
+				var cell4 = $('<td><h6 class="table_tr data_text" style="margin-top:8px; text-align:center;" name="userinfo_deptname">요청자 선택</h6>')
+				var cell5 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;" name="bws_content">Subject 선택</h6>')
+				var cell6 = $('<td><textarea class="table_tr data_text" rows="3"></textarea>')
+				var cell7 = $('<td><textarea class="table_tr data_text" rows="3"></textarea>')
+				var cell8 = $('<td><textarea class="table_tr data_text" rows="3"></textarea>')
+				//var cell5 = $('<td><input class="table_tr data_text" type="text" value="">')
+				//var cell6 = $('<td><input class="table_tr data_text" type="text" value="">')
+				//var cell7 = $('<td><input class="table_tr data_text" type="text" value="">')
+				var cell9 = $('<td><input class="table_tr data_text" type="text" value="" min="0" max="10">')
+				var cell10 = $('<td><select id="bdm_work_status_' + rownum + '" class="table_tr data_text"> <c:forEach var="obj" items="${search_work_status_noall }"> <option value="${obj.BASE_CODE}">${obj.BASE_NAME}</option> </c:forEach> </select>')
+				var cell11 = $('<td><input type="date" class="table_tr data_text" value="${getToday}">')
+				var cell12 = $('<td><input type="date" class="table_tr data_text" value="">')
+				var cell13 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;"></h6>')				
+				var cell14 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;"></h6>')
+				var cell15 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;">R</h6>')
+				var cell16 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + login_empid + '</h6>')
+				var cell17 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;"></h6>')
+				
+				$(row).append(cell0, cell1, cell2, cell3, cell4, cell5, cell6, cell7, cell8, cell9, cell10, cell11, cell12, cell13, cell14, cell15, cell16, cell17);
+				//alert(rownum)
+				if (rownum == 0) {
+					alert('rownum 0')
+					//$('#BizDailyMaster >tbody').append(row);
+					var tbody = $('<tbody>');
+					$(tbody).append(row);
+					$("#BizDailyMaster").append(tbody);
+					
+				} else {
+					$('#BizDailyMaster >tbody:last').append(row);
+				}			
 				
 				target_row = rownum;
 				changeFlag("I", 'BizDailyMaster', rownum)
 				$('#bdm_rec_date_' + rownum).focus();
-				
 			})
 			
 			
@@ -869,6 +1303,127 @@
 						$("#findUserList_Table").trigger('update')
 					}
 				})
+			})
+			
+			// 현업 리스트 더블 클릭
+			//$('#findUserList_Table').dblclick(function() {
+			$('#findUserList_Table').on('dblclick', 'tr', function() {
+				
+				var $This = $(this);
+			    var row = $This.parent().children().index($(this)) + 1; // row
+			    //alert(col)
+			    
+			    var data = $('#findUserList_Table tr:eq(' + row + ')>td:eq(1)').text();
+			    
+			    var empname = $('#findUserList_Table tr:eq(' + row + ')>td:eq(2)').text();
+			    var deptname = $('#findUserList_Table tr:eq(' + row + ')>td:eq(0)').text();
+			    var empid = $('#findUserList_Table tr:eq(' + row + ')>td:eq(1)').text();
+			    
+			    //alert($('#findUserList_setrow').text())
+			    var mst_index = Number($('#findUserList_setrow').text());
+			    var mst_row = mst_index + 1
+			    
+			    var org_emp_id = $('#BizDailyMaster tr:eq(' + mst_row + ')>td:eq(14)').text()
+			    
+			    if (org_emp_id != empid) {
+				    $('#BizDailyMaster tr:eq(' + mst_row + ')>td:eq(3)>h6').text(empname)
+				    $('#BizDailyMaster tr:eq(' + mst_row + ')>td:eq(4)>h6').text(deptname)
+				    $('#BizDailyMaster tr:eq(' + mst_row + ')>td:eq(14)>h6').text(empid)
+				    
+				    changeFlag("U", 'BizDailyMaster', mst_index)
+			    }
+			    
+			    $('#findUserList').modal('hide')
+			})
+			
+			// 업무 배치자 저장
+			$('#btn_exec_save').click(function() {
+				var rowCount = $('#BizDailyExecuter tbody tr').length;
+				 
+				if (rowCount == 0) {
+					$('#JustInfoModal_Title').text('IT 작업 배치 확인')
+					$('#JustInfoModal_Body').text('저장될 내역이 없습니다!')
+					$('#JustInfoModal').modal('show')
+					return;
+				}
+				
+				var all_weight = 0;
+				// 전체 비중 계산
+				for (i = 0; i < rowCount; i++) {
+					var weight = Number($('#BizDailyExecuter tr:eq(' + (i + 1) + ')>td:eq(2)>input').val())
+					var flag = $('#BizDailyExecuter tr:eq(' + (i + 1) + ')>td:eq(6)').text()
+					
+					if (flag != 'D') {					
+						all_weight = all_weight + weight
+					}
+				}
+				
+				if (all_weight != 100) {
+					$('#JustInfoModal_Title').text('IT 작업자 배치 실패')
+					$('#JustInfoModal_Body').text('각 배치자의 비중 총 합은 반드시 100이 되어야합니다!')
+					$('#JustInfoModal').modal('show')
+					return;
+				}
+				
+				
+				var savearry = new Array();
+				
+				for (i = 0; i < rowCount; i++) {
+					var flag = $('#BizDailyExecuter tr:eq(' + (i + 1) + ')>td:eq(6)').text()
+					alert(flag)
+					if (flag == 'U' || flag == 'I' || flag == 'D') {
+						
+						/*
+						var row = $('<tr id="rowid_' + i + '">').addClass('trstyle');
+						var cell0 = $('<td style="text-align:center"><i class="fas fa-caret-right" style="width:100%"></i>')
+						var cell1 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + data1[i].EMPNAME + '</h6>')
+						var cell2 = $('<td><input class="table_tr data_text" style="text-align:center;" type="number" value="' + data1[i].EXC_WEIGHT + '"</h6>')
+						var cell3 = $('<td><input class="table_tr data_text" type="text" value="' + data1[i].REMARK + '">')							
+						var cell4 = $('<td style="display:none">').text(data1[i].BD_SEQ)
+						var cell5 = $('<td style="display:none">').text(data1[i].EMPID)
+						var cell6 = $('<td style="display:none">').text(data1[i].FLAG)
+						*/
+						var rowdata = new Object();
+						rowdata.BD_SEQ = Number($('#BizDailyExecuter tr:eq(' + (i + 1) + ')>td:eq(4)').text())
+						rowdata.EXC_USER = $('#BizDailyExecuter tr:eq(' + (i + 1) + ')>td:eq(5)').text()
+						rowdata.EXC_WEIGHT = $('#BizDailyExecuter tr:eq(' + (i + 1) + ')>td:eq(2)>input').val()
+						rowdata.REMARK = $('#BizDailyExecuter tr:eq(' + (i + 1) + ')>td:eq(3)>input').val()
+						rowdata.FLAG = flag;
+						savearry.push(rowdata);
+					}
+				}
+				
+				if (!savearry || savearry.length == 0) { 
+					$('#JustInfoModal_Title').text('저장 실패')
+					$('#JustInfoModal_Body').text('저장될 내역이 없습니다!')
+					$('#JustInfoModal').modal('show')
+					return;
+				} else {
+					// 저장 Action 시작
+					//alert(JSON.stringify(savearry))
+					$.ajax({
+						type:"post",
+						dataType:'json',
+						url:'${root}biz/saveDailyExecData',
+						contentType:'application/json',
+						//traditional:true, // 배열 및 리스트로 값을 넘기기 위해서는 꼭 선언되어야함.
+						data:JSON.stringify(savearry),
+						//data: {'action_data':sendarry},
+						success: function(result) {
+							//alert('success')
+							//alert(result);
+							allSearch();
+						}
+					})
+				}
+			})
+			
+			// 업무 배치자 삭제
+			$('#btn_exec_delete').click(function() {
+				var getobject = $('#BizDailyExecuter > tbody > tr.trstyle.clicked');
+				var rowidx = getobject.index()
+				
+				changeFlag('D', 'BizDailyExecuter', rowidx)
 			})
 		})
 	</script>

@@ -2,6 +2,8 @@ package kr.co.hojeon.services;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 
@@ -38,4 +40,18 @@ public class BizDailyService {
 	public List<HashMap<String, Object>> getBizDailyDetail(String bd_seq) {
 		return bdd.getBizDailyDetail(bd_seq);
 	}
+	
+	// 업무 Master 저장
+	public int saveDailyMasterData(List<Map<String, Object>> listmap) {
+		System.out.println("★★★★★★★★ in saveWeeklySubjectData Service ★★★★★★★★");
+		
+		return bdd.saveDailyMasterData(listmap, loginUserBean.getUserid());
+	}
+	
+	// 배치자 저장
+		public int saveDailyExecData(List<Map<String, Object>> listmap) {
+			System.out.println("★★★★★★★★ in saveDailyExecData Service ★★★★★★★★");
+			
+			return bdd.saveDailyExecData(listmap, loginUserBean.getUserid());
+		}
 }

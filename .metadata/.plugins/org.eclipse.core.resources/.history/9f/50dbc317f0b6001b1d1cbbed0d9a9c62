@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mabatis.org//DTD Mapper 3.0//EN"
+                       "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="bizDaily">
+	<select id="getBizDailyList" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[
+		SELECT
+			A.REC_USER, B.EMPNAME REC_NAME, dbo.FN_DATE_TO_STRING(A.REC_DATE) REC_DATE, 
+			A.REQ_USER, C.EMPNAME REQ_NAME, C.DEPTNAME, A.REQ_SUBJECT, A.REQ_CONTENT, A.ANL_CONTENT, A.WORK_LEV, A.WORK_STATUS, E.BCD_NAME WORK_STATUS_NAME,
+			A.BD_SEQ, 'R' FLAG, A.BWS_SEQ, F.BWS_CONTENT
+		FROM
+			TB_BIZDAILY_MASTER A WITH(NOLOCK)
+			INNER JOIN
+				VT_USERALL_LIST B ON A.REC_USER = B.EMPID
+			INNER JOIN
+				VT_USERALL_LIST C ON A.REQ_USER = C.EMPID AND C.EMPNAME LIKE #{empname}
+			LEFT OUTER JOIN
+				(SELECT BD_SEQ, COUNT(*) BATCH_CNT FROM TB_BIZDAILY_EXECUTER WITH(NOLOCK) GROUP BY BD_SEQ) D ON A.BD_SEQ = D.BD_SEQ
+			INNER JOIN
+				(SELECT BCD_CODE, BCD_NAME FROM TB_BASE_DETAIL WITH(NOLOCK) WHERE BCH_CODE = 'W0002') E ON A.WORK_STATUS = E.BCD_CODE
+			INNER JOIN
+				TB_BIZWEEKLY_SUBJECT WITH(NOLOCK) F ON A.BWS_SEQ = F.BWS_SEQ 
+		WHERE
+			A.REC_USER LIKE #{rec_user} AND			 
+			A.REQ_SUBJECT LIKE #{req_subject} AND
+			A.WORK_STATUS LIKE #{work_status} AND
+			CONVERT(NVARCHAR, A.REC_DATE, 112) >= Replace(#{rec_sdate}, '-', '') AND
+			CONVERT(NVARCHAR, A.REC_DATE, 112) <= Replace(#{rec_edate}, '-', '')
+		ORDER BY A.REC_DATE desc, A.BD_SEQ desc;
+		]]>
+	</select>
+	
+	<select id="getBizDailyExecuter" parameterType="java.lang.String" resultType="hashmap">
+		<![CDATA[
+		SELECT
+			A.BD_SEQ, A.EXC_USER, B.EMPNAME, A.EXC_WEIGHT, ISNULL(A.REMARK, '') REMARK, C.SORT_NO, B.EMPID
+		FROM
+			TB_BIZDAILY_EXECUTER A WITH(NOLOCK),
+			VT_USERALL_LIST B,
+			(SELECT etc_col01 EXC_USER, SORT_NO  FROM TB_BASE_DETAIL WITH(NOLOCK) WHERE BCH_CODE = 'Z0001') C
+		WHERE
+			A.BD_SEQ = #{BD_SEQ} AND
+			A.EXC_USER = B.empid AND
+			A.EXC_USER = C.EXC_USER
+		ORDER BY C.SORT_NO;
+		]]>
+	</select>
+	
+	<select id="getBizDailyDetail" parameterType="java.lang.String" resultType="hashmap">
+		<![CDATA[
+		SELECT
+			A.BD_SEQ, A.EXC_SEQ, A.EXC_USER, B.EMPNAME, A.EXC_CONTENT, A.WORK_LEV, A.WORK_STATUS, A.WORK_PRC_PER, A.ACT_END_DATE, ISNULL(A.REMARK, '') REMARK, 'R' FLAG
+		FROM
+			TB_BIZDAILY_DETAIL A WITH(NOLOCK),
+			VT_USERALL_LIST B WITH(NOLOCK)
+		WHERE
+			A.BD_SEQ = #{BD_SEQ} AND
+			A.EXC_USER = B.empid
+		ORDER BY A.EXC_SEQ desc;
+		]]>
+	</select>
+	
+	<insert id="saveWeeklySubjectData" parameterType="hashmap">
+		begin
+			Declare @v_inserts int;
+			Declare @v_cnt int;
+		
+			if #{FLAG} = 'I'
+				begin
+					Insert Into TB_BIZDAILY_MASTER
+						(
+						rec_user, req_user, req_subject, req_content, anl_content, work_lev, work_status, work_prc_per, bws_seq,
+						rec_date, rec_week, exp_end_date, act_end_date, remark, wk_date, wk_user
+						)
+					Values
+						(
+						#{REC_USER}, #{REQ_USER}, #{REQ_SUBJECT}, #{REQ_CONTENT}, #{ANL_CONTENT}, #{WORK_LEV}, #{WORK_STATUS}, #{WORK_PRC_PER}, #{BWS_SEQ},
+						#{REC_DATE}, #{REC_WEEK}, #{EXP_END_DATE}, #{ACT_END_DATE}, #{REMARK}, getdate(), #{REG_USER}
+						);
+		
+					SELECT @v_inserts = SCOPE_IDENTITY() ;
+		
+					Insert Into TB_BIZDAILY_EXECUTER
+						(
+						bd_seq, exc_user, exc_weight, wk_date, wk_user
+						)
+					Values
+						(
+						@v_inserts, #{REC_USER}, 100, getdate(), #{REG_USER}
+						);
+				end;
+			else if 'I' = 'U'
+				begin
+					Update TB_BIZDAILY_MASTER
+					   Set REC_USER = #{REC_USER},  REQ_USER = #{REC_USER}, REQ_SUBJECT = #{REC_USER}, REQ_CONTENT = #{REC_USER}, 
+					       ANL_CONTENT = #{REC_USER}, WORK_LEV = #{REC_USER}, WORK_STATUS = #{REC_USER}, WORK_PRC_PER = #{REC_USER}, BWS_SEQ = #{REC_USER},
+						   REC_DATE = #{REC_USER}, REC_WEEK = #{REC_USER}, EXP_END_DATE = #{REC_USER}, ACT_END_DATE = #{REC_USER}, REMARK = #{REC_USER},
+						   ET_DATE = GETDATE(), ET_USER = #{REG_USER}
+					 Where bd_seq = #{BD_SEQ};
+				end
+			else if 'I' = 'D'
+				begin
+					Select @v_cnt = Count(*)
+					  From TB_BIZDAILY_EXECUTER with(nolock)
+					 Where bd_seq = #{BD_SEQ};
+		
+					if @v_cnt > 0
+						begin
+							Delete From TB_BIZDAILY_EXECUTER Where bd_seq = #{BD_SEQ};
+						end
+		
+					Delete From TB_BIZDAILY_MASTER Where bd_seq = #{BD_SEQ};
+				end
+		end
+	</insert>
+	
+</mapper>

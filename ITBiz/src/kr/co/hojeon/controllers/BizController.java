@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -16,10 +17,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.co.hojeon.beans.BizWeekScope;
+import kr.co.hojeon.beans.BizWeeklyBasicSubject;
 import kr.co.hojeon.beans.TableUsrBizTwDetail;
 import kr.co.hojeon.beans.UserBean;
 import kr.co.hojeon.services.BizDailyService;
@@ -27,6 +32,7 @@ import kr.co.hojeon.services.BizWeeklyService;
 import kr.co.hojeon.services.CommonService;
 import kr.co.hojeon.subclasses.GetSysDateInfo;
 import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("/biz")
@@ -56,7 +62,7 @@ public class BizController {
 		List<HashMap<String, Object>> search_work_status = cms.getBaseData("W0002", "Y");
 		List<HashMap<String, Object>> search_work_status_noall = cms.getBaseData("W0002", "N");
 		List<HashMap<String, Object>> search_rec_user = cms.getITUserInfo("Y");
-		
+		List<BizWeeklyBasicSubject> search_subject = bws.getJustWeekBasicSubject();
 		/*
 		SimpleDateFormat format = new SimpleDateFormat ( "yyyy-MM-dd");
 				
@@ -80,7 +86,15 @@ public class BizController {
 		model.addAttribute("search_work_status", search_work_status);
 		model.addAttribute("search_rec_user", search_rec_user);		
 		model.addAttribute("lub", loginUserBean);
-		
+		model.addAttribute("search_subjects", search_subject);
+		//JSONObject asdf = JSONObject.fromObject(search_subject);
+		//JSONObject asdf = JSONObject.fromObject(search_subject);
+		//JSONObject asdf = JSONObject.fromObject(search_subject);
+		//model.addAttribute("search_subject", search_subject);
+		//JSONObject jobj = JSONObject.fromObject(search_subject);
+		//JSONArray ja = new JSONArray();
+		System.out.println("※※※※※※※※※※※※※※※※※※※※※※※※※※※※※");
+		//System.out.println(search_subject);
 		return "biz/dailyRgst";
 	}
 	
@@ -180,4 +194,24 @@ public class BizController {
 		model.addAttribute("lub", loginUserBean);
 	}
 	
+	// 개별 항목 등록 업무 Master 저장
+	@RequestMapping(value="/saveDailyMasterData", method=RequestMethod.POST)
+	@ResponseBody
+	public String saveDailyMasterData(@RequestBody List<Map<String, Object>> listmap) throws Exception{
+		System.out.println("★★★★★★★★ in saveDailyMasterData ★★★★★★★★");
+		//String[] bws_content = request.getParameterValues("bws_content");
+		//System.out.println(listmap.size());
+		int result = bds.saveDailyMasterData(listmap);
+		return Integer.toString(result);
+	}// 개별 항목 등록 업무 Master 저장
+	
+	@RequestMapping(value="/saveDailyExecData", method=RequestMethod.POST)
+	@ResponseBody
+	public String saveDailyExecData(@RequestBody List<Map<String, Object>> listmap) throws Exception{
+		System.out.println("★★★★★★★★ in saveDailyExecData ★★★★★★★★");
+		//String[] bws_content = request.getParameterValues("bws_content");
+		//System.out.println(listmap.size());
+		int result = bds.saveDailyExecData(listmap);
+		return Integer.toString(result);
+	}
 }

@@ -28,7 +28,6 @@
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestMapping"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestMethod"/>
     <fullyQualifiedTypeName name="kr.co.hojeon.beans.BizWeeklySubject"/>
-    <fullyQualifiedTypeName name="kr.co.hojeon.beans.BizWeeklyBasicSubject"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.RequestParam"/>
     <fullyQualifiedTypeName name="kr.co.hojeon.beans.TableUsrBizTwDetail"/>
     <fullyQualifiedTypeName name="kr.co.hojeon.services.BizWeeklyService"/>
@@ -58,4 +57,7 @@
     <fullyQualifiedTypeName name="kr.co.hojeon.services.CommonService"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PostMapping"/>
     <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="kr.co.hojeon.beans.BizWeeklyBasicSubject"/>
+    <fullyQualifiedTypeName name="org.json.simple.JSONObject"/>
+    <fullyQualifiedTypeName name="net.sf.json.JSONObject"/>
 </qualifiedTypeNameHistroy>

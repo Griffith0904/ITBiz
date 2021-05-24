@@ -463,8 +463,6 @@
 			// 저장 버튼
 			$('#btn_save').click(function() {
 				//var table = document.getElementById('categoryDataTable')
-				
-				
 				$('#save_check_Title').text('저장 확인')
 				$('#save_check_Body').html('해당 내역을 저장하시겠습니까?')
 				$('#SaveCheckModal').modal('show')
