@@ -49,9 +49,16 @@ public class BizDailyService {
 	}
 	
 	// 배치자 저장
-		public int saveDailyExecData(List<Map<String, Object>> listmap) {
-			System.out.println("★★★★★★★★ in saveDailyExecData Service ★★★★★★★★");
-			
-			return bdd.saveDailyExecData(listmap, loginUserBean.getUserid());
-		}
+	public int saveDailyExecData(List<Map<String, Object>> listmap) {
+		System.out.println("★★★★★★★★ in saveDailyExecData Service ★★★★★★★★");
+		
+		return bdd.saveDailyExecData(listmap, loginUserBean.getUserid());
+	}
+	
+	// 업무 Detail 저장
+	public int saveDailyDetailData(List<Map<String, Object>> listmap) {
+		System.out.println("★★★★★★★★ in saveDailyExecData Service ★★★★★★★★");
+		
+		return bdd.saveDailyDetailData(listmap, loginUserBean.getUserid());
+	}
 }

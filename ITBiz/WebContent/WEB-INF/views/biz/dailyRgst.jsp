@@ -160,8 +160,8 @@
 										<div class='search_condition'>요청자</div>
 										<input type='text' class='search_data' style='width:100px;' id='search_empname'>
 										
-										<!-- 요청 제목 -->
-										<div class='search_condition'>요청 제목</div>
+										<!-- 요청 사항 -->
+										<div class='search_condition'>요청 사항</div>
 										<input type='text' class='search_data' id='search_req_subject'>
 										
 										<!-- 접수 일자 -->
@@ -234,10 +234,11 @@
 														<th class='table_header' style='width: 50px;'>요청자</th>
 														<th class='table_header' style='width: 120px;'>요청 부서/팀</th>
 														<th class='table_header' style='width: 100px;'>Subject</th>
-														<th class='table_header' style='width: 140px;'>요청 사항</th>
+														<th class='table_header' style='width: 135px;'>요청 사항</th>
 														<th class='table_header' style='width: 160px;'>요청 세부 내역</th>
 														<th class='table_header' style='width: 160px;'>분석 사항</th>
 														<th class='table_header' style='width: 40px;'>난이도</th>
+														<th class='table_header' style='width: 45px;'>진행률</th>
 														<th class='table_header' style='width: 80px;'>상태</th>
 														<th class='table_header' style='width: 80px;'>예상 종료일</th>
 														<th class='table_header' style='width: 80px;'>실제 종료일</th>
@@ -344,6 +345,7 @@
 														<th class='table_header' style='width: 20px;'>처리자</th>
 														<th class='table_header' style='width: 100px;'>처리 사항</th>
 														<th class='table_header' style='width: 20px;'>난이도</th>
+														<th class='table_header' style='width: 20px;'>진행률</th>
 														<th class='table_header' style='width: 40px;'>상태</th>
 														<th class='table_header' style='width: 40px;'>처리 일자</th>
 														<th class='table_header' style='width: 100px;'>비고</th>
@@ -500,6 +502,7 @@
 					<div class="card shadow mb-4">
 						<h6 style='display:none' id='findITUserList_bd_seq'></h6>
 						<h6 style='display:none' id='findITUserList_setrow'></h6>
+						<h6 style='display:none' id='findITUserList_type'></h6>
 						<!-- <div class="card-header py-3"> -->
 						<div class="card-body">
 							<div class="table-responsive">
@@ -623,11 +626,11 @@
 			switch (tablename) {
 				case 'BizDailyMaster' :
 					obj = '#bdm_flag_' + row_index;
-					flag = '#BizDailyMaster tr:eq(' + (row_index+1) + ')>td:eq(15)>h6'
+					flag = '#BizDailyMaster tr:eq(' + (row_index+1) + ')>td:eq(16)>h6'
 					break;
 				case 'BizDailyDetail' :
-					obj = '#bdd_flag_' + row_index;
-					flag = '#BizDailyDetail tr:eq(' + (row_index+1) + ')>td:eq(9)>h6'
+					obj = '#BizDailyDetail tr:eq(' + (row_index+1) + ')>td:eq(0)>i'
+					flag = '#BizDailyDetail tr:eq(' + (row_index+1) + ')>td:eq(10)>h6'
 					break;
 				case 'BizDailyExecuter' :
 					obj = '#BizDailyExecuter tr:eq(' + (row_index+1) + ')>td:eq(0)>i'
@@ -727,10 +730,10 @@
 			    var bws_content = $('#findSubjectList_Table tr:eq(' + (row + 1) + ')>td:eq(1)').text();
 			    
 			    //alert(bws_seq + " : " + bws_content)
-			    var bws_seq_chk = $('#BizDailyMaster tr:eq(' + (table_row + 1) + ')>td:eq(17)').text();
+			    var bws_seq_chk = $('#BizDailyMaster tr:eq(' + (table_row + 1) + ')>td:eq(18)').text();
 			    
 			    if (bws_seq != bws_seq_chk) {
-			    	$('#BizDailyMaster tr:eq(' + (table_row + 1) + ')>td:eq(17)>h6').text(bws_seq)
+			    	$('#BizDailyMaster tr:eq(' + (table_row + 1) + ')>td:eq(18)>h6').text(bws_seq)
 			    	$('#BizDailyMaster tr:eq(' + (table_row + 1) + ')>td:eq(5)>h6').text(bws_content)
 			    	
 			    	changeFlag("U", 'BizDailyMaster', table_row)
@@ -766,8 +769,90 @@
 				
 			})
 			
+			// 업무 배치 조회
+			function execSearch(bd_seq) {
+				$('#BizDailyExecuter tbody').remove();
+				
+				$.ajax({
+					type:"post",
+					url:'${root}biz/getBizDailySubExec',
+					data:{'bd_seq':bd_seq},
+					success: function(result) {
+						//alert(JSON.stringify(result))
+						var data1 = result;
+						
+						if (data1.length != 0) {
+							var tbody = $('<tbody>');
+
+							for (i = 0; i < data1.length; i++) {
+								var row = $('<tr id="rowid_' + i + '">').addClass('trstyle');
+								var cell0 = $('<td style="text-align:center"><i class="fas fa-caret-right" style="width:100%"></i>')
+								var cell1 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + data1[i].EMPNAME + '</h6>')
+								var cell2 = $('<td><input class="table_tr data_text" style="text-align:center;" type="number" value="' + data1[i].EXC_WEIGHT + '"</h6>')
+								var cell3 = $('<td><input class="table_tr data_text" type="text" value="' + data1[i].REMARK + '">')							
+								var cell4 = $('<td style="display:none">').text(data1[i].BD_SEQ)
+								var cell5 = $('<td style="display:none">').text(data1[i].EMPID)
+								var cell6 = $('<td style="display:none">').text(data1[i].FLAG)
+								
+								$(row).append(cell0, cell1, cell2, cell3, cell4, cell5, cell6);
+								$(tbody).append(row);
+							}
+							
+							$("#BizDailyExecuter").append(tbody);
+							$("#BizDailyExecuter").trigger('update')
+						}
+					}
+				})
+			}
+			
+			// 업무 Detail 조회
+			function detailSearch(bd_seq) {
+				$('#BizDailyDetail tbody').remove();
+				
+				$.ajax({
+					type:"post",
+					url:'${root}biz/getBizDailySubDetail',
+					data:{'bd_seq':bd_seq},
+					success: function(result) {
+						//alert(JSON.stringify(result))
+						var data2 = result;
+						
+						if (data2.length != 0) {
+							var tbody = $('<tbody>');
+
+							for (i = 0; i < data2.length; i++) {
+								var row = $('<tr id="rowid_' + i + '">').addClass('trstyle');
+								var cell0 = $('<td style="text-align:center"><i class="fas fa-caret-right" style="width:100%" id="bdd_flag_' + i + '"></i>')
+								var cell1 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + data2[i].EXC_SEQ + '</h6>')
+								var cell2 = $('<td><h6 class="table_tr" name="userinfo_empname" style="margin-top:8px; text-align:center;">' + data2[i].EMPNAME + '</h6>')
+								var cell3 = $('<td><input class="table_tr data_text" type="text" value="' + data2[i].EXC_CONTENT + '">')
+								var cell4 = $('<td><input class="table_tr data_text" type="number" value="' + data2[i].WORK_LEV + '" min="0" max="10">')
+								var cell5 = $('<td><input class="table_tr data_text" type="number" value="' + data2[i].WORK_PRC_PER + '" min="0" max="100">')
+								var cell6 = $('<td><select id="bdd_work_status_' + i + '" class="table_tr data_text"> <c:forEach var="obj" items="${search_work_status_noall }"> <option value="${obj.BASE_CODE}">${obj.BASE_NAME}</option> </c:forEach> </select>')
+								var cell7 = $('<td><input type="date" class="table_tr data_text" value="' + data2[i].ACT_END_DATE + '">')
+								var cell8 = $('<td><input class="table_tr data_text" type="text" value="' + data2[i].REMARK + '">')
+								var cell9 = $('<td style="display:none">').text(data2[i].BD_SEQ)
+								var cell10 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + data2[i].FLAG + '</h6>')
+								var cell11 = $('<td style="display:none">' + data2[i].EXC_USER + '</td>')
+								$(row).append(cell0, cell1, cell2, cell3, cell4, cell5, cell6, cell7, cell8, cell9, cell10, cell11);
+								$(tbody).append(row);
+							}
+							
+							$("#BizDailyDetail").append(tbody);
+							$("#BizDailyDetail").trigger('update')
+							
+							// c:if로 selected가 안먹음 ㅜㅜ...
+							for (i = 0; i < data2.length; i++) {
+								$('#bdd_work_status_' + i).val(data2[i].WORK_STATUS).prop("selected", true);							
+							}
+						}
+					}
+				})
+			}
+			
 			// 전제 조회
 			allSearch = function() {
+				
 				var rec_user = $('#search_rec_user').val()
 				var empname = $('#search_empname').val()
 				var req_subject = $('#search_req_subject').val()
@@ -833,17 +918,17 @@
 							var cell8 = $('<td><textarea class="table_tr data_text" rows="3">' + result[i].ANL_CONTENT + '</textarea>')
 							var cell9 = $('<td><input class="table_tr data_text" type="number" value="' + result[i].WORK_LEV + '" min="0" max="10">')
 							//alert('new7 : ' + result[i].WORK_STATUS)
+							var cell10 = $('<td><input class="table_tr data_text" type="number" value="' + result[i].WORK_PRC_PER + '" min="0" max="100">')
+							var cell11 = $('<td><select id="bdm_work_status_' + i + '" class="table_tr data_text"> <c:forEach var="obj" items="${search_work_status_noall }"> <option value="${obj.BASE_CODE}">${obj.BASE_NAME}</option> </c:forEach> </select>')
+							var cell12 = $('<td><input type="date" class="table_tr data_text" value="' + result[i].EXP_END_DATE + '">')
+							var cell13 = $('<td><input type="date" class="table_tr data_text" value="' + result[i].ACT_END_DATE + '">')
+							var cell14 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].BD_SEQ + '</h6>')
+							var cell15 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].REQ_USER + '</h6>')
+							var cell16 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].FLAG + '</h6>')
+							var cell17 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].REC_USER + '</h6>')
+							var cell18 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].BWS_SEQ + '</h6>')
 							
-							var cell10 = $('<td><select id="bdm_work_status_' + i + '" class="table_tr data_text"> <c:forEach var="obj" items="${search_work_status_noall }"> <option value="${obj.BASE_CODE}">${obj.BASE_NAME}</option> </c:forEach> </select>')
-							var cell11 = $('<td><input type="date" class="table_tr data_text" value="' + result[i].EXP_END_DATE + '">')
-							var cell12 = $('<td><input type="date" class="table_tr data_text" value="' + result[i].ACT_END_DATE + '">')
-							var cell13 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].BD_SEQ + '</h6>')
-							var cell14 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].REQ_USER + '</h6>')
-							var cell15 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].FLAG + '</h6>')
-							var cell16 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].REC_USER + '</h6>')
-							var cell17 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].BWS_SEQ + '</h6>')
-							
-							$(row).append(cell0, cell1, cell2, cell3, cell4, cell5, cell6, cell7, cell8, cell9, cell10, cell11, cell12, cell13, cell14, cell15, cell16, cell17);
+							$(row).append(cell0, cell1, cell2, cell3, cell4, cell5, cell6, cell7, cell8, cell9, cell10, cell11, cell12, cell13, cell14, cell15, cell16, cell17, cell18);
 							$(tbody).append(row);
 							//$("#categoryDataTable > tbody").append(row);
 							//$('#bdm_work_status_' + i).val(result[i].WORK_STATUS).prop("selected", true);
@@ -872,7 +957,7 @@
 				var row = this.rowIndex;
 				if (row == 0) return;
 				
-				var bd_seq = $('#BizDailyMaster tr:eq(' + row + ')>td:eq(13)').text();
+				var bd_seq = $('#BizDailyMaster tr:eq(' + row + ')>td:eq(14)').text();
 				
 				$('#BizDailyExecuter tbody').remove();
 				$('#BizDailyDetail tbody').remove();
@@ -919,15 +1004,17 @@
 									var row = $('<tr id="rowid_' + i + '">').addClass('trstyle');
 									var cell0 = $('<td style="text-align:center"><i class="fas fa-caret-right" style="width:100%" id="bdd_flag_' + i + '"></i>')
 									var cell1 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + data2[i].EXC_SEQ + '</h6>')
-									var cell2 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + data2[i].EMPNAME + '</h6>')
+									var cell2 = $('<td><h6 class="table_tr" name="userinfo_empname" style="margin-top:8px; text-align:center;">' + data2[i].EMPNAME + '</h6>')
 									var cell3 = $('<td><input class="table_tr data_text" type="text" value="' + data2[i].EXC_CONTENT + '">')
-									var cell4 = $('<td><input class="table_tr data_text" type="text" value="' + data2[i].WORK_LEV + '">')
-									var cell5 = $('<td><select id="bdd_work_status_' + i + '" class="table_tr data_text"> <c:forEach var="obj" items="${search_work_status_noall }"> <option value="${obj.BASE_CODE}">${obj.BASE_NAME}</option> </c:forEach> </select>')
-									var cell6 = $('<td><input type="date" class="table_tr data_text" id="bdd_rec_date_' + i + '" value="' + data2[i].ACT_END_DATE + '">')
-									var cell7 = $('<td><input class="table_tr data_text" type="text" value="' + data2[i].REMARK + '">')
-									var cell8 = $('<td style="display:none">').text(data2[i].BD_SEQ)
-									var cell9 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + data2[i].FLAG + '</h6>')
-									$(row).append(cell0, cell1, cell2, cell3, cell4, cell5, cell6, cell7, cell8, cell9);
+									var cell4 = $('<td><input class="table_tr data_text" type="number" value="' + data2[i].WORK_LEV + '" min="0" max="10">')
+									var cell5 = $('<td><input class="table_tr data_text" type="number" value="' + data2[i].WORK_PRC_PER + '" min="0" max="100">')
+									var cell6 = $('<td><select id="bdd_work_status_' + i + '" class="table_tr data_text"> <c:forEach var="obj" items="${search_work_status_noall }"> <option value="${obj.BASE_CODE}">${obj.BASE_NAME}</option> </c:forEach> </select>')
+									var cell7 = $('<td><input type="date" class="table_tr data_text" value="' + data2[i].ACT_END_DATE + '">')
+									var cell8 = $('<td><input class="table_tr data_text" type="text" value="' + data2[i].REMARK + '">')
+									var cell9 = $('<td style="display:none">').text(data2[i].BD_SEQ)
+									var cell10 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + data2[i].FLAG + '</h6>')
+									var cell11 = $('<td style="display:none">' + data2[i].EXC_USER + '</td>')
+									$(row).append(cell0, cell1, cell2, cell3, cell4, cell5, cell6, cell7, cell8, cell9, cell10, cell11);
 									$(tbody).append(row);
 								}
 								
@@ -964,7 +1051,7 @@
 				
 				for (i = 0; i < rowCount; i++) {
 					var rowdata = new Object();
-					var flag = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(15)>h6').text()
+					var flag = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(16)>h6').text()
 					//alert(i + " : " + flag)
 					if (flag == 'U' || flag == 'I' || flag == 'D') {
 						var req_date = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(2)>input').val()
@@ -973,7 +1060,8 @@
 						var req_content = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(7)>textarea').val()
 						var anl_content = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(8)>textarea').val()
 						var work_lev = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(9)>input').val()
-						var work_status = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(10)>select').val()
+						var work_prc_per =$('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(10)>input').val()
+						var work_status = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(11)>select').val()
 						
 						if (flag != 'D') {
 							if (!req_name || req_name == '요청자 선택') {
@@ -1022,6 +1110,14 @@
 								}
 							}
 							
+							if (!work_prc_per) {
+								$('#JustInfoModal_Title').text('저장 실패')
+								$('#JustInfoModal_Body').text('진행률을 입력하여 주십시오!')
+								$('#JustInfoModal').modal('show')
+								
+								$('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(10)>input').focus();
+							}
+							
 							if (work_status !== '00001') {
 								// requested (단순 접수 상태) 가 아닌 경우 분석 사항 무조껀 기입
 								if (!anl_content) {
@@ -1044,6 +1140,24 @@
 										$('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(12)>input').focus();
 										return;
 									}
+									
+									if (work_prc_per != 100) {
+										$('#JustInfoModal_Title').text('저장 실패')
+										$('#JustInfoModal_Body').text('완료 상태시 진행률은 100% 이여야합니다!')
+										$('#JustInfoModal').modal('show')
+										
+										$('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(10)>input').focus();
+										return;
+									}
+								} else {
+									if (work_prc_per == 100) {
+										$('#JustInfoModal_Title').text('저장 실패')
+										$('#JustInfoModal_Body').text('완료 상태가 아닌 경우 진행률은 100% 일 수 없습니다!')
+										$('#JustInfoModal').modal('show')
+										
+										$('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(10)>input').focus();
+										return;
+									}
 								}
 							}
 						}
@@ -1054,14 +1168,14 @@
 						rowdata.ANL_CONTENT = anl_content
 						rowdata.WORK_LEV = work_lev
 						rowdata.WORK_STATUS = work_status
-						rowdata.BD_SEQ = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(13)>h6').text()
-						rowdata.REQ_USER = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(14)>h6').text()
+						rowdata.BD_SEQ = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(14)>h6').text()
+						rowdata.REQ_USER = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(15)>h6').text()
 						rowdata.FLAG = flag 
-						rowdata.REC_USER = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(16)>h6').text()
-						rowdata.EXP_END_DATE = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(11)>input').val()
-						rowdata.ACT_END_DATE = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(12)>input').val()
-						rowdata.BWS_SEQ = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(17)>h6').text()
-						
+						rowdata.REC_USER = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(17)>h6').text()
+						rowdata.EXP_END_DATE = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(12)>input').val()
+						rowdata.ACT_END_DATE = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(13)>input').val()
+						rowdata.BWS_SEQ = $('#BizDailyMaster tr:eq(' + (i+1) + ')>td:eq(18)>h6').text()
+						rowdata.WORK_PRC_PER = work_prc_per
 						savearry.push(rowdata);
 					}
 				}
@@ -1099,7 +1213,7 @@
 				var getobject = $('#BizDailyMaster > tbody > tr.trstyle.clicked');
 				var clicked = getobject.attr('id');
 				//alert(JSON.stringify(getobject))
-				//alert(clicked)
+				
 				
 				if (!clicked) {
 					$('#JustInfoModal_Title').text('배치자 추가 확인')
@@ -1114,6 +1228,7 @@
 				
 				$('#findITUserList_bd_seq').text(bd_seq)
 				$('#findITUserList_setrow').text(index)
+				$('findITUserList_type').text('E')
 				
 				if (all_rows != 0) {					
 					$('#BizDailyExecuter tr').each(function(index, item) {
@@ -1124,6 +1239,8 @@
 	                    var add_user = exec_user.toString()
 	                    all_reg_user.push(add_user)
 	                });
+				} else {
+					
 				}
 				//alert(JSON.stringify(all_reg_user))
 				$('#findITUserList_Table tbody').remove();
@@ -1163,36 +1280,46 @@
 				// 업무 배치 작업자 추가
 				//alert('findITUserList_Table dblclick')
 				//var rownum = $('#BizDailyExecuter >tbody tr').length;
-				var tbody = $('#BizDailyExecuter >tbody');
-				
 				var $This = $(this);
-				var row = Number($This.parent().children().index($(this)) + 1)
+				var rows = Number($This.parent().children().index($(this)) + 1)
 				
-				var emp_id = $('#findITUserList_Table tr:eq(' + row + ')>td:eq(0)').text()
-				var emp_name = $('#findITUserList_Table tr:eq(' + row + ')>td:eq(1)').text()
+				var emp_id = $('#findITUserList_Table tr:eq(' + rows + ')>td:eq(0)').text()
+				var emp_name = $('#findITUserList_Table tr:eq(' + rows + ')>td:eq(1)').text()
 				var bd_seq = $('#findITUserList_bd_seq').text()
+				var ttype = $('#findITUserList_type').text()
 				
-				var row = $('<tr id="rowid_' + i + '">').addClass('trstyle');
-				//var cell0 = $('<td style="text-align:center"><i class="fas fa-caret-right" style="width:100%" id="bdd_flag_' + i + '"></i>')
-				var cell0 = $('<td style="text-align:center"><i class="fas fa-plus" style="width:100%"></i>')
-				var cell1 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + emp_name + '</h6>')
-				var cell2 = $('<td><input class="table_tr data_text" style="text-align:center;" type="number" value="0"/>')
-				var cell3 = $('<td><input class="table_tr data_text" type="text" value="">')	
-				var cell4 = $('<td style="display:none">').text(bd_seq)
-				var cell5 = $('<td style="display:none">').text(emp_id)
-				var cell6 = $('<td style="display:none">').text('I')
-				$(row).append(cell0, cell1, cell2, cell3, cell4, cell5, cell6);
-				$(tbody).append(row);
-			
-				//alert($('#findITUserList_bd_seq').text())
-				/* 작업자 더블클릭시 추가되는거 작업 전.. 21.05.24 09:28
-				var row = $('<tr id="rowid_' + i + '">').addClass('trstyle');
-				var cell1 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + data1[i].EMPNAME + '</h6>')
-				var cell2 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + data1[i].EXC_WEIGHT + '</h6>')
-				var cell3 = $('<td><input class="table_tr data_text" type="text" value="' + data1[i].REMARK + '">')							
-				var cell4 = $('<td style="display:none">').text(data1[i].BD_SEQ)
-				var cell5 = $('<td style="display:none">').text(data1[i].EMPID)
-				*/
+				if (ttype == 'E') {
+					// 업무 배치에 추가
+					var row = $('<tr id="rowid_' + i + '">').addClass('trstyle');
+					//var cell0 = $('<td style="text-align:center"><i class="fas fa-caret-right" style="width:100%" id="bdd_flag_' + i + '"></i>')
+					var cell0 = $('<td style="text-align:center"><i class="fas fa-plus" style="width:100%"></i>')
+					var cell1 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + emp_name + '</h6>')
+					var cell2 = $('<td><input class="table_tr data_text" style="text-align:center;" type="number" value="0"/>')
+					var cell3 = $('<td><input class="table_tr data_text" type="text" value="">')	
+					var cell4 = $('<td style="display:none">').text(bd_seq)
+					var cell5 = $('<td style="display:none">').text(emp_id)
+					var cell6 = $('<td style="display:none">').text('I')
+					
+					var rownum = $('#BizDailyExecuter >tbody tr').length;
+					
+					$(row).append(cell0, cell1, cell2, cell3, cell4, cell5, cell6);
+					
+					if (rownum == 0) {
+						var tbody = $('<tbody>');
+						$(tbody).append(row);
+						$("#BizDailyExecuter").append(tbody);
+					} else {
+						var tbody = $('#BizDailyExecuter >tbody');
+						$(tbody).append(row);
+					}
+				} else if (ttype == 'D') {
+					// Detail에 추가
+					var getrow = Number($('#findITUserList_setrow').text())
+					//alert(getrow)
+					$('#BizDailyDetail tr:eq(' + (getrow + 1) + ')>td:eq(11)').text(emp_id)
+					$('#BizDailyDetail tr:eq(' + (getrow + 1) + ')>td:eq(2)>h6').text(emp_name)
+				}
+				
 				$('#findITUserList').modal('hide')
 			})
 			
@@ -1215,19 +1342,20 @@
 				//var cell6 = $('<td><input class="table_tr data_text" type="text" value="">')
 				//var cell7 = $('<td><input class="table_tr data_text" type="text" value="">')
 				var cell9 = $('<td><input class="table_tr data_text" type="text" value="" min="0" max="10">')
-				var cell10 = $('<td><select id="bdm_work_status_' + rownum + '" class="table_tr data_text"> <c:forEach var="obj" items="${search_work_status_noall }"> <option value="${obj.BASE_CODE}">${obj.BASE_NAME}</option> </c:forEach> </select>')
-				var cell11 = $('<td><input type="date" class="table_tr data_text" value="${getToday}">')
-				var cell12 = $('<td><input type="date" class="table_tr data_text" value="">')
-				var cell13 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;"></h6>')				
-				var cell14 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;"></h6>')
-				var cell15 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;">R</h6>')
-				var cell16 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + login_empid + '</h6>')
-				var cell17 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;"></h6>')
+				var cell10 = $('<td><input class="table_tr data_text" type="text" value="" min="0" max="100">')
+				var cell11 = $('<td><select id="bdm_work_status_' + rownum + '" class="table_tr data_text"> <c:forEach var="obj" items="${search_work_status_noall }"> <option value="${obj.BASE_CODE}">${obj.BASE_NAME}</option> </c:forEach> </select>')
+				var cell12 = $('<td><input type="date" class="table_tr data_text" value="${getToday}">')
+				var cell13 = $('<td><input type="date" class="table_tr data_text" value="">')
+				var cell14 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;"></h6>')				
+				var cell15 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;"></h6>')
+				var cell16 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;">R</h6>')
+				var cell17 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + login_empid + '</h6>')
+				var cell18 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;"></h6>')
 				
-				$(row).append(cell0, cell1, cell2, cell3, cell4, cell5, cell6, cell7, cell8, cell9, cell10, cell11, cell12, cell13, cell14, cell15, cell16, cell17);
+				$(row).append(cell0, cell1, cell2, cell3, cell4, cell5, cell6, cell7, cell8, cell9, cell10, cell11, cell12, cell13, cell14, cell15, cell16, cell17, cell18);
 				//alert(rownum)
 				if (rownum == 0) {
-					alert('rownum 0')
+					//alert('rownum 0')
 					//$('#BizDailyMaster >tbody').append(row);
 					var tbody = $('<tbody>');
 					$(tbody).append(row);
@@ -1339,7 +1467,7 @@
 			// 업무 배치자 저장
 			$('#btn_exec_save').click(function() {
 				var rowCount = $('#BizDailyExecuter tbody tr').length;
-				 
+				
 				if (rowCount == 0) {
 					$('#JustInfoModal_Title').text('IT 작업 배치 확인')
 					$('#JustInfoModal_Body').text('저장될 내역이 없습니다!')
@@ -1370,7 +1498,7 @@
 				
 				for (i = 0; i < rowCount; i++) {
 					var flag = $('#BizDailyExecuter tr:eq(' + (i + 1) + ')>td:eq(6)').text()
-					alert(flag)
+					
 					if (flag == 'U' || flag == 'I' || flag == 'D') {
 						
 						/*
@@ -1384,7 +1512,8 @@
 						var cell6 = $('<td style="display:none">').text(data1[i].FLAG)
 						*/
 						var rowdata = new Object();
-						rowdata.BD_SEQ = Number($('#BizDailyExecuter tr:eq(' + (i + 1) + ')>td:eq(4)').text())
+						var bd_seq = Number($('#BizDailyExecuter tr:eq(' + (i + 1) + ')>td:eq(4)').text())
+						rowdata.BD_SEQ = bd_seq
 						rowdata.EXC_USER = $('#BizDailyExecuter tr:eq(' + (i + 1) + ')>td:eq(5)').text()
 						rowdata.EXC_WEIGHT = $('#BizDailyExecuter tr:eq(' + (i + 1) + ')>td:eq(2)>input').val()
 						rowdata.REMARK = $('#BizDailyExecuter tr:eq(' + (i + 1) + ')>td:eq(3)>input').val()
@@ -1412,7 +1541,7 @@
 						success: function(result) {
 							//alert('success')
 							//alert(result);
-							allSearch();
+							execSearch(bd_seq);
 						}
 					})
 				}
@@ -1424,6 +1553,267 @@
 				var rowidx = getobject.index()
 				
 				changeFlag('D', 'BizDailyExecuter', rowidx)
+			})
+			
+			// 업무 상세 Detail 신규 추가
+			$('#btn_dtl_add').click(function() {
+				
+				var getobject = $('#BizDailyMaster > tbody > tr.trstyle.clicked');
+				var clicked = getobject.attr('id');
+				
+				if (!clicked) {
+					$('#JustInfoModal_Title').text('업무 상세 추가 실패')
+					$('#JustInfoModal_Body').text('먼저 업무 Master 데이터를 선택해 주십시오!')
+					$('#JustInfoModal').modal('show')
+					return;
+				}
+				
+				var rownum = $('#BizDailyDetail >tbody tr').length;
+				var tbody = $('#BizDailyDetail >tbody');
+				var index = Number(clicked.substring(6))
+				
+				bd_seq = $('#BizDailyMaster tr:eq(' + (index + 1) + ')>td:eq(14)').text()
+				
+				if (!bd_seq || bd_seq == 0) {
+					$('#JustInfoModal_Title').text('업무 상세 추가 실패')
+					$('#JustInfoModal_Body').text('먼저 업무 Master 데이터를 저장 후 사용해 주십시오!')
+					$('#JustInfoModal').modal('show')
+					return;
+				}
+				
+				var row = $('<tr id="rowid_' + i + '">').addClass('trstyle');
+				var cell0 = $('<td style="text-align:center"><i class="fas fa-plus" style="width:100%"></i>')
+				var cell1 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;"></h6>')
+				var cell2 = $('<td><h6 class="table_tr" name="userinfo_empname" style="margin-top:8px; text-align:center;">선택</h6>')
+				var cell3 = $('<td><input class="table_tr data_text" type="text" value="">')
+				var cell4 = $('<td><input class="table_tr data_text" type="number" value="0" min="0" max="10">')
+				var cell5 = $('<td><input class="table_tr data_text" type="number" value="0" min="0" max="100">')
+				var cell6 = $('<td><select id="bdd_work_status_' + i + '" class="table_tr data_text"> <c:forEach var="obj" items="${search_work_status_noall }"> <option value="${obj.BASE_CODE}">${obj.BASE_NAME}</option> </c:forEach> </select>')
+				//var cell7 = $('<td><input type="date" class="table_tr data_text" id="bdd_rec_date_' + i + '" value="' + today + '">')
+				var cell7 = $('<td><input type="date" class="table_tr data_text" id="bdd_rec_date_' + i + '" value="">')
+				var cell8 = $('<td><input class="table_tr data_text" type="text" value="">')
+				var cell9 = $('<td style="display:none">').text(bd_seq)
+				var cell10 = $('<td style="display:none"><h6 class="table_tr" style="margin-top:8px; text-align:center;">I</h6>')
+				var cell11 = $('<td style="display:none"></td>')
+				
+				$(row).append(cell0, cell1, cell2, cell3, cell4, cell5, cell6, cell7, cell8, cell9, cell10, cell11);
+				//alert(rownum)
+				if (rownum == 0) {
+					//alert('rownum 0')
+					//$('#BizDailyMaster >tbody').append(row);
+					var tbody = $('<tbody>');
+					$(tbody).append(row);
+					$("#BizDailyDetail").append(tbody);
+					
+				} else {
+					$('#BizDailyDetail >tbody:last').append(row);
+				}
+			})
+			
+			// 업무 상세 작업자 더블 클릭
+			$('#BizDailyDetail').on('dblclick', 'td', function(e) {
+			    var col = $(this).index();
+			    var row = $(this).parent().index();
+			    var dbl_cell = $(e.target).attr('name')
+			    
+				$('#findITUserList_setrow').text(row)
+				$('#findITUserList_type').text('D')
+				
+				if (dbl_cell == 'userinfo_empname') {				
+					var all_reg_user = []				
+					var rowCount = $('#BizDailyDetail tbody tr').length;
+					
+					$('#BizDailyDetail tr').each(function(index, item) {
+	                    if (!this.rowIndex) return; // skip first row
+	                    var exec_user = $('#BizDailyDetail tr:eq(' + index + ')>td:eq(11)').text();
+	                    //alert(exec_user)
+	                    //var eqi_no = $(this).find('#id_eqi_no').val();
+	                    if (!exec_user) {
+	                    	exec_user = 'X'
+	                    }
+	                    
+	                    var add_user = exec_user.toString()
+	                    all_reg_user.push(add_user)
+	                });					
+					
+					$.ajax({
+						type:"post",
+						url:'${root}biz/getITUserInfoFromCheck',
+						traditional:true,
+						//data:{'reg_user':JSON.stringify(all_reg_user)},
+						data:{'reg_user':all_reg_user},
+						success: function(result) {
+							if (result.length > 0) {
+								$('#findITUserList_Table tbody').remove();
+								var tbody = $('<tbody>');
+								for (i = 0; i < result.length; i++) {
+									var row = $('<tr id="rowid_' + i + '">').addClass('trstyle');
+									//var cell0 = $('<td style="text-align:center"><i class="fas fa-caret-right" style="width:100%" id="bdd_flag_' + i + '"></i>')
+									var cell1 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].BASE_CODE + '</h6>')
+									var cell2 = $('<td><h6 class="table_tr" style="margin-top:8px; text-align:center;">' + result[i].BASE_NAME + '</h6>')
+									$(row).append(cell1, cell2);
+									$(tbody).append(row);
+								}
+								$("#findITUserList_Table").append(tbody);
+								$("#findITUserList_Table").trigger('update');
+								$('#findITUserList').modal('show')
+							} else {
+								$('#JustInfoModal_Title').text('IT 작업 배치')
+								$('#JustInfoModal_Body').text('현재 모든 IT 팀원이 추가되어 있습니다!')
+								$('#JustInfoModal').modal('show')
+							}
+						}
+					})
+				}
+			})
+			
+			// 업무 Detail Save
+			$('#btn_dtl_save').click(function() {
+				var rowCount = $('#BizDailyDetail tbody tr').length;
+				
+				if (rowCount == 0) {
+					$('#JustInfoModal_Title').text('저장 실패')
+					$('#JustInfoModal_Body').text('조회된 내역이 없습니다!')
+					$('#JustInfoModal').modal('show')
+					return;
+				}
+				
+				var savearry = new Array();
+				
+				for (i = 0; i < rowCount; i++) {
+					var rowdata = new Object();
+					var flag = $('#BizDailyDetail tr:eq(' + (i+1) + ')>td:eq(10)>h6').text()
+					//alert(i + " : " + flag)
+					if (flag == 'U' || flag == 'I' || flag == 'D') {
+						
+						var bd_seq = $('#BizDailyDetail tr:eq(' + (i+1) + ')>td:eq(9)').text()
+						var exc_seq = $('#BizDailyDetail tr:eq(' + (i+1) + ')>td:eq(1)>h6').text()
+						var exc_user = $('#BizDailyDetail tr:eq(' + (i+1) + ')>td:eq(11)').text()
+						var exc_content = $('#BizDailyDetail tr:eq(' + (i+1) + ')>td:eq(3)>input').val()
+						var work_lev = $('#BizDailyDetail tr:eq(' + (i+1) + ')>td:eq(4)>input').val()
+						var work_prc_per = $('#BizDailyDetail tr:eq(' + (i+1) + ')>td:eq(5)>input').val()
+						var work_status = $('#BizDailyDetail tr:eq(' + (i+1) + ')>td:eq(6)>select').val()
+						var act_end_date = $('#BizDailyDetail tr:eq(' + (i+1) + ')>td:eq(7)>input').val()
+						var remark = $('#BizDailyDetail tr:eq(' + (i+1) + ')>td:eq(8)>input').val()
+						
+						if (flag != 'D') {
+							if (!exc_user) {
+								$('#JustInfoModal_Title').text('저장 실패')
+								$('#JustInfoModal_Body').text('처리자를 선택해 주세요!')
+								$('#JustInfoModal').modal('show')
+								
+								$('#BizDailyDetail tr:eq(' + (i+1) + ')>td:eq(2)>input').focus();
+								
+								return;
+							}
+							
+							if (!exc_content) {
+								$('#JustInfoModal_Title').text('저장 실패')
+								$('#JustInfoModal_Body').text('처리 사항을 입력하여 주십시오!')
+								$('#JustInfoModal').modal('show')
+								
+								$('#BizDailyDetail tr:eq(' + (i+1) + ')>td:eq(3)>input').focus();
+								return;
+							}
+							
+							if (!work_lev) {
+								$('#JustInfoModal_Title').text('저장 실패')
+								$('#JustInfoModal_Body').text('업무 레벨을 정의하여 주십시오!')
+								$('#JustInfoModal').modal('show')
+								
+								$('#BizDailyDetail tr:eq(' + (i+1) + ')>td:eq(4)>input').focus();
+								return;
+							} else {
+								if (work_lev < 0 || work_lev > 10) {
+									$('#JustInfoModal_Title').text('저장 실패')
+									$('#JustInfoModal_Body').text('업무 레벨은 0~10까지의 데이터만 입력 가능합니다!')
+									$('#JustInfoModal').modal('show')
+									
+									$('#BizDailyDetail tr:eq(' + (i+1) + ')>td:eq(4)>input').focus();
+									return;
+								}
+							}
+							
+							if (work_status !== '00001') {
+								// requested (단순 접수 상태) 가 아닌 경우 분석 사항 무조껀 기입
+								if (work_status == '00004') {									
+									if (!act_end_date) {
+										$('#JustInfoModal_Title').text('저장 실패')
+										$('#JustInfoModal_Body').text('처리 완료의 경우 실제 종료일을 입력해 주십시오!')
+										$('#JustInfoModal').modal('show')
+										
+										$('#BizDailyDetail tr:eq(' + (i+1) + ')>td:eq(7)>input').focus();
+										return;
+									}
+									
+									if (work_prc_per != 100) {
+										$('#JustInfoModal_Title').text('저장 실패')
+										$('#JustInfoModal_Body').text('완료 상태의 경우 진행률은 100% 이여야합니다!')
+										$('#JustInfoModal').modal('show')
+										
+										$('#BizDailyDetail tr:eq(' + (i+1) + ')>td:eq(5)>input').focus();
+										return;
+									}
+								}
+							}
+						}
+						
+						rowdata.BD_SEQ = Number(bd_seq)
+						rowdata.EXC_SEQ = Number(exc_seq)
+						rowdata.EXC_USER = exc_user
+						rowdata.EXC_CONTENT = exc_content
+						rowdata.WORK_LEV = Number(work_lev)
+						rowdata.WORK_PRC_PER = Number(work_prc_per)
+						rowdata.WORK_STATUS = work_status
+						rowdata.ACT_END_DATE = act_end_date
+						rowdata.REMARK = remark
+						rowdata.FLAG = flag
+						
+						savearry.push(rowdata);
+					}
+				}
+				
+				if (!savearry || savearry.length == 0) { 
+					$('#JustInfoModal_Title').text('저장 실패')
+					$('#JustInfoModal_Body').text('변경 혹은 추가된 내역이 없습니다!')
+					$('#JustInfoModal').modal('show')
+					return;
+				} else {
+					// 저장 Action 시작
+					//alert(JSON.stringify(savearry))
+					$.ajax({
+						type:"post",
+						dataType:'json',
+						url:'${root}biz/saveDailyDetailData',
+						contentType:'application/json',
+						//traditional:true, // 배열 및 리스트로 값을 넘기기 위해서는 꼭 선언되어야함.
+						data:JSON.stringify(savearry),
+						//data: {'action_data':sendarry},
+						success: function(result) {
+							//alert('success')
+							//alert(result);
+							detailSearch(bd_seq);
+						}
+					})
+				}
+			})
+			
+			// 업무 Detail 삭제
+			$('#btn_dtl_delete').click(function() {
+				var getobject = $('#BizDailyDetail > tbody > tr.trstyle.clicked');
+				var clicked = getobject.attr('id');
+				//alert(JSON.stringify(getobject))
+				
+				if (!clicked) {
+					$('#JustInfoModal_Title').text('삭제 확인')
+					$('#JustInfoModal_Body').text('먼저 삭제할 업무 Master 데이터를 선택해 주십시오!')
+					$('#JustInfoModal').modal('show')
+					return;
+				}
+				
+				var index = clicked.substring(6)
+				
+				changeFlag('D', 'BizDailyDetail', Number(index))
 			})
 		})
 	</script>

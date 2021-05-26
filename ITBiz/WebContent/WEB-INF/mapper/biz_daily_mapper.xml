@@ -7,7 +7,7 @@
 		SELECT
 			A.REC_USER, B.EMPNAME REC_NAME, dbo.FN_DATE_TO_STRING(A.REC_DATE) REC_DATE, 
 			A.REQ_USER, C.EMPNAME REQ_NAME, C.DEPTNAME, A.REQ_SUBJECT, A.REQ_CONTENT, A.ANL_CONTENT, A.WORK_LEV, A.WORK_STATUS, E.BCD_NAME WORK_STATUS_NAME,
-			A.BD_SEQ, 'R' FLAG, A.BWS_SEQ, F.BWS_CONTENT, dbo.FN_DATE_TO_STRING(A.EXP_END_DATE) EXP_END_DATE, dbo.FN_DATE_TO_STRING(A.ACT_END_DATE) ACT_END_DATE
+			A.BD_SEQ, 'R' FLAG, A.BWS_SEQ, F.BWS_CONTENT, dbo.FN_DATE_TO_STRING(A.EXP_END_DATE) EXP_END_DATE, dbo.FN_DATE_TO_STRING(A.ACT_END_DATE) ACT_END_DATE, A.WORK_PRC_PER
 		FROM
 			TB_BIZDAILY_MASTER A WITH(NOLOCK)
 			INNER JOIN
@@ -49,7 +49,7 @@
 	<select id="getBizDailyDetail" parameterType="java.lang.String" resultType="hashmap">
 		<![CDATA[
 		SELECT
-			A.BD_SEQ, A.EXC_SEQ, A.EXC_USER, B.EMPNAME, A.EXC_CONTENT, A.WORK_LEV, A.WORK_STATUS, A.WORK_PRC_PER, A.ACT_END_DATE, ISNULL(A.REMARK, '') REMARK, 'R' FLAG
+			A.BD_SEQ, A.EXC_SEQ, A.EXC_USER, B.EMPNAME, A.EXC_CONTENT, A.WORK_LEV, A.WORK_STATUS, A.WORK_PRC_PER, dbo.FN_DATE_TO_STRING(A.ACT_END_DATE) ACT_END_DATE, ISNULL(A.REMARK, '') REMARK, 'R' FLAG
 		FROM
 			TB_BIZDAILY_DETAIL A WITH(NOLOCK),
 			VT_USERALL_LIST B WITH(NOLOCK)
@@ -149,5 +149,50 @@
 		end
 	</insert>
 	
-	
+	<insert id="saveDailyDetailData" parameterType="hashmap">
+		begin
+			if #{FLAG} = 'I'
+				begin
+					Declare @v_max_exc_seq int;
+					
+					Select @v_max_exc_seq = Max(exc_seq)
+					  From TB_BIZDAILY_DETAIL
+					 Where BD_SEQ = #{BD_SEQ};
+					
+					if @v_max_exc_seq is null
+						Set @v_max_exc_seq = 1;
+					else
+						Set @v_max_exc_seq = @v_max_exc_seq + 1;
+						
+					Insert Into TB_BIZDAILY_DETAIL
+						(
+						BD_SEQ, EXC_SEQ, EXC_USER, EXC_CONTENT, WORK_LEV, WORK_STATUS, WORK_PRC_PER, 
+						ACT_END_DATE, 
+						REMARK, WK_DATE, WK_USER
+						) 
+					Values
+						(
+						#{BD_SEQ}, @v_max_exc_seq, #{EXC_USER}, #{EXC_CONTENT}, #{WORK_LEV}, #{WORK_STATUS}, #{WORK_PRC_PER}, 
+						<choose><when test="ACT_END_DATE != null and ACT_END_DATE != ''">CONVERT(DATE, #{ACT_END_DATE})</when><otherwise>NULL</otherwise></choose>, 
+						#{REMARK}, GETDATE(), #{REG_USER}
+						);
+				end
+			else if #{FLAG} = 'U'
+				begin
+					Update TB_BIZDAILY_DETAIL
+					   Set EXC_USER = #{EXC_USER}, EXC_CONTENT = #{EXC_CONTENT}, WORK_LEV = #{WORK_LEV}, WORK_STATUS = #{WORK_STATUS}, WORK_PRC_PER = #{WORK_PRC_PER}, 
+					       <if test="ACT_END_DATE != null and ACT_END_DATE != ''">ACT_END_DATE = CONVERT(DATE, #{ACT_END_DATE}), </if>
+					       REMARK = #{REMARK},
+					       ET_DATE = GETDATE(), ET_USER = #{REG_USER}
+					 Where bd_seq = #{BD_SEQ}
+					   And EXC_SEQ = #{EXC_SEQ};
+				end
+			else if #{FLAG} = 'D'
+				begin
+					Delete From TB_BIZDAILY_DETAIL
+					 Where bd_seq = #{BD_SEQ}
+					   And EXC_SEQ = #{EXC_SEQ};
+				end
+		end
+	</insert>
 </mapper>

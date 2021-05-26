@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="allSearch"/>
+		<item key="selection" value="업무 배치 조회"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
-			<item value="allSearch"/>
-			<item value="saveDailyExecData"/>
-			<item value="saveDailyExecData."/>
-			<item value="_delete"/>
+			<item value="업무 배치 조회"/>
+			<item value="all"/>
+			<item value="execSearch"/>
+			<item value="detailSearch"/>
+			<item value="function "/>
+			<item value="function"/>
+			<item value="("/>
+			<item value="detailSearch()"/>
+			<item value="btn_dtl_save"/>
 			<item value="btn_exec_save"/>
-			<item value="btn_exec_add"/>
-			<item value="BizDailyExecuter"/>
-			<item value="bde_flag_"/>
-			<item value="changeFlag"/>
-			<item value="BizDailye"/>
-			<item value="BizDaliyE"/>
-			<item value="savedaily"/>
-			<item value="savearry"/>
-			<item value="btn_mst_save"/>
-			<item value="btn_"/>
+			<item value="getBizDailySubAll"/>
+			<item value="allse"/>
+			<item value="var row = $(&apos;&lt;tr"/>
+			<item value="var row = $(&apos;&lt;tr&gt;"/>
+			<item value="BizDailyDetail"/>
 		</list>
 		<list key="replacehistory">
 		</list>

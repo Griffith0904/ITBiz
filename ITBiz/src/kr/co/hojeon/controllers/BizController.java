@@ -203,8 +203,9 @@ public class BizController {
 		//System.out.println(listmap.size());
 		int result = bds.saveDailyMasterData(listmap);
 		return Integer.toString(result);
-	}// 개별 항목 등록 업무 Master 저장
+	}
 	
+	// 개별 항목 등록 업무 배치자 저장
 	@RequestMapping(value="/saveDailyExecData", method=RequestMethod.POST)
 	@ResponseBody
 	public String saveDailyExecData(@RequestBody List<Map<String, Object>> listmap) throws Exception{
@@ -212,6 +213,17 @@ public class BizController {
 		//String[] bws_content = request.getParameterValues("bws_content");
 		//System.out.println(listmap.size());
 		int result = bds.saveDailyExecData(listmap);
+		return Integer.toString(result);
+	}
+	
+	// 개별 항목 등록 업무 Detail 저장
+	@RequestMapping(value="/saveDailyDetailData", method=RequestMethod.POST)
+	@ResponseBody
+	public String saveDailyDetailData(@RequestBody List<Map<String, Object>> listmap) throws Exception{
+		System.out.println("★★★★★★★★ in saveDailyExecData ★★★★★★★★");
+		//String[] bws_content = request.getParameterValues("bws_content");
+		//System.out.println(listmap.size());
+		int result = bds.saveDailyDetailData(listmap);
 		return Integer.toString(result);
 	}
 }

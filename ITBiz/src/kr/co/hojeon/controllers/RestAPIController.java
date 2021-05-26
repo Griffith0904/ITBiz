@@ -309,6 +309,17 @@ public class RestAPIController {
 		return data_all;
 	}
 	
+	@PostMapping("/biz/getBizDailySubExec")
+	public List<HashMap<String, Object>> getBizDailySubExec(@RequestParam("bd_seq") String bd_seq) {
+		return bds.getBizDailyExecuter(bd_seq);
+	}
+	
+	@PostMapping("/biz/getBizDailySubDetail")
+	public List<HashMap<String, Object>> getBizDailySubDetail(@RequestParam("bd_seq") String bd_seq) {
+		return bds.getBizDailyDetail(bd_seq);
+	}
+	
+	
 	@PostMapping("/biz/getITUserInfoFromCheck")
 	public List<HashMap<String, Object>> getITUserInfoFromCheck(@RequestParam(value="reg_user", required=false) String[] reg_user) {
 		System.out.println("★★★★★★★★★★★★ getITUserInfoFromCheck ★★★★★★★★★★★★");
