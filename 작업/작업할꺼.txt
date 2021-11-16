@@ -1,0 +1,11 @@
+Select
+	a.bws_seq, a.sort_no, b.bws_content
+From
+	TB_USRBIZNW_DETAIL a with(nolock),
+	TB_BIZWEEKLY_SUBJECT b with(nolock)
+Where
+	a.year_num = 21 and
+	a.week_num = 10 and
+	a.work_user = 'yjkim1' and
+	a.bws_seq = b.bws_seq
+Order by a.sort_no;
